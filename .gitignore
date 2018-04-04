@@ -1,0 +1,8 @@
+app/__init__.pyc
+app/projects/__init__.pyc
+app/projects/admin.pyc
+app/projects/migrations/*
+app/roles/migrations/*
+app/tasks/migrations/*
+app/users/migrations/*
+*.pyc
