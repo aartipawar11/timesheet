@@ -8,12 +8,12 @@ from app.roles.models import Role
 class UserProfile(models.Model):
 
 	user = models.ForeignKey(User)
-	role = models.ForeignKey(Role)
+	role = models.ForeignKey(Role,default='')
 	first_name = models.CharField(max_length=100)
 	last_name = models.CharField(max_length=100)
 	mobile = models.CharField(max_length=10,blank=True)
 	dob = models.CharField(max_length=20)
-	gender = models.BooleanField()
+	gender = models.CharField(max_length=20)
 	designation = models.CharField(max_length=200)
 	status = models.BooleanField(default=True)
 	is_deleted = models.BooleanField(default=False)
