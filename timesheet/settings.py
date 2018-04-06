@@ -61,7 +61,7 @@ ROOT_URLCONF = 'timesheet.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': ['/home/hp/Desktop/projects/django/timesheet/timesheet/app/templates',],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -140,3 +140,9 @@ STATIC_URL = '/static/'
 # STATICFILES_DIRS = (
 #     os.path.join(BASE_DIR,'assets')
 #     )
+
+STATICFILES_DIRS=[
+os.path.join(BASE_DIR,'static')
+
+    ]
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR),"static_cdn")

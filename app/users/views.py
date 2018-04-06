@@ -12,6 +12,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate
+import re
 
 class UserProfileList(APIView):
 	
@@ -87,7 +88,6 @@ class Login(TemplateView):
 	def post(self,request,*args, **kwargs):
 
 		## written by aarti
-		##
 		try:
 			# get_value= request.body
 			# print(get_value)
@@ -99,8 +99,6 @@ class Login(TemplateView):
 			if email:
 				user = User.objects.get(username=email)
 				auth_user = authenticate(username=email, password=password)
-				# print(auth_user)
-				# login(request, user)
 				token,created = Token.objects.get_or_create(user_id=user.id)
 				if(user):
 					userprofile = UserProfile.objects.get(user_id=user.id)
@@ -108,18 +106,60 @@ class Login(TemplateView):
 				else:
 					userData = UserProfile.objects.all()
 					user_data = UserSerializer(userData,many=True)
-				# print(user_data.data)
-				for value in user_data:
-					userlist.append(value)
-				print(userlist)
-				return Response(user_data.data)
+				token_value = {
+					'token':token.key,
+					}
 				
-				# return HttpResponseRedirect('/user/dashboard/')
-			# return render(request,'dashboard.html')
-			
+				user_response = user_data.data
+				user_response.update(token_value)
+				# print(user_response)
+				return JsonResponse(user_response)
+				
 		except Exception as e:
 			print(e)
 			return JsonResponse({'Error':'eerrrorrr'})
 		
 		
-	
+			
+class Dashboard(TemplateView):
+	def get(self,request):
+		return render(request,'dashboard.html')
+
+class UserDetail(TemplateView):
+	def get(self,request):
+		return render(request,'user.html')
+
+class AdminDashboard(TemplateView):
+	def get(self,request):
+		return render(request,'admin.html')
+
+class AddUser(TemplateView):
+	def get(self,request):
+		return render(request,'adduser.html')
+
+class AddProject(TemplateView):
+	def get(self,request):
+		return render(request,'addproject.html')
+
+
+class WorkDetails(TemplateView):
+	def get(self,request):
+		return render(request,'details.html')
+
+
+class AssignProject(TemplateView):
+	def get(self,request):
+		data={"data":"data in fills"}
+		return render(request,'assignproject.html',data)
+	# def user_page(request, username):
+	# 	try:
+	# 		user = User.objects.get(username=username)
+	# 	except:
+	# 		raise Http404('Requested user not found.')
+
+	# 	template = get_template('assignproject.html')
+	# 	variables = Context({
+	# 		'username': username,
+	# 		 })
+	# 	output = template.render(variables)
+	# 	return HttpResponse(output)
