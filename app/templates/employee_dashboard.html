@@ -1,0 +1,183 @@
+
+{% include "header.html" %}
+
+<script type="text/javascript">
+   setCookie("username", "foo");
+</script>
+
+<!-- <script>
+    alert(getCookie("username"));
+    // console.log(var);
+</script> -->   
+<script>
+    checkCookie();
+</script> 
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar" data-image="/static/img/sidebar-5.jpg">
+            <!--
+        Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
+
+        Tip 2: you can also add an image using data-image tag
+    -->
+            <div class="sidebar-wrapper">
+                <div class="logo">
+                    <a href="http://www.thoughtwin.com" class="simple-text">
+                        Thoughtwin
+                    </a>
+                </div>
+                <ul class="nav">
+                    <li  class="nav-item active">
+                        <a class="nav-link" href="/user/dashboard">  
+                           <i class="fa fa-pie-chart" aria-hidden="true"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="/user/userprofile">
+                            <i class="fa fa-user fa" aria-hidden="true"></i>
+                            <p>User Profile</p>
+                        </a>
+                    </li>
+                    
+                   
+                   
+                </ul>
+            </div>
+        </div>
+        <div class="main-panel">
+            <!-- fixed plugin  -->
+            <div class="fixed-plugin">
+                
+            </div>
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg " color-on-scroll="500">
+                <div class=" container-fluid  ">
+                    <a class="navbar-brand" href="/user/dashboard">My Dashboard </a>
+                    <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-bar burger-lines"></span>
+                  <span class="navbar-toggler-bar burger-lines"></span>
+                  <span class="navbar-toggler-bar burger-lines"></span>
+                  </button>
+                    
+                    <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                        
+                        <ul class="navbar-nav ml-auto">
+                           
+                            <li class="nav-item">
+                                <a class="nav-link" onclick="deleteAllCookies()">
+                                    <span class="no-icon">Log out</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- End Navbar -->
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                           
+                        </div>
+<div class="col-md-12">
+    <div class="card card-plain table-plain-bg">
+        <div class="card-header ">
+            <h4 class="card-title">Billing Hours</h4>
+            <br>
+            <input type="date" name="date">
+        </div>
+                                
+    
+
+<div class="container">  
+<form>         
+<table class="table table-bordered">
+
+<tbody>
+  <tr>
+    <th>Project Name</th>
+    <td><select>
+        <option>Select Project</option>
+        <option value="red">Project 1</option>
+        <option value="green">Project 2</option>
+        <option value="blue">Project 3</option>
+    </select></td>
+      </tr>
+      <tr>
+        <th>Description</th>
+        <td><textarea rows="2" cols="75" placeholder="Description"></textarea></td>
+      </tr>
+      <tr>
+        <th>Time (Hours)</th>
+        <td><input type="number" name="hours" max="8" id="time1" value="2"></td>
+      </tr>
+    </tbody>
+
+  
+  </table>
+<br>
+  <div class="card-header ">
+     <h4 class="card-title">Non-Billing Hours</h4><br>
+ </div>
+ <table class="table table-bordered">
+
+<tbody>
+  <tr>
+    <th>Project Name</th>
+    <td><select>
+        <option>Select Project</option>
+        <option value="red">Project 1</option>
+        <option value="green">Project 2</option>
+        <option value="blue">Project 3</option>
+    </select></td>
+      </tr>
+      <tr>
+        <th>Description</th>
+        <td><textarea rows="2" cols="75" placeholder="Description"></textarea></td>
+      </tr>
+      <tr>
+        <th>Time (Hours)</th>
+        <td><input type="number" name="hours" id="time2" max="8"></td>
+      </tr>
+    </tbody>
+
+  
+  </table>
+  <button class="center" id="btn1" type="Submit">Submit</button>
+    </form>
+</div>
+
+
+    
+    
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="footer">
+                <div class="container">
+                    <nav>
+                        
+                        <p class="copyright text-center">
+                            ©
+                            
+                            <a href="http://www.thoughtwin.com">Thoughtwin</a>, made with love by Python Team
+                        </p>
+                    </nav>
+                </div>
+            </footer>
+        </div>
+    </div>
+</body>
+<script src="/static/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="/static/js/core/popper.min.js" type="text/javascript"></script>
+<script src="/static/js/core/bootstrap.min.js" type="text/javascript"></script>
+<script src="/static/js/light-bootstrap-dashboard.js?v=2.0.1" type="text/javascript"></script>
+
+
+</html>

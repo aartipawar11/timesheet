@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from datetime import datetime
 from app.projects.models import Projects
 
-class Tasks(models.Model):
+class Task(models.Model):
 	project = models.ForeignKey(Projects)
 	user = models.ForeignKey(User)
 	billing_hour = models.TimeField(auto_now_add=False, blank=True)
