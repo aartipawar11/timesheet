@@ -63,7 +63,7 @@ class UserProfileList(APIView):
 		else:
 			userData = UserProfile.objects.all()
 			user_data = UserSerializer(userData, many=True)
-		return Response(user_data.data)
+		return Response(user_data.data,status=status.HTTP_200_OK)
 
 	def put(self,request,user_id):
 		try:
@@ -71,7 +71,7 @@ class UserProfileList(APIView):
 			update_data = UserSerializer(get_data,data=request.data)
 			if update_data.is_valid():
 				update_data.save()
-				return Response(update_data.data)
+				return Response(update_data.data,status=status.HTTP_200_OK)
 		except:
 			return Response("Error" ,status=status.HTTP_400_BAD_REQUEST)
 
@@ -140,11 +140,19 @@ class UserDetail(TemplateView):
 		user_data = UserSerializer(userData, many=True)
 		print(user_data.data)
 		data={"uname":user_data.data}
-		return render(request,'user.html',data)
+		return render(request,'user_details.html',data)
 
 class AdminDashboard(TemplateView):
 	def get(self,request):
 		return render(request,'admin_dashboard.html')
+
+class AdminDetails(TemplateView):
+	def get(self,request):
+		userData = UserProfile.objects.all()
+		user_data = UserSerializer(userData, many=True)
+		print(user_data.data)
+		data={"uname":user_data.data}
+		return render(request,'admin_details.html',data)
 
 class AddUser(TemplateView):
 	def get(self,request):
@@ -157,7 +165,7 @@ class AddProject(TemplateView):
 
 class WorkDetails(TemplateView):
 	def get(self,request):
-		return render(request,'details.html')
+		return render(request,'datewise_details.html')
 
 
 class AssignProject(TemplateView):

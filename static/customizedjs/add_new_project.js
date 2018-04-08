@@ -1,21 +1,16 @@
    $(document).ready(function(){
-             $("#adduserform").submit(function(event){
+             $("#createprojectform").submit(function(event){
               event.preventDefault();
               // var el = document.getElementsByName("csrfmiddlewaretoken");
               // csrf_value = el[0].getAttribute("value");
 
                  $.ajax({
-                  url: "http://127.0.0.1:8000/user/",
+                  url: "http://127.0.0.1:8000/project/",
                   type:"POST",
                      data: {
-                     'first_name': $("#first_name").val(),
-                     'last_name': $("#last_name").val(),
-                      'dob': $("#dob").val(),
-                      'gender': $("#gender").val(), 
-                      'email': $("#email").val(), 
-                      'password': $("#password").val(), 
-                      'designation': $("#designation").val(),
-                      'role': $("#role").val(),  
+                     'name': $("#projectname").val(),
+                     'description': $("#projectdescription").val(),
+                      
                       
                       // 'csrfmiddlewaretoken':csrf_value
                      },
@@ -25,7 +20,7 @@
                        console.log(response);
                        
                        if(response.status==201){
-                        alert("User Created Successfully!");
+                        alert("Project Created Successfully!");
                         window.location = "admindashboard"; 
                        }
                        if(response.status==404){

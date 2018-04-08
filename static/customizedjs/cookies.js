@@ -23,17 +23,16 @@ function getCookie(cname) {
 }
 
 function checkCookie() {
-    var user=getCookie("username");
+    var user=getCookie("Authorization");
     if (user == "") {
         location.replace("login");
     } 
 }
 
 function deleteAllCookies() {
-  setCookie("username", '', 1);
   setCookie("Authorization", '');
   setCookie("id", '', 1);
   setCookie("role", '', 1);
-  setCookie("designation", '', 1);
+  setCookie("user", '', 1);
   self.location = "login";
 }

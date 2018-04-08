@@ -1,4 +1,7 @@
 {% include "header.html" %}
+      <script>
+         checkCookie();
+      </script>
    <body>
       <div class="wrapper">
          <div class="sidebar" data-image="/static/img/sidebar-5.jpg">
@@ -15,13 +18,13 @@
                </div>
                <ul class="nav">
                   <li  class="nav-item active">
-                     <a class="nav-link" href="dashboard.html">
+                     <a class="nav-link" href="/user/admindashboard">
                         <i class="fa fa-pie-chart" aria-hidden="true"></i>
                         <p>Dashboard</p>
                      </a>
                   </li>
                   <li>
-                     <a class="nav-link" href="../userProfile">
+                     <a class="nav-link" href="/user/admindetails">
                         <i class="fa fa-user fa" aria-hidden="true"></i>
                         <p>User Profile</p>
                      </a>

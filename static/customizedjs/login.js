@@ -17,9 +17,9 @@ $(document).ready(function(){
                      if(response){
                        console.log(response);
                        setCookie("Authorization", "Token "+response.token);
-                       setCookie("id", response.user);
+                       setCookie("id", response.id);
                        setCookie("role", response.role);
-                       setCookie("designation", response.designation);
+                       setCookie("user", response.user);
          
                        if(response.role==3){
                          $("#alertmesg").hide();
