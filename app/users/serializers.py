@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app.users.models import UserProfile,UserProjects
+from app.users.models import UserProfile
 from app.roles.models import Role
 
 

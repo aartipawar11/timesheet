@@ -6,9 +6,9 @@ from app.projects.models import Projects
 class Task(models.Model):
 	project = models.ForeignKey(Projects)
 	user = models.ForeignKey(User)
-	billing = models.CharField(max_length=2,default="")
-	non_billing = models.CharField(max_length=2,default="")
-	total = models.CharField(max_length=2,default="")
+	billing = models.CharField(max_length=2)
+	non_billing = models.CharField(max_length=2)
+	total = models.CharField(max_length=2)
 	task_description = models.CharField(max_length=500)
 	status = models.BooleanField(default=True)
 	is_deleted = models.BooleanField(default=False)
