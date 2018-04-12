@@ -4,15 +4,12 @@ from app.roles.models import Role
 
 
 class UserSerializer(serializers.ModelSerializer):
-	
 	role_name = serializers.SerializerMethodField("getRoleDetail")
 	def getRoleDetail(self,obj):
 		try:
 			return Role.objects.get(id=obj.role.id).name
 		except Exception as e:
 			print(e)
-		 
-	
 	class Meta:
 		model = UserProfile
 		fields = ('id','user','role','role_name','first_name','last_name','mobile','dob','gender','designation','is_deleted','created_at','updated_at')

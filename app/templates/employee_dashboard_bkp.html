@@ -1,13 +1,81 @@
-{% include "header.html" %}
 
-      <script>
-         checkCookie();
-      </script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="/static/img/favicon.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Dashboard</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+    <!-- CSS Files -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/static/css/light-bootstrap-dashboard.css?v=2.0.1" rel="stylesheet" />
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link href="/static/css/demo.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/static/js/cookies.js"></script>
+
+<script type="text/javascript">
+setCookie("username", "foo");
+
+ </script>
+
+<!-- <script>
+
+$(document).ready(function(){
+         
+        $.ajax({
+           url: "http://127.0.0.1:8000/user/login",
+             
+            type:"POST",
+           
+            success: function(response){
+            console.log(response)
+            
+                
+
+            
+        }});
+    });
+
+
+</script> -->
+
+
+<!-- <script>
+    alert(getCookie("username"));
+    // console.log(var);
+</script> --><!--   
+<script>
+    checkCookie();
+</script> -->
+<style type="text/css">
+    .box{
+        color: black;
+        padding: 20px;
+        display: none;
+        margin-top: 20px;
+    }
+    .red{ background: #D3D3D3; }
+    .green{ background: #228B22; }
+    .blue{ background: #0000ff; }
+</style>
+</head>
+
 <body>
     <div class="wrapper">
         <div class="sidebar" data-image="/static/img/sidebar-5.jpg">
             <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
+
         Tip 2: you can also add an image using data-image tag
     -->
             <div class="sidebar-wrapper">
@@ -44,11 +112,7 @@
             <nav class="navbar navbar-expand-lg " color-on-scroll="500">
                 <div class=" container-fluid  ">
                     <a class="navbar-brand" href="/user/dashboard">My Dashboard </a>
-                    <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-bar burger-lines"></span>
-                  <span class="navbar-toggler-bar burger-lines"></span>
-                  <span class="navbar-toggler-bar burger-lines"></span>
-                  </button>
+                    
                     
                     <div class="collapse navbar-collapse justify-content-end" id="navigation">
                         
@@ -167,4 +231,6 @@
 <script src="/static/js/core/popper.min.js" type="text/javascript"></script>
 <script src="/static/js/core/bootstrap.min.js" type="text/javascript"></script>
 <script src="/static/js/light-bootstrap-dashboard.js?v=2.0.1" type="text/javascript"></script>
+
+
 </html>

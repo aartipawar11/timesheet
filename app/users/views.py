@@ -17,6 +17,7 @@ from app.projects.models import Projects
 from app.projects.serializers import ProjectSerializer
 from app.projects.views import ProjectView
 
+
 class UserProfileList(APIView):
 	
 	def post(self,request):
@@ -64,7 +65,7 @@ class UserProfileList(APIView):
 		else:
 			userData = UserProfile.objects.all()
 			user_data = UserSerializer(userData, many=True)
-		return Response(user_data.data)
+		return Response(user_data.data,status=status.HTTP_200_OK)
 
 	def put(self,request,user_id):
 		try:
@@ -72,7 +73,7 @@ class UserProfileList(APIView):
 			update_data = UserSerializer(get_data,data=request.data)
 			if update_data.is_valid():
 				update_data.save()
-				return Response(update_data.data)
+				return Response(update_data.data,status=status.HTTP_200_OK)
 		except:
 			return Response("Error" ,status=status.HTTP_400_BAD_REQUEST)
 
@@ -98,12 +99,14 @@ class Login(TemplateView):
 				user = User.objects.get(username=email)
 				auth_user = authenticate(username=email, password=password)
 				token,created = Token.objects.get_or_create(user_id=user.id)
+				print(token)
 				if(user):
 					userprofile = UserProfile.objects.get(user_id=user.id)
 					user_data = UserSerializer(userprofile)
 				else:
 					userData = UserProfile.objects.all()
 					user_data = UserSerializer(userData,many=True)
+
 				token_value = {
 					'token':token.key,
 					}
@@ -112,15 +115,13 @@ class Login(TemplateView):
 				user_response.update(token_value)
 				# print(user_response)
 				return JsonResponse(user_response)
-				
 		except Exception as e:
 			print(e)
-			return JsonResponse({'Error':'eerrrorrr'})
+			return JsonResponse({'Error':'err'})
 		
 		
-			
 class Dashboard(TemplateView):
-	def get(self,request):
+	def get(self,request):	
 		return render(request,'employee_dashboard.html')
 
 class UserDetail(TemplateView):
@@ -129,12 +130,19 @@ class UserDetail(TemplateView):
 		user_data = UserSerializer(userData, many=True)
 		print(user_data.data)
 		data={"uname":user_data.data}
-		return render(request,'user.html',data)
-
+		return render(request,'user_details.html',data)
 
 class AdminDashboard(TemplateView):
 	def get(self,request):
 		return render(request,'admin_dashboard.html')
+
+class AdminDetails(TemplateView):
+	def get(self,request):
+		userData = UserProfile.objects.all()
+		user_data = UserSerializer(userData, many=True)
+		print(user_data.data)
+		data={"uname":user_data.data}
+		return render(request,'admin_details.html',data)
 
 class AddUser(TemplateView):
 	def get(self,request):
@@ -147,18 +155,34 @@ class AddProject(TemplateView):
 
 class WorkDetails(TemplateView):
 	def get(self,request):
-		return render(request,'details.html')
+		return render(request,'datewise_details.html')
 
 
-# class AssignProject(TemplateView):
-# 	def get(self,request):
-# 		project_Data= Projects.objects.all()
-# 		project_data = ProjectSerializer(project_Data,many=True)
-# 		project_dict={"projectlist":project_data.data}
-# 		userData = UserProfile.objects.all()
-# 		user_data = UserSerializer(userData, many=True)
-# 		user_dict={"userslist":user_data.data}
-# 		user_dict.update(project_dict)
-# 		# print(user_dict)
+class AssignProject(TemplateView):
+	def get(self,request):
+		project_Data= Projects.objects.all()
+		project_data = ProjectSerializer(project_Data,many=True)
+		# print(project_data.data)
+		project_dict={"projectlist":project_data.data}
 
-# 		return render(request,'assignproject.html',user_dict)
+		userData = UserProfile.objects.all()
+		user_data = UserSerializer(userData, many=True)
+		# print(user_data.data)
+		user_dict={"userslist":user_data.data}
+		user_dict.update(project_dict)
+		print(user_dict)
+
+		return render(request,'assignproject.html',user_dict)
+	# def user_page(request, username):
+	# 	try:
+	# 		user = User.objects.get(username=username)
+	# 	except:
+	# 		raise Http404('Requested user not found.')
+
+	# 	template = get_template('assignproject.html')
+	# 	variables = Context({
+	# 		'username': username,
+	# 		 })
+	# 	output = template.render(variables)
+	# 	return HttpResponse(output)
+

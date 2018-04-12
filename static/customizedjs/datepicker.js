@@ -4,4 +4,4 @@ $(function() {
                buttonImage: "/static/img/Calendar.png",
                buttonImageOnly: true
             });
-         })
+        });

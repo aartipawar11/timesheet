@@ -15,13 +15,12 @@ $(document).ready(function(){
                      dataType: "json",
                      success: function(response){
                      if(response){
-                       console.log(response);
-                       setCookie("Authorization", "Token "+response.token);
-                       setCookie("id", response.user);
-                       setCookie("role", response.role);
-                       setCookie("designation", response.designation);
-         
-                       if(response.role==3){
+                        console.log(response);
+                        setCookie("Authorization", "Token "+response.token);
+                        setCookie("id", response.id);
+                        setCookie("role", response.role);
+                        setCookie("user", response.user);
+                      if(response.role==3){
                          $("#alertmesg").hide();
                          $("#alertsuccess").show();
                          $("#alertsuccess").html("Login Successfully");
@@ -68,4 +67,3 @@ $(document).ready(function(){
          
              });
          });
-         

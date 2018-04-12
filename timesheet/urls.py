@@ -18,8 +18,9 @@ from django.contrib import admin
 # from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-	url(r'^user/', include('app.users.urls')),
-	url(r'^role/', include('app.roles.urls')),
+
+    url(r'^user/', include('app.users.urls')),
+    url(r'^role/', include('app.roles.urls')),
     url(r'^project/', include('app.projects.urls')),
     url(r'^task/', include('app.tasks.urls')),
     url(r'^admin/', admin.site.urls),

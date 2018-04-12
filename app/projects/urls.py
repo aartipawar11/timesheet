@@ -9,3 +9,4 @@ urlpatterns = [
 	# url(r'',views.UserProjectView.as_view())
 	url(r'^(?P<project_id>[0-9]+)$',views.ProjectView.as_view()),
 ]
+

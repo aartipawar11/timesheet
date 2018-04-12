@@ -7,7 +7,6 @@ from app.tasks.serializers import TaskSerializer
 from django.contrib.auth.models import User
 
 
-
 class TaskView(APIView):
 	
 	def post(self,request):

@@ -1,3 +1,4 @@
+
 $(document).ready(function(){
          $("#adduserform").submit(function(event){
           event.preventDefault();
@@ -23,18 +24,20 @@ $(document).ready(function(){
                  success: function(response){
                  if(response){
                    console.log(response);
+                   
                    if(response.status==201){
-                    alert("User Created Successfully!")
-                   location.reload();
+                    alert("User Created Successfully!");
+                    window.location = "admindashboard"; 
                    }
                    if(response.status==404){
-                     alert("404 test error")
-                   }
+                    console.log("Error in creating user")
+                     alert("Error in creating user")
+                   };
                    
                  }
              },
              error: function (err) {
-               alert("Error");
+               // alert("Error");
                return false;
              }
      
@@ -42,3 +45,4 @@ $(document).ready(function(){
      
          });
      });
+
