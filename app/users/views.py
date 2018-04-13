@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from django.http import Http404
-from app.users.serializers import UserSerializer
-from app.users.models import UserProfile
+from app.users.serializers import UserSerializer,UserProjectSerializer
+from app.users.models import UserProfile,UserProjects
 from django.shortcuts import render,redirect
 from django.views.generic import TemplateView
 from rest_framework.authtoken.models import Token
@@ -15,6 +15,7 @@ from django.contrib.auth import authenticate
 from app.projects.views import ProjectView
 from app.projects.serializers import ProjectSerializer
 from app.projects.models import Projects
+
 
 class UserProfileList(APIView):
 	
@@ -90,20 +91,12 @@ class Login(TemplateView):
 	def post(self,request,*args, **kwargs):
 
 		## written by aarti
-		##
 		try:
-			# get_value= request.body
-			# print(get_value)
-			userlist =[]
 			email = request.POST.get('inputEmail')
 			password = request.POST.get('inputPassword')
-			print(email)
-			print(password)
 			if email:
 				user = User.objects.get(username=email)
 				auth_user = authenticate(username=email, password=password)
-				print(auth_user)
-				# login(request, user)
 				token,created = Token.objects.get_or_create(user_id=user.id)
 				print(token)
 				if(user):
@@ -121,10 +114,7 @@ class Login(TemplateView):
 				print(user_response)
 
 				return JsonResponse(user_response)
-			# else:	
-				# return JsonResponse({'status':'404'})
-			# return render(request,'dashboard.html')
-			
+
 		except Exception as e:
 			print(e)
 			return JsonResponse({'Error':'err'})
@@ -132,7 +122,25 @@ class Login(TemplateView):
 		
 class Dashboard(TemplateView):
 	def get(self,request):	
-		return render(request,'employee_dashboard.html')
+		# user_id=UserProjects.objects.get(pk=user_id)
+		user_dict = {"test":"yes"}
+		return render(request,'employee_dashboard.html',user_dict)
+		# return render(request,'employee_dashboard.html')
+	@csrf_exempt
+	def post(self,request,user_id=None):
+		idd=request.POST.get('userid')
+		# userData = UserProjects.objects.get(user_id=idd)
+		userData = UserProjects.objects.all()
+		user_data = UserProjectSerializer(userData, many=True)
+		print(user_data.data)
+		
+		print(idd)
+		print("post !!!!")
+		data={
+		"hi":"ji"
+		}
+		return JsonResponse({"tt":user_data.data})
+		# return Response(user_data.data,status=status.HTTP_201_CREATED) 
 
 class UserDetail(TemplateView):
 	def get(self,request):
@@ -158,6 +166,10 @@ class AddUser(TemplateView):
 	def get(self,request):
 		return render(request,'adduser.html')
 
+class DeleteUser(TemplateView):
+	def get(self,request):
+		return render(request,'delete_user.html')
+
 class AddProject(TemplateView):
 	def get(self,request):
 		return render(request,'addproject.html')
@@ -166,7 +178,6 @@ class AddProject(TemplateView):
 class WorkDetails(TemplateView):
 	def get(self,request):
 		return render(request,'datewise_details.html')
-
 
 class AssignProject(TemplateView):
 	def get(self,request):
@@ -180,20 +191,33 @@ class AssignProject(TemplateView):
 		# print(user_data.data)
 		user_dict={"userslist":user_data.data}
 		user_dict.update(project_dict)
-		print(user_dict)
+		# print(user_dict)
 
 		return render(request,'assignproject.html',user_dict)
-	# def user_page(request, username):
-	# 	try:
-	# 		user = User.objects.get(username=username)
-	# 	except:
-	# 		raise Http404('Requested user not found.')
 
-	# 	template = get_template('assignproject.html')
-	# 	variables = Context({
-	# 		'username': username,
-	# 		 })
-	# 	output = template.render(variables)
-	# 	return HttpResponse(output)
+class AssignProjectApi(APIView):
+	
+
+	# @csrf_exempt
+	def post(self,request):
+
+		## written by aarti
+		
+		try:
+			
+			project_id = request.POST.get('project')	
+			user_id = request.POST.get('user')
+			print(project_id)
+			print(user_id)
+				
+			user_data = UserProjectSerializer(data=request.data)
+			if not(user_data.is_valid()):
+				return Response(user_data.errors,status=status.HTTP_404_NOT_FOUND)
+			user_data.save()
+			return Response(user_data.data,status=status.HTTP_201_CREATED)
+			
+		except Exception as e:
+			print(e)
+			return JsonResponse({'Error':'err'})
 
 		

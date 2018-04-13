@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app.tasks.models import Task
+from app.tasks.models import Tasks
 from app.projects.models import Projects
 from app.projects.serializers import ProjectSerializer
 
@@ -13,8 +13,8 @@ class TaskSerializer(serializers.ModelSerializer):
 		 
 		 
 	class Meta:
-		model =  Task
-		fields = ('id','user','project','project_details','billing','non_billing','total','task_description','is_deleted','created_at','updated_at','status')
+		model =  Tasks
+		fields = ('id','user','project','project_details','billing_hour','non_billing_hour','total_hour','description','is_deleted','created_at','updated_at','status')
 		extra_kwargs = {
 			'billing': {
 				'required':True,

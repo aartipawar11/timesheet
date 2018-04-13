@@ -13,7 +13,7 @@ class TaskView(APIView):
 			# import pdb;pdb.set_trace();
 			task_data = TaskSerializer(data=request.data)
 			if not(task_data.is_valid()):
-				return Response(task_data.errors,status=status.HTTP_404_NOT_FOUND)
+				return Response(task_data.errors)
 			task_data.save()
 			return Response(task_data.data,status=status.HTTP_201_CREATED)
 		except Exception as err:

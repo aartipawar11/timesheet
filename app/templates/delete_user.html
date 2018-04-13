@@ -1,9 +1,15 @@
 {% include "header.html" %}
-<link rel="stylesheet" href="/static/css/screen.css" />
-<script type="text/javascript" src="/static/customizedjs/add_new_project.js"></script>
 <script>
    checkCookie();
 </script>
+<script type="text/javascript" src="/static/customizedjs/deleteuser.js"></script>
+<script type="text/javascript" src="/static/customizedjs/get_users_list.js"></script>
+<style type="text/css">
+   tr:hover {
+   color: red;
+   cursor: pointer;
+   }
+</style>
 <body>
    <div class="wrapper">
    <div class="sidebar" data-image="/static/img/sidebar-5.jpg">
@@ -72,24 +78,22 @@
             <div class="col-md-12">
             </div>
             <div class="col-md-12">
-               <h2>Add Project</h2>
+               <div  class="form-group" id="deluserform">
+                  <label>Enter ID to delete</label>
+                  <textarea class="form-control" style="resize: none;" type="text" name="id" id="inputid"></textarea>
+                  <button id="deletenow">DELETE</button>
+               </div>
                <br>
-               <form id="createprojectform" method="post">
-                  <!-- {% csrf_token %} --> 
-                  <div>
-                     <div class="form-group">
-                        <label for="projectname">Project Name</label>
-                        <input type="text" class="form-control" id="projectname" placeholder="Enter Project Name" name="name" required>
-                     </div>
-                     <div class="form-group">
-                        <label for="description">Project Description</label>
-                        <textarea class="form-control" rows="30" id="projectdescription" name="description" placeholder="Enter Project Description" required></textarea>
-                     </div>
-                     <br><br>
-                     <INPUT TYPE="hidden" NAME="redirect" VALUE="thankyou.html">
-                     <button type="Submit">Submit</button>
-                  </div>
-               </form>
+               <table class="table table-hover table-bordered">
+                  <thead>
+                     <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Lastname</th>
+                     </tr>
+                  </thead>
+                  <tbody id="tBody"></tbody>
+               </table>
             </div>
          </div>
       </div>
@@ -97,6 +101,6 @@
    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
    <script type="text/javascript" src="/static/customizedjs/jquery.validate.js"></script>
    <script>
-      $("#createprojectform").validate()
+      $("#deluserform").validate()
    </script>
    {% include "footer.html" %}

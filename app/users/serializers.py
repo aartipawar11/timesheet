@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from app.users.models import UserProfile,UserProjects
 from app.roles.models import Role
-
+from app.projects.models import Projects
+from app.projects.serializers import ProjectSerializer
 
 class UserSerializer(serializers.ModelSerializer):
 	role_name = serializers.SerializerMethodField("getRoleDetail")
@@ -56,3 +57,15 @@ class UserSerializer(serializers.ModelSerializer):
 			},
 			
 		}		
+
+class UserProjectSerializer(serializers.ModelSerializer):
+	project_name = serializers.SerializerMethodField("getProjectDetail")
+	def getProjectDetail(self,obj):
+		try:
+			return ProjectSerializer(Projects.objects.get(id=obj.project.id)).data
+		except Exception as e:
+			print(e)
+		 
+	class Meta:
+		model =  UserProjects 
+		fields = ('id','user','project','project_name','is_deleted','created_at','updated_at','status')

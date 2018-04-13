@@ -2,6 +2,42 @@
       <script>
          checkCookie();
       </script>
+
+      <script type="text/javascript">
+        $(document).ready(function(){
+             $("#Button2").click(function(event){
+              event.preventDefault();
+              // var p=$("#select1").val();
+              // alert(p);
+              var el = document.getElementsByName("csrfmiddlewaretoken");
+              csrf_value = el[0].getAttribute("value");
+                 $.ajax({
+                  url: "http://127.0.0.1:8000/user/assignprojectdetails",
+                  type:"POST",
+                     data: {
+                    // 'project':$("#select1").val(),
+                    'user'   :$("#select2").val(),
+                    'project':$("#select1").val(),
+                    // 'user': "1",
+                      'csrfmiddlewaretoken':csrf_value
+                     },
+                    dataType: "json",
+                    success: function(response){
+                    console.log(response);
+                 },
+                 error: function (err) {
+                   $("#alertsuccess").hide();
+                   $("#alertmesg").show();
+                   $("#alertmesg").html("Something went wrong. Please try again later. ");
+                   return false;
+                 }
+         
+               });
+         
+             });
+         });
+         
+      </script>
    <body>
       <div class="wrapper">
          <div class="sidebar" data-image="/static/img/sidebar-5.jpg">
@@ -72,23 +108,27 @@
                      <div class="col-md-12">
                         <h2>Assign Project To User</h2>
                         <br>
-                        <form>
+                        <form method="POST" name="assignprojectdetailsform">
+                           {% csrf_token %}
                            <div>
                               <span>Project Name:</span>
-                              <select>
-                                 {% for list in projectlist %}
-                                 <option value="{{list.id}}">{{list.name}}</option>
+                              <select id="select1">
+                                 {% for listt in projectlist %}
+                                 <option value="{{listt.id}}" id="projectid">{{listt.id}} | {{listt.name}}</option>
                                  {% endfor %}
-                              </select>
+                              </select><br>
+                              </div>
+                              <div>
+
                               <br><br>
                               <span>Select User</span>
-                              <select>
+                              <select id="select2">
                                  {% for list in userslist %}
-                                 <option value="{{list.id}}">{{list.first_name}} {{list.last_name}}</option>
+                                 <option value="{{list.id}}" id="userid">{{list.id}} || {{list.first_name}} {{list.last_name}}</option>
                                  {% endfor %}
                               </select>
                               <br><br><br>
-                              <button type="Submit">Submit</button>
+                              <button id="Button2" type="Submit">Submit</button>
                            </div>
                         </form>
                         <!-- {{userslist}} -->
