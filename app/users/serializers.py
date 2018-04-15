@@ -3,6 +3,7 @@ from app.users.models import UserProfile,UserProjects
 from app.roles.models import Role
 from app.projects.models import Projects
 
+
 class UserSerializer(serializers.ModelSerializer):
 	role_name = serializers.SerializerMethodField("getRoleDetail")
 	def getRoleDetail(self,obj):
@@ -56,8 +57,6 @@ class UserSerializer(serializers.ModelSerializer):
 			
 		}		
 
-
-
 class UserProjectSerializer(serializers.ModelSerializer):
 	project_name = serializers.SerializerMethodField("getProjectDetail")
 	def getProjectDetail(self,obj):
@@ -65,14 +64,10 @@ class UserProjectSerializer(serializers.ModelSerializer):
 			return Projects.objects.get(id=obj.project.id).name
 		except Exception as e:
 			print(e)
-	
-	# user_name = serializers.SerializerMethodField("getUsertName")
-	# def getUsertName(self,obj):
-	# 	try:
-	# 		return User.objects.get(id=obj.user.id).name
-	# 	except Exception as e:
-	# 		print(e) 
-	
 	class Meta:
 		model =  UserProjects 
 		fields = ('id','user','project','project_name','is_deleted','created_at','updated_at','status')
+
+
+
+		

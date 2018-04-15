@@ -3,6 +3,108 @@
       <script>
          checkCookie();
       </script>
+
+       <script type = "text/javascript" >
+     $(document).ready(function(event) {
+         var userid = getCookie("id");
+         var el = document.getElementsByName("csrfmiddlewaretoken");
+         csrf_value = el[0].getAttribute("value");
+         var url = "http://127.0.0.1:8000/user/dashboard";
+         $.ajax({
+             url: url,
+             type: "POST",
+             data: {
+                 'userid': userid,
+                 'csrfmiddlewaretoken': csrf_value
+             },
+             dataType: "json",
+             success: function(response) {
+                 var len = response.tt.length;
+                 console.log(len);
+                 $("#select1").empty();
+                 $("#select2").empty();
+                 var pname = "Select Project";
+                 $("#select1").append("<option value='0'>" + pname + "</option>");
+                 $("#select2").append("<option value='0'>" + pname + "</option>");
+                 for (i = 0; i < len; i++) {
+                     if (response.tt[i].user == userid) {
+                         console.log(response.tt[i].project_name.name)
+                         var projectid = response.tt[i].project;
+                         var name = response.tt[i].project_name.name;
+                         $("#select1").append("<option value='" + projectid + "'>" + name + "</option>");
+                         $("#select2").append("<option value='" + projectid + "'>" + name + "</option>");
+                     }
+                 };
+             },
+             error: function(err) {
+
+                 return false;
+             }
+         });
+     }); 
+   </script>
+
+<script type="text/javascript">
+     $(document).ready(function(){
+             $("#billing_form").submit(function(event){
+              event.preventDefault();
+              var time1= $("#billing_hour").val();
+              var time2= $("#non_billing_hour").val();
+              var total_hour= time1+time2;
+              alert(time1);
+
+              // var el = document.getElementsByName("csrfmiddlewaretoken");
+              // csrf_value = el[0].getAttribute("value");
+
+                 $.ajax({
+                  url: "http://127.0.0.1:8000/task/",
+                  type:"POST",
+                     data: {
+                      'user':getCookie("user"),
+                     // 'billing_hour': $("#billing_hour").val(),
+                     // 'non_billing_hour': $("#non_billing_hour").val(),
+                      'billing_hour':"10:10",
+                      'non_billing_hour':"10:10",
+                      'project':"1",
+                      'total_hour':"10:10",
+                      'description':"fdfd"
+
+                      
+                      // 'csrfmiddlewaretoken':csrf_value
+                     },
+                     dataType: "json",
+                     success: function(response){
+                     if(response){
+                       console.log(response);
+                       
+                       if(response.status==201){
+                        alert("Project Created Successfully!");
+                        window.location = "admindashboard"; 
+                       }
+                       if(response.status==404){
+                        console.log("Error in creating user")
+                         alert("Error in creating user")
+                       };
+                       
+                     }
+                 },
+                 error: function (err) {
+                   // alert("Error");
+                   return false;
+                 }
+         
+               });
+         
+             });
+         });
+
+
+
+
+</script>
+
+</head>
+>>>>>>> Ashwin
 <body>
     <div class="wrapper">
         <div class="sidebar" data-image="/static/img/sidebar-5.jpg">
@@ -77,22 +179,20 @@
             <br>
             <input type="date" name="date">
         </div>
-                                
-    
+                   kkk:{{test}}             
+  
 
 <div class="container">  
-<form>         
+<form id=billing_form>  
+ {% csrf_token %}       
 <table class="table table-bordered">
 
 <tbody>
   <tr>
     <th>Project Name</th>
-    <td><select>
-        <option>Select Project</option>
-        <option value="red">Project 1</option>
-        <option value="green">Project 2</option>
-        <option value="blue">Project 3</option>
-    </select></td>
+    <td><select id="select1">
+    <option value="0">Select Project</option>
+    </select><br></td>
       </tr>
       <tr>
         <th>Description</th>
@@ -100,7 +200,11 @@
       </tr>
       <tr>
         <th>Time (Hours)</th>
+
         <td><input type="number" name="billing" max="8" id="time1" value="2"></td>
+
+        <!-- <td><input type="time" name="hours" max="8" id="billing_hour">  [ hh:mm ]</td> -->
+
       </tr>
     </tbody>
   </table>
@@ -115,12 +219,10 @@
 <tbody>
   <tr>
     <th>Project Name</th>
-    <td><select>
-        <option>Select Project</option>
-        <option value="red">Project 1</option>
-        <option value="green">Project 2</option>
-        <option value="blue">Project 3</option>
-        <option value="yellow">R & D</option>
+
+    <td><select id="select2">
+        <option value="0">Select Project</option>
+
     </select></td>
       </tr>
       <tr>
@@ -129,7 +231,10 @@
       </tr>
       <tr>
         <th>Time (Hours)</th>
+
         <td><input type="number" name="non_billing" id="time2" max="8"></td>
+
+        <!-- <td><input type="time" name="hours" id="non_billing_hour" max="8">  [ hh:mm ]</td> -->
       </tr>
     </tbody>
 

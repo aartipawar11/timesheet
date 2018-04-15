@@ -18,6 +18,7 @@ from app.projects.serializers import ProjectSerializer
 from app.projects.views import ProjectView
 
 
+
 class UserProfileList(APIView):
 	
 	def post(self,request):
@@ -115,14 +116,33 @@ class Login(TemplateView):
 				user_response.update(token_value)
 				# print(user_response)
 				return JsonResponse(user_response)
+
 		except Exception as e:
 			print(e)
-			return JsonResponse({'Error':'err'})
+			return JsonResponse({'Error':'error'})
 		
 		
 class Dashboard(TemplateView):
 	def get(self,request):	
-		return render(request,'employee_dashboard.html')
+		# user_id=UserProjects.objects.get(pk=user_id)
+		user_dict = {"test":"yes"}
+		return render(request,'employee_dashboard.html',user_dict)
+		# return render(request,'employee_dashboard.html')
+	@csrf_exempt
+	def post(self,request,user_id=None):
+		idd=request.POST.get('userid')
+		# userData = UserProjects.objects.get(user_id=idd)
+		userData = UserProjects.objects.all()
+		user_data = UserProjectSerializer(userData, many=True)
+		print(user_data.data)
+		
+		print(idd)
+		print("post !!!!")
+		data={
+		"hi":"ji"
+		}
+		return JsonResponse({"tt":user_data.data})
+		# return Response(user_data.data,status=status.HTTP_201_CREATED) 
 
 class UserDetail(TemplateView):
 	def get(self,request):
@@ -146,6 +166,10 @@ class AdminDetails(TemplateView):
 class AddUser(TemplateView):
 	def get(self,request):
 		return render(request,'adduser.html')
+
+class DeleteUser(TemplateView):
+	def get(self,request):
+		return render(request,'delete_user.html')
 
 class AddProject(TemplateView):
 	def get(self,request):
@@ -173,45 +197,16 @@ class AssignProject(TemplateView):
 		user_dict={"userslist":user_data.data}
 		user_dict.update(project_dict)
 		return render(request,'assignproject.html',user_dict)
-
-	def post(self,request,*args, **kwargs):
-
-		## written by aarti
-		try:
-			project_id = request.POST.get('project')
-			user = request.POST.get('user')
-			print(project_id)
-			print(user)
-			# import pdb;pdb.set_trace();
-			# if user_id:
-			# 	user = User.objects.get(username=user_id)
-			# auth_user = authenticate(username=email, password=password)
-			# token,created = Token.objects.get_or_create(user_id=user)
-			# print(token)
-			
-			userprofile = UserProjects.objects.get(id=user)
-			user_data = UserProjectSerializer(userprofile)
-			print(user_data.data)
-			# token_value = {
-			# 	'token':token.key,
-			# 	}
-			
-			# user_response = user_data.data
-			# user_response.update(token_value)
-			# print(user_response)
-			return JsonResponse(user_data.data)
-		except Exception as e:
-			print(e)
-			return JsonResponse({'Error':'err'})
 		
-		
-
 class AssignProjectApi(APIView):
+	
 	def post(self,request):
 
 		## written by aarti
 		
-		try:
+		try:	
+			project_id = request.POST.get('project')	
+			user_id = request.POST.get('user')
 			user_data = UserProjectSerializer(data=request.data)
 			if not(user_data.is_valid()):
 				return Response(user_data.errors)
@@ -220,7 +215,5 @@ class AssignProjectApi(APIView):
 			
 		except Exception as e:
 			print(e)
-			return JsonResponse({'Error':'err'})
-
-
+			return JsonResponse({'Error':'error'})
 

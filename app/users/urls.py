@@ -24,6 +24,7 @@ urlpatterns = [
 	url(r'^admindashboard$',views.AdminDashboard.as_view()),
 	url(r'^admindetails$',views.AdminDetails.as_view()),
 	url(r'^adduser$',views.AddUser.as_view()),
+	url(r'^deleteuser$',views.DeleteUser.as_view()),
 	url(r'^assignproject$',views.AssignProject.as_view()),
 	url(r'^assignprojectdetails$',views.AssignProjectApi.as_view()),
 	url(r'^workdetails$',views.WorkDetails.as_view()),
