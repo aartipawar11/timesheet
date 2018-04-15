@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
          $("#adduserform").submit(function(event){
           event.preventDefault();

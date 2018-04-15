@@ -7,6 +7,6 @@ urlpatterns = [
 	url(r'',views.ProjectView.as_view()),
 	# url(r'^assignproject$',views.AssignProject.as_view()),
 	# url(r'',views.UserProjectView.as_view())
-	url(r'^(?P<project_id>[0-9]+)$',views.ProjectView.as_view()),
+	url(r'^(?P<id>[0-9]+)$',views.ProjectView.as_view()),
 ]
 

@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from django.http import Http404
-from app.users.serializers import UserSerializer
-from app.users.models import UserProfile
+from app.users.serializers import UserSerializer,UserProjectSerializer
+from app.users.models import UserProfile,UserProjects
 from django.shortcuts import render,redirect
 from django.views.generic import TemplateView
 from rest_framework.authtoken.models import Token
@@ -25,18 +25,18 @@ class UserProfileList(APIView):
 			
 			user = self.create_user(request)
 			if not(user):
-				return Response("Error while create user",status=status.HTTP_400_BAD_REQUEST)
+				return Response("Error while create user")
 
 			self.overWrite(request, {'user':user.id})
 			print(request.data)	
 			user_data = UserSerializer(data=request.data)
 			if not(user_data.is_valid()):
-				return Response(user_data.errors,status=status.HTTP_400_BAD_REQUEST)
+				return Response(user_data.errors)
 			user_data.save()
 			return Response(user_data.data,status=status.HTTP_201_CREATED)
 		except Exception as err:
 			print(err)
-			return Response("Error",status=status.HTTP_400_BAD_REQUEST)
+			return Response("Error")
 
 	def overWrite(self, request, dic):
 		try:
@@ -75,7 +75,7 @@ class UserProfileList(APIView):
 				update_data.save()
 				return Response(update_data.data,status=status.HTTP_200_OK)
 		except:
-			return Response("Error" ,status=status.HTTP_400_BAD_REQUEST)
+			return Response("Error")
 
 	def delete(self,request,user_id):
 		delete_user=UserProfile.objects.get(pk=user_id)
@@ -88,7 +88,7 @@ class Login(TemplateView):
 	def get(self,request):
 		return render(request,'login.html')
 	
-	# @csrf_exempt
+	
 	def post(self,request,*args, **kwargs):
 
 		## written by aarti
@@ -140,7 +140,6 @@ class AdminDetails(TemplateView):
 	def get(self,request):
 		userData = UserProfile.objects.all()
 		user_data = UserSerializer(userData, many=True)
-		print(user_data.data)
 		data={"uname":user_data.data}
 		return render(request,'admin_details.html',data)
 
@@ -155,34 +154,73 @@ class AddProject(TemplateView):
 
 class WorkDetails(TemplateView):
 	def get(self,request):
-		return render(request,'datewise_details.html')
+		user_info = UserProfile.objects.all()
+		user_data = UserSerializer(user_info, many=True)
+		user_dict = {"userslist":user_data.data}
+		return render(request,'datewise_details.html',user_dict)
 
+class UserTaskDetails(TemplateView):
+	def get(self,request):
+		return render(request,'user_task_detailss.html')
 
 class AssignProject(TemplateView):
 	def get(self,request):
 		project_Data= Projects.objects.all()
 		project_data = ProjectSerializer(project_Data,many=True)
-		# print(project_data.data)
 		project_dict={"projectlist":project_data.data}
-
 		userData = UserProfile.objects.all()
 		user_data = UserSerializer(userData, many=True)
-		# print(user_data.data)
 		user_dict={"userslist":user_data.data}
 		user_dict.update(project_dict)
-		print(user_dict)
-
 		return render(request,'assignproject.html',user_dict)
-	# def user_page(request, username):
-	# 	try:
-	# 		user = User.objects.get(username=username)
-	# 	except:
-	# 		raise Http404('Requested user not found.')
 
-	# 	template = get_template('assignproject.html')
-	# 	variables = Context({
-	# 		'username': username,
-	# 		 })
-	# 	output = template.render(variables)
-	# 	return HttpResponse(output)
+	def post(self,request,*args, **kwargs):
+
+		## written by aarti
+		try:
+			project_id = request.POST.get('project')
+			user = request.POST.get('user')
+			print(project_id)
+			print(user)
+			# import pdb;pdb.set_trace();
+			# if user_id:
+			# 	user = User.objects.get(username=user_id)
+			# auth_user = authenticate(username=email, password=password)
+			# token,created = Token.objects.get_or_create(user_id=user)
+			# print(token)
+			
+			userprofile = UserProjects.objects.get(id=user)
+			user_data = UserProjectSerializer(userprofile)
+			print(user_data.data)
+			# token_value = {
+			# 	'token':token.key,
+			# 	}
+			
+			# user_response = user_data.data
+			# user_response.update(token_value)
+			# print(user_response)
+			return JsonResponse(user_data.data)
+		except Exception as e:
+			print(e)
+			return JsonResponse({'Error':'err'})
+		
+		
+
+class AssignProjectApi(APIView):
+	def post(self,request):
+
+		## written by aarti
+		
+		try:
+			user_data = UserProjectSerializer(data=request.data)
+			if not(user_data.is_valid()):
+				return Response(user_data.errors)
+			user_data.save()
+			return Response(user_data.data,status=status.HTTP_201_CREATED)
+			
+		except Exception as e:
+			print(e)
+			return JsonResponse({'Error':'err'})
+
+
 

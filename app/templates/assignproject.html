@@ -1,7 +1,9 @@
+
 {% include "header.html" %}
       <script>
          checkCookie();
       </script>
+ <script type="text/javascript" src="/static/customizedjs/assign_project.js"></script>
    <body>
       <div class="wrapper">
          <div class="sidebar" data-image="/static/img/sidebar-5.jpg">
@@ -13,7 +15,7 @@
             <div class="sidebar-wrapper">
                <div class="logo">
                   <a href="http://www.thoughtwin.com" class="simple-text">
-                  Thoughtwin
+                  Thoughtwine
                   </a>
                </div>
                <ul class="nav">
@@ -74,22 +76,24 @@
                         <h2>Assign Project To User</h2>
                         <br>
                         <form>
+                           {% csrf_token %}  
                            <div>
+
                               <span>Project Name:</span>
-                             <select>
+                              <select id="select1">
                                  {% for list in projectlist %}
                                  <option value="{{list.id}}">{{list.name}}</option>
                                  {% endfor %}
                               </select>
                               <br><br>
                               <span>Select User</span>
-                           <select>
+                             <select id="select2">
                                  {% for list in userslist %}
-                                 <option value="{{list.id}}">{{list.first_name}} {{list.last_name}}</option>
+                                 <option value="{{list.id}}" >{{list.first_name}} {{list.last_name}}</option>
                                  {% endfor %}
                               </select>
                               <br><br><br>
-                              <button type="Submit">Submit</button>
+                              <button type="Submit"  id="Button2">Submit</button>
                            </div>
                         </form>
                         <!-- {{userslist}} -->
@@ -99,4 +103,4 @@
                   </div>
                </div>
             </div>
-            {% include "footer.html" %}
+{% include "footer.html" %}

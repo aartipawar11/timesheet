@@ -107,9 +107,9 @@
                                         <tbody>
                                         {% for list in userslist %}
                                           <tr>
-                                            <td value="{{list.id}}"><a href="/user/taskdetails"> {{list.first_name}}</a>
+                                            <td value="{{list.id}}"><a class="nav-link" href="/user/taskdetail"> {{list.first_name}}</a>
                                             </td >
-                                            <td value="{{list.id}}"><a href="/user/taskdetails">{{list.last_name}}</a></td>
+                                            <td value="{{list.id}}"><a class="nav-link" href="/user/taskdetail">{{list.last_name}}</a></td>
                                             <td value="{{list.id}}">{{list.email}}</td>
                                           </tr>
                                         {% endfor %}

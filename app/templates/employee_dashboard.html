@@ -73,7 +73,7 @@
 <div class="col-md-12">
     <div class="card card-plain table-plain-bg">
         <div class="card-header ">
-            <h4 class="card-title">Billing Hours</h4>
+            <h4 class="card-title" >Billing Hours</h4>
             <br>
             <input type="date" name="date">
         </div>
@@ -96,19 +96,19 @@
       </tr>
       <tr>
         <th>Description</th>
-        <td><textarea rows="2" cols="75" placeholder="Description"></textarea></td>
+        <td><textarea rows="2" cols="75" placeholder="Description" name="task_description"></textarea></td>
       </tr>
       <tr>
         <th>Time (Hours)</th>
-        <td><input type="number" name="hours" max="8" id="time1" value="2"></td>
+        <td><input type="number" name="billing" max="8" id="time1" value="2"></td>
       </tr>
     </tbody>
-
-  
   </table>
 <br>
   <div class="card-header ">
      <h4 class="card-title">Non-Billing Hours</h4><br>
+
+        <input type="date" name="date">
  </div>
  <table class="table table-bordered">
 
@@ -120,15 +120,16 @@
         <option value="red">Project 1</option>
         <option value="green">Project 2</option>
         <option value="blue">Project 3</option>
+        <option value="yellow">R & D</option>
     </select></td>
       </tr>
       <tr>
         <th>Description</th>
-        <td><textarea rows="2" cols="75" placeholder="Description"></textarea></td>
+        <td><textarea rows="2" cols="75" placeholder="Description" ></textarea></td>
       </tr>
       <tr>
         <th>Time (Hours)</th>
-        <td><input type="number" name="hours" id="time2" max="8"></td>
+        <td><input type="number" name="non_billing" id="time2" max="8"></td>
       </tr>
     </tbody>
 
@@ -153,7 +154,7 @@
                     <nav>
                         
                         <p class="copyright text-center">
-                            ©
+                            
                             
                             <a href="http://www.thoughtwin.com">Thoughtwin</a>, made with love by Python Team
                         </p>
