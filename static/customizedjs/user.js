@@ -1,4 +1,4 @@
-   $(document).ready(function(){
+      $(document).ready(function(){
              $("#adduserform").submit(function(event){
               event.preventDefault();
               // var el = document.getElementsByName("csrfmiddlewaretoken");
@@ -15,7 +15,7 @@
                       'email': $("#email").val(), 
                       'password': $("#password").val(), 
                       'designation': $("#designation").val(),
-                      'role': $("#role").val(),  
+                      'role': $("#role:checked").val(),  
                       
                       // 'csrfmiddlewaretoken':csrf_value
                      },
@@ -23,7 +23,15 @@
                      success: function(response){
                      if(response){
                        console.log(response);
-                       
+                       $('.alert').show();
+
+                        // alert("Details updated  ")
+                           window.setTimeout(function() {
+                           $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                           $(this).remove(); 
+                           });
+                           location.reload()
+                           }, 2000);
                        if(response.status==201){
                         alert("User Created Successfully!");
                         window.location = "admindashboard"; 

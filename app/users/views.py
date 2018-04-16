@@ -15,7 +15,8 @@ from django.contrib.auth import authenticate
 from app.projects.views import ProjectView
 from app.projects.serializers import ProjectSerializer
 from app.projects.models import Projects
-
+from app.tasks.models import Tasks
+from app.tasks.serializers import TaskSerializer
 
 class UserProfileList(APIView):
 	
@@ -132,9 +133,9 @@ class Dashboard(TemplateView):
 		# userData = UserProjects.objects.get(user_id=idd)
 		userData = UserProjects.objects.all()
 		user_data = UserProjectSerializer(userData, many=True)
-		print(user_data.data)
+		# print(user_data.data)
 		
-		print(idd)
+		# print(idd)
 		print("post !!!!")
 		data={
 		"hi":"ji"
@@ -146,7 +147,7 @@ class UserDetail(TemplateView):
 	def get(self,request):
 		userData = UserProfile.objects.all()
 		user_data = UserSerializer(userData, many=True)
-		print(user_data.data)
+		# print(user_data.data)
 		data={"uname":user_data.data}
 		return render(request,'user_details.html',data)
 
@@ -177,7 +178,17 @@ class AddProject(TemplateView):
 
 class WorkDetails(TemplateView):
 	def get(self,request):
-		return render(request,'datewise_details.html')
+		user_info = UserProfile.objects.all()
+		user_data = UserSerializer(user_info, many=True)
+		# user_email = User.objects.get(username=request.username)
+		
+		# print(user_email)
+		user_dict = {"userslist":user_data.data}
+		# user_dict.update(user_email)
+		# print(user_dict)
+		return render(request,'datewise_details.html',user_dict)
+
+		# return render(request,'datewise_details.html')
 
 class AssignProject(TemplateView):
 	def get(self,request):
@@ -201,7 +212,7 @@ class AssignProjectApi(APIView):
 	# @csrf_exempt
 	def post(self,request):
 
-		## written by aarti
+		
 		
 		try:
 			
@@ -220,4 +231,30 @@ class AssignProjectApi(APIView):
 			print(e)
 			return JsonResponse({'Error':'err'})
 
-		
+class UserTaskDetails(TemplateView):
+	def get(self,request):
+		return render(request,'user_task_details.html')
+
+class UserTaskDatewise(APIView):
+	def get(self,request,user_id=None):
+		usertasks = Tasks.objects.get(pk=user_id)
+		user_tasks = TaskSerializer(usertasks)
+		print(user_tasks)
+		return render(request,'datewise_all_details.html',user_tasks.data)
+		# return Response(user_tasks.data,status=status.HTTP_200_OK)
+
+class DateWiseWork(APIView):
+
+	def post(self,request):
+		input_date=request.POST.get('date')
+		print(input_date)
+		# objects.all()
+		# if not 
+		datewise=Tasks.objects.get(date=input_date)
+		if datewise:
+			print("date got!")
+			# usersall=Tasks.objects.get()
+		datee=TaskSerializer(datewise)
+
+		# return Response(input_date,status=status.HTTP_200_OK)
+		return Response(datee.data,status=status.HTTP_200_OK)

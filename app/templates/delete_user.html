@@ -3,6 +3,7 @@
    checkCookie();
 </script>
 <script type="text/javascript" src="/static/customizedjs/deleteuser.js"></script>
+
 <script type="text/javascript" src="/static/customizedjs/get_users_list.js"></script>
 <style type="text/css">
    tr:hover {
@@ -72,6 +73,10 @@
       </div>
    </nav>
    <!-- End Navbar -->
+  <!--   <div class="alert alert-success" style="position: absolute;top:30px;left: 25%;height: 40px;width: 300px;color: black;border-radius: 10px; text-align: center;display: none;">
+               User Deleted Successfully!
+
+            </div> -->
    <div class="content">
       <div class="container-fluid">
          <div class="row">
@@ -80,7 +85,8 @@
             <div class="col-md-12">
                <div  class="form-group" id="deluserform">
                   <label>Enter ID to delete</label>
-                  <textarea class="form-control" style="resize: none;" type="text" name="id" id="inputid"></textarea>
+                <!--   <textarea class="form-control" style="resize: none;" type="text" name="id" id="inputid"></textarea> -->
+                <input type="text" class="form-control"  name="id" id="inputid">
                   <button id="deletenow">DELETE</button>
                </div>
                <br>

@@ -1,7 +1,8 @@
- $(function() {
+     $(function() {
             $("#datepicker-6").datepicker({
+                dateFormat: 'yy-mm-dd',
                showOn:"button",
-               buttonImage: "/static/img/Calendar.png",
+               buttonImage: "/static/img/calendar.png",
                buttonImageOnly: true
             });
          });

@@ -1,4 +1,5 @@
-$(document).ready(function() {
+ 
+   $(document).ready(function() {
         $("#userdetailform").submit(function(event) {
             event.preventDefault();
             var id = getCookie("id");
@@ -26,8 +27,15 @@ $(document).ready(function() {
                 success: function(response) {
                     if (response) {
                         console.log(response);
-                        alert("Details updated  ")
+                        $('.alert').show();
 
+                        // alert("Details updated  ")
+                           window.setTimeout(function() {
+                           $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                           $(this).remove(); 
+                           });
+                           location.reload()
+                           }, 2000);
 
                         if (response.status == 200) {
                             alert("User Created Successfully!");
@@ -49,4 +57,3 @@ $(document).ready(function() {
         });
 
     });
-

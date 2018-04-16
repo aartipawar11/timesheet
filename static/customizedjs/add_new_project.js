@@ -1,4 +1,4 @@
-   $(document).ready(function(){
+      $(document).ready(function(){
              $("#createprojectform").submit(function(event){
               event.preventDefault();
               // var el = document.getElementsByName("csrfmiddlewaretoken");
@@ -18,7 +18,15 @@
                      success: function(response){
                      if(response){
                        console.log(response);
-                       
+                        $('.alert').show();
+
+                        // alert("Details updated  ")
+                           window.setTimeout(function() {
+                           $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                           $(this).remove(); 
+                           });
+                           location.reload()
+                           }, 2000);
                        if(response.status==201){
                         alert("Project Created Successfully!");
                         window.location = "admindashboard"; 
