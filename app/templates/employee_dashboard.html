@@ -3,7 +3,10 @@
       <script>
          checkCookie();
       </script>
-
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="/static/customizedjs/datepicker.js"></script>
        <script type = "text/javascript" >
      $(document).ready(function(event) {
          var userid = getCookie("id");
@@ -20,15 +23,16 @@
              dataType: "json",
              success: function(response) {
                  var len = response.tt.length;
-                 console.log(len);
+                 // console.log(len);
                  $("#select1").empty();
                  $("#select2").empty();
                  var pname = "Select Project";
+                 var nonpname = "Thoughtwin | R & D";
                  $("#select1").append("<option value='0'>" + pname + "</option>");
-                 $("#select2").append("<option value='0'>" + pname + "</option>");
+                 $("#select2").append("<option value='0'>" + nonpname + "</option>");
                  for (i = 0; i < len; i++) {
                      if (response.tt[i].user == userid) {
-                         console.log(response.tt[i].project_name.name)
+                         // console.log(response.tt[i].project_name.name)
                          var projectid = response.tt[i].project;
                          var name = response.tt[i].project_name.name;
                          $("#select1").append("<option value='" + projectid + "'>" + name + "</option>");
@@ -48,10 +52,10 @@
      $(document).ready(function(){
              $("#billing_form").submit(function(event){
               event.preventDefault();
-              var time1= $("#billing_hour").val();
-              var time2= $("#non_billing_hour").val();
-              var total_hour= time1+time2;
-              alert(time1);
+              // var time1= $("#billing_hour").val();
+              // var time2= $("#non_billing_hour").val();
+              // var total_hour= time1+time2;
+              // alert(time1);
 
               // var el = document.getElementsByName("csrfmiddlewaretoken");
               // csrf_value = el[0].getAttribute("value");
@@ -61,13 +65,14 @@
                   type:"POST",
                      data: {
                       'user':getCookie("user"),
-                     // 'billing_hour': $("#billing_hour").val(),
-                     // 'non_billing_hour': $("#non_billing_hour").val(),
-                      'billing_hour':"10:10",
-                      'non_billing_hour':"10:10",
-                      'project':"1",
-                      'total_hour':"10:10",
-                      'description':"fdfd"
+                      'project':$("#select1").val(),
+                     'billing_hour': $("#billing_hour").val(),
+                     'non_billing_hour': $("#non_billing_hour").val(),
+                     
+                      // 'total_hour':$("#billing_hour").val()+$("#non_billing_hour").val(),
+                      'total_hour':"08:00",
+                      'billing_description':$("#billing_description").val(),
+                      'non_billing_description':$("#non_billing_description").val(),
 
                       
                       // 'csrfmiddlewaretoken':csrf_value
@@ -76,7 +81,17 @@
                      success: function(response){
                      if(response){
                        console.log(response);
-                       
+                      $('.alert').show();
+
+                        // alert("Details updated  ")
+                           window.setTimeout(function() {
+                           $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                           $(this).remove(); 
+                           });
+                           location.reload()
+                           }, 2000);
+
+
                        if(response.status==201){
                         alert("Project Created Successfully!");
                         window.location = "admindashboard"; 
@@ -102,9 +117,16 @@
 
 
 </script>
+<style>
+.ui-datepicker-trigger { 
+    position:relative;
+    /*top:10px ;*/
+    right:30px ; 
+    height:25px }
+ /* {} is the value according to your need */
+</style>
 
 </head>
->>>>>>> Ashwin
 <body>
     <div class="wrapper">
         <div class="sidebar" data-image="/static/img/sidebar-5.jpg">
@@ -155,17 +177,26 @@
                     <div class="collapse navbar-collapse justify-content-end" id="navigation">
                         
                         <ul class="navbar-nav ml-auto">
-                           
+                           <li class="nav-item">
+                                <a class="nav-link">
+                                    <span class="no-icon">Billing/NonBilling</span>
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" onclick="deleteAllCookies()">
                                     <span class="no-icon">Log out</span>
                                 </a>
                             </li>
+                            
                         </ul>
                     </div>
                 </div>
             </nav>
             <!-- End Navbar -->
+            <div class="alert alert-success" style="position: fixed;top:30px;left: 35%;height: 40px;width: 300px;color: black;border-radius: 10px; text-align: center;display: none;">
+               Submitted Successfully!
+
+            </div>
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
@@ -173,13 +204,16 @@
                            
                         </div>
 <div class="col-md-12">
+  <b>Enter Date: <input type = "text" id = "datepicker-6"></b>
+  <br><br><br>
     <div class="card card-plain table-plain-bg">
         <div class="card-header ">
             <h4 class="card-title" >Billing Hours</h4>
             <br>
-            <input type="date" name="date">
+            <!-- <input type="date" name="date"> -->
+            <!-- <input type = "text" id = "datepicker-6"> -->
         </div>
-                   kkk:{{test}}             
+                               
   
 
 <div class="container">  
@@ -197,6 +231,9 @@
       <tr>
         <th>Description</th>
         <td><textarea rows="2" cols="75" placeholder="Description" name="task_description"></textarea></td>
+
+       <!--  <td><textarea rows="2" cols="75" placeholder="Description" id=billing_description></textarea></td> -->
+
       </tr>
       <tr>
         <th>Time (Hours)</th>
@@ -227,7 +264,10 @@
       </tr>
       <tr>
         <th>Description</th>
+
         <td><textarea rows="2" cols="75" placeholder="Description" ></textarea></td>
+        <!--  <td><textarea rows="2" cols="75" placeholder="Description" id=non_billing_description></textarea></td> -->
+
       </tr>
       <tr>
         <th>Time (Hours)</th>
@@ -269,8 +309,11 @@
         </div>
     </div>
 </body>
-<script src="/static/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
+<!-- <script src="/static/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
 <script src="/static/js/core/popper.min.js" type="text/javascript"></script>
 <script src="/static/js/core/bootstrap.min.js" type="text/javascript"></script>
+<<<<<<< HEAD
 <script src="/static/js/light-bootstrap-dashboard.js?v=2.0.1" type="text/javascript"></script>
+=======
+<script src="/static/js/light-bootstrap-dashboard.js?v=2.0.1" type="text/javascript"></script> -->
 </html>

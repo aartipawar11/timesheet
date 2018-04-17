@@ -1,7 +1,4 @@
-
 {% include "header.html" %}
-<link rel="stylesheet" href="/static/css/screen.css" />
-<script type="text/javascript" src="/static/customizedjs/add_new_project.js"></script>
 
 <script>
    checkCookie();
@@ -43,7 +40,7 @@
    <!-- Navbar -->
    <nav class="navbar navbar-expand-lg " color-on-scroll="500">
       <div class=" container-fluid  ">
-         <a class="navbar-brand" href="admindashboard">Admin Dashboard </a>
+         <a class="navbar-brand" href="../admindashboard">Admin Dashboard </a>
          <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-bar burger-lines"></span>
          <span class="navbar-toggler-bar burger-lines"></span>
@@ -68,41 +65,69 @@
       </div>
    </nav>
    <!-- End Navbar -->
-    <div class="alert alert-success" style="position: absolute;top:30px;left: 25%;height: 40px;width: 300px;color: black;border-radius: 10px; text-align: center;display: none;">
-               Project Added Successfully!
-
-            </div>
+  
    <div class="content">
       <div class="container-fluid">
          <div class="row">
             <div class="col-md-12">
-            </div>
-            <div class="col-md-12">
-               <h2>Add Project</h2>
+
+            	<h2>Details Of Work</h2>
                <br>
-               <form id="createprojectform" method="post">
-                  <!-- {% csrf_token %} --> 
-                  <div>
-                     <div class="form-group">
-                        <label for="projectname">Project Name</label>
-                        <input type="text" class="form-control" id="projectname" placeholder="Enter Project Name" name="name" required>
-                     </div>
-                     <div class="form-group">
-                        <label for="description">Project Description</label>
-                        <textarea class="form-control" rows="30" id="projectdescription" name="description" placeholder="Enter Project Description" required></textarea>
-                     </div>
-                     <br><br>
-                     <INPUT TYPE="hidden" NAME="redirect" VALUE="thankyou.html">
-                     <button type="Submit">Submit</button>
-                  </div>
-               </form>
-            </div>
+               <div class="container">
+          
+						<table class="table table-bordered">
+
+						<tbody>
+						<tr>
+						<td><b>User id</b></td>
+						<td>{{id}}</td>
+
+						</tr>
+						<tr>
+						<td><b>Date</b></td>
+						<td>{{date}}</td>
+
+						</tr>
+						
+						<tr>
+						<td><b>Biling Project Name</b></td>
+						<td>{{project_details.name}}</td>
+						</tr>
+						
+						<tr>
+						<td><b>Billing Description</b></td>
+						<td>{{billing_description}}</td>
+						</tr>
+						<tr>
+						<td><b>Billing Hour</b></td>
+						<td>{{billing_hour}}</td>
+						</tr>
+						
+						<tr>
+						<td><b>Non Billing Project Name</b></td>
+						<td></td>
+						</tr>
+						
+						<tr>
+						<td><b>Non Billing Description</b></td>
+						<td>{{non_billing_description}}</td>
+						</tr>
+						<tr>
+						<td><b>Non Billing Hour</b></td>
+						<td>{{non_billing_hour}}</td>
+						</tr>
+						<tr>
+						<td><b>Total Hour</b></td>
+						<td>{{total_hour}}</td>	
+						</tr>
+						</tbody>
+						</table>
+					</div>
+
+
+           </div>
          </div>
       </div>
    </div>
-   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-   <script type="text/javascript" src="/static/customizedjs/jquery.validate.js"></script>
-   <script>
-      $("#createprojectform").validate()
-   </script>
+ 
    {% include "footer.html" %}
