@@ -15,7 +15,7 @@ $(document).ready(function(){
                   'email': $("#email").val(), 
                   'password': $("#password").val(), 
                   'designation': $("#designation").val(),
-                  'role': $("#role").val(),  
+                  'role': $("#role:checked").val(),  
                   
                   // 'csrfmiddlewaretoken':csrf_value
                  },
