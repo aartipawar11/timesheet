@@ -33,7 +33,7 @@ urlpatterns = [
 	url(r'^(?P<user_id>[0-9]+)$',views.UserProfileList.as_view()),
 	url(r'^taskdetail$',views.UserTaskDetails.as_view()),
 	url(r'^taskdetail/(?P<user_id>[0-9]+)$',views.UserTaskDatewise.as_view()),
-	url(r'^datewise$',views.DateWiseWork.as_view()),
+	# url(r'^datewise$',views.DateWiseWork.as_view()),
 	url(r'',views.UserProfileList.as_view()), 
 	url(r'^taskdetail$',views.UserTaskDetails.as_view()),
 

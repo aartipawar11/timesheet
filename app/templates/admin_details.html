@@ -1,191 +1,185 @@
 {% include "header.html" %}
-      <script>
-         checkCookie();
-      </script>
-
-   <script type="text/javascript" src="/static/customizedjs/get_details.js"></script>
-
+<script>
+	checkCookie();
+</script>
+<script type="text/javascript" src="/static/customizedjs/get_details.js"></script>
 <script type="text/javascript" src="/static/customizedjs/edit_details.js"></script>
-   </head>
-   <body>
-      <div class="wrapper">
-         <div class="sidebar" data-image="/static/img/sidebar-5.jpg">
-            <!--
-               Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
-               
-               Tip 2: you can also add an image using data-image tag
-               -->
-            <div class="sidebar-wrapper">
-               <div class="logo">
-                  <a href="http://www.thoughtwin.com" class="simple-text">
-                  Thoughtwin
-                  </a>
-               </div>
-               <ul class="nav">
-                  <li>
-                     <a class="nav-link" href="/user/admindashboard">
-                        <i class="fa fa-pie-chart" aria-hidden="true"></i>
-                        <p>Dashboard</p>
-                     </a>
-                  </li>
-                  <li class="nav-item active">
-                     <a class="nav-link" href="/user/userprofile">
-                        <i class="fa fa-user fa" aria-hidden="true"></i>
-                        <p>User Profile</p>
-                     </a>
-                  </li>
-               </ul>
-            </div>
-         </div>
-         <div class="main-panel">
-            <nav class="navbar navbar-expand-lg " color-on-scroll="500">
-               <div class=" container-fluid  ">
-                  <a class="navbar-brand" href="/user/admindashboard">Admin Dashboard</a>
-                  <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-bar burger-lines"></span>
-                  <span class="navbar-toggler-bar burger-lines"></span>
-                  <span class="navbar-toggler-bar burger-lines"></span>
-                  </button>
-                  <div class="collapse navbar-collapse justify-content-end" id="navigation">
-                     <ul class="nav navbar-nav mr-auto">
-                        <li class="nav-item">
-                           <a href="#" class="nav-link" data-toggle="dropdown">
-                           <span class="d-lg-none">Dashboard</span>
-                           </a>
-                        </li>
-                     </ul>
-                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                           <a class="nav-link" onclick="deleteAllCookies()">
-                           <span class="no-icon">Log out</span>
-                           </a>
-                        </li>
-                     </ul>
-                  </div>
-               </div>
-            </nav>
-            <!-- End Navbar -->
-             <div class="alert alert-success" style="position: absolute;top:30px;left: 25%;height: 40px;width: 300px;color: black;border-radius: 10px; text-align: center;display: none;">
-               Personal Information Updated!
-
-            </div>
-            <div class="content">
-               <div class="container-fluid">
-                  <div class="row">
-                     <div class="col-md-8">
-                        <div class="card">
-                           <div class="card-header">
-                              <h4 class="card-title">Edit Profile</h4>
-                           </div>
-                           
-                           <div class="card-body">
-                              <form  id="userdetailform">
-                                 <div class="row">
-                                    <div class="col-md-5 pr-1">
-                                       <div class="form-group">
-                                          <label>Company (disabled)</label>
-                                          <input type="text" class="form-control" disabled="" placeholder="Company" value="Thoughtwin">
-                                       </div>
-                                    </div>
-                                   <!--  <div class="col-md-3 px-1">
-                                       <div class="form-group">
-                                          <label>Username</label>
-                                          <input type="text" name="username" class="form-control" placeholder="Username" value="">
-                                       </div>
-                                    </div> -->
-                                  <!--   <div class="col-md-4 pl-1">
-                                       <div class="form-group">
-                                          <label for="exampleInputEmail1">Email address</label>
-                                          <input type="email" name="email" class="form-control" placeholder="Email">
-                                       </div>
-                                    </div> -->
-                                 </div>
-                                 <div class="row">
-                                    <div class="col-md-6 pr-1">
-                                       <div class="form-group">
-                                          <label>First Name</label>
-                                          <textarea style="resize: none;" type="text" placeholder="Company" name="first_name" id="first_name" class="form-control"  value=""></textarea>
-                                       </div>
-                                    </div>
-                                    <div class="col-md-6 pl-1">
-                                       <div class="form-group">
-                                          <label>Last Name</label>
-                                          <textarea style="resize: none;" type="text" name="last_name" id="last_name" class="form-control" placeholder="Last Name" value=""></textarea>
-                                       </div>
-                                    </div>
-                                 </div>
-                                 <div class="row">
-                                    <div class="col-md-4 pr-1">
-                                       <div class="form-group">
-                                          <label>Mobile</label>
-                                          <textarea style="resize: none;" type="number" name="mobile" id="mobile" class="form-control" placeholder="Mobile" value=""></textarea>
-                                       </div>
-                                    </div>
-                                    <div class="col-md-4 px-1">
-                                       <div class="form-group">
-                                          <label>DOB</label>
-                                          <textarea style="resize: none;" type="date" name="dob" id="dob" class="form-control" placeholder="dob" value=""></textarea>
-                                       </div>
-                                    </div>
-                                    <div class="col-md-4 pl-1">
-                                       <div class="form-group">
-                                          <label>Gender</label>
-                                          <textarea style="resize: none;" type="text" name="gender" id="gender" class="form-control" placeholder="Gender"></textarea>
-                                       </div>
-                                    </div>
-                                 </div>
-                                
-                                 <div class="row">
-                                    <div class="col-md-12">
-                                       <div class="form-group">
-                                          <label>Designation</label>
-                                          <textarea  style="resize: none;" rows="4" cols="80" class="form-control" placeholder="Your Desgnation" name="designation" id="designation" value=""></textarea>
-                                       </div>
-                                    </div>
-                                 </div>
-                                 <button type="submit" class="btn btn-info btn-fill pull-right">Update Profile</button>
-                                 <div class="clearfix"></div>
-                              </form>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="col-md-4">
-                        <div class="card card-user">
-                           <div class="card-image">
-                              <img src="/static/img/background.jpeg" alt="...">
-                           </div>
-                           <div class="card-body">
-                              <div class="author">
-                                 <a href="#">
-                                    <img class="avatar border-gray" src="/static/img/faces/face-1.jpg" alt="...">
-                                    <h5 class="title">D Ashwin</h5>
-                                 </a>
-                                 <p class="description">
-                                    D.Ashwin ...
-                                 </p>
-                              </div>
-                              <p class="description text-center">
-                                 "Lamborghini Mercy
-                                 <br> Your chick she so thirsty
-                                 <br> I'm in that two seat Lambo"
-                              </p>
-                           </div>
-                           <hr>
-                           <div class="button-container mr-auto ml-auto">
-                              <button href="#" class="btn btn-simple btn-link btn-icon">
-                              <i class="fa fa-facebook-square"></i>
-                              </button>
-                              <button href="#" class="btn btn-simple btn-link btn-icon">
-                              <i class="fa fa-twitter"></i>
-                              </button>
-                              <button href="#" class="btn btn-simple btn-link btn-icon">
-                              <i class="fa fa-google-plus-square"></i>
-                              </button>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-     
-            {% include "footer.html" %}
+</head>
+<body>
+	<div class="wrapper">
+	<div class="sidebar" data-image="/static/img/sidebar-5.jpg">
+		<!--
+			Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
+			
+			Tip 2: you can also add an image using data-image tag
+			-->
+		<div class="sidebar-wrapper">
+			<div class="logo">
+				<a href="http://www.thoughtwin.com" class="simple-text">
+				Thoughtwin
+				</a>
+			</div>
+			<ul class="nav">
+				<li>
+					<a class="nav-link" href="/user/admindashboard">
+						<i class="fa fa-pie-chart" aria-hidden="true"></i>
+						<p>Dashboard</p>
+					</a>
+				</li>
+				<li class="nav-item active">
+					<a class="nav-link" href="/user/userprofile">
+						<i class="fa fa-user fa" aria-hidden="true"></i>
+						<p>User Profile</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="main-panel">
+	<nav class="navbar navbar-expand-lg " color-on-scroll="500">
+		<div class=" container-fluid  ">
+			<a class="navbar-brand" href="/user/admindashboard">Admin Dashboard</a>
+			<button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-bar burger-lines"></span>
+			<span class="navbar-toggler-bar burger-lines"></span>
+			<span class="navbar-toggler-bar burger-lines"></span>
+			</button>
+			<div class="collapse navbar-collapse justify-content-end" id="navigation">
+				<ul class="nav navbar-nav mr-auto">
+					<li class="nav-item">
+						<a href="#" class="nav-link" data-toggle="dropdown">
+						<span class="d-lg-none">Dashboard</span>
+						</a>
+					</li>
+				</ul>
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="nav-link" onclick="deleteAllCookies()">
+						<span class="no-icon">Log out</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- End Navbar -->
+	<div class="alert alert-success" style="position: absolute;top:30px;left: 25%;height: 40px;width: 300px;color: black;border-radius: 10px; text-align: center;display: none;">
+		Personal Information Updated!
+	</div>
+	<div class="content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-8">
+					<div class="card">
+						<div class="card-header">
+							<h4 class="card-title">Edit Profile</h4>
+						</div>
+						<div class="card-body">
+							<form  id="userdetailform">
+								<div class="row">
+									<div class="col-md-5 pr-1">
+										<div class="form-group">
+											<label>Company (disabled)</label>
+											<input type="text" class="form-control" disabled="" placeholder="Company" value="Thoughtwin">
+										</div>
+									</div>
+									<!--  <div class="col-md-3 px-1">
+										<div class="form-group">
+											<label>Username</label>
+											<input type="text" name="username" class="form-control" placeholder="Username" value="">
+										</div>
+										</div> -->
+									<!--   <div class="col-md-4 pl-1">
+										<div class="form-group">
+											<label for="exampleInputEmail1">Email address</label>
+											<input type="email" name="email" class="form-control" placeholder="Email">
+										</div>
+										</div> -->
+								</div>
+								<div class="row">
+									<div class="col-md-6 pr-1">
+										<div class="form-group">
+											<label>First Name</label>
+											<textarea style="resize: none;" type="text" placeholder="Company" name="first_name" id="first_name" class="form-control"  value=""></textarea>
+										</div>
+									</div>
+									<div class="col-md-6 pl-1">
+										<div class="form-group">
+											<label>Last Name</label>
+											<textarea style="resize: none;" type="text" name="last_name" id="last_name" class="form-control" placeholder="Last Name" value=""></textarea>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4 pr-1">
+										<div class="form-group">
+											<label>Mobile</label>
+											<textarea style="resize: none;" type="number" name="mobile" id="mobile" class="form-control" placeholder="Mobile" value=""></textarea>
+										</div>
+									</div>
+									<div class="col-md-4 px-1">
+										<div class="form-group">
+											<label>DOB</label>
+											<textarea style="resize: none;" type="date" name="dob" id="dob" class="form-control" placeholder="dob" value=""></textarea>
+										</div>
+									</div>
+									<div class="col-md-4 pl-1">
+										<div class="form-group">
+											<label>Gender</label>
+											<textarea style="resize: none;" type="text" name="gender" id="gender" class="form-control" placeholder="Gender"></textarea>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label>Designation</label>
+											<textarea  style="resize: none;" rows="4" cols="80" class="form-control" placeholder="Your Desgnation" name="designation" id="designation" value=""></textarea>
+										</div>
+									</div>
+								</div>
+								<button type="submit" class="btn btn-info btn-fill pull-right">Update Profile</button>
+								<div class="clearfix"></div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card card-user">
+						<div class="card-image">
+							<img src="/static/img/background.jpeg" alt="...">
+						</div>
+						<div class="card-body">
+							<div class="author">
+								<a href="#">
+									<img class="avatar border-gray" src="/static/img/faces/face-1.jpg" alt="...">
+									<h5 class="title">D Ashwin</h5>
+								</a>
+								<p class="description">
+									D.Ashwin ...
+								</p>
+							</div>
+							<p class="description text-center">
+								"Lamborghini Mercy
+								<br> Your chick she so thirsty
+								<br> I'm in that two seat Lambo"
+							</p>
+						</div>
+						<hr>
+						<div class="button-container mr-auto ml-auto">
+							<button href="#" class="btn btn-simple btn-link btn-icon">
+							<i class="fa fa-facebook-square"></i>
+							</button>
+							<button href="#" class="btn btn-simple btn-link btn-icon">
+							<i class="fa fa-twitter"></i>
+							</button>
+							<button href="#" class="btn btn-simple btn-link btn-icon">
+							<i class="fa fa-google-plus-square"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% include "footer.html" %}
