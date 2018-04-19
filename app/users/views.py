@@ -16,7 +16,7 @@ import re
 from app.projects.models import Projects
 from app.projects.serializers import ProjectSerializer
 from app.projects.views import ProjectView
-from app.tasks.models import Task
+from app.tasks.models import Tasks
 from app.tasks.serializers import TaskSerializer
 
 
@@ -90,7 +90,6 @@ class Login(TemplateView):
 	def get(self,request):
 		return render(request,'login.html')
 	
-	
 	def post(self,request,*args, **kwargs):
 
 		## written by aarti
@@ -115,7 +114,6 @@ class Login(TemplateView):
 				
 				user_response = user_data.data
 				user_response.update(token_value)
-				# print(user_response)
 				return JsonResponse(user_response)
 
 		except Exception as e:
@@ -125,31 +123,19 @@ class Login(TemplateView):
 		
 class Dashboard(TemplateView):
 	def get(self,request):	
-		# user_id=UserProjects.objects.get(pk=user_id)
 		user_dict = {"test":"yes"}
 		return render(request,'employee_dashboard.html',user_dict)
-		# return render(request,'employee_dashboard.html')
+		
 	@csrf_exempt
 	def post(self,request,user_id=None):
-		idd=request.POST.get('userid')
-		# userData = UserProjects.objects.get(user_id=idd)
 		userData = UserProjects.objects.all()
 		user_data = UserProjectSerializer(userData, many=True)
-		# print(user_data.data)
-		
-		# print(idd)
-		print("post !!!!")
-		data={
-		"hi":"ji"
-		}
 		return JsonResponse({"tt":user_data.data})
-		# return Response(user_data.data,status=status.HTTP_201_CREATED) 
 
 class UserDetail(TemplateView):
 	def get(self,request):
 		userData = UserProfile.objects.all()
 		user_data = UserSerializer(userData, many=True)
-		# print(user_data.data)
 		data={"uname":user_data.data}
 		return render(request,'user_details.html',data)
 
@@ -184,6 +170,38 @@ class WorkDetails(TemplateView):
 		user_dict = {"userslist":user_data.data}
 		return render(request,'datewise_details.html',user_dict)
 
+	@csrf_exempt	
+	def post(self,request):
+		try:
+			# import pdb;pdb.set_trace();
+			get_date = request.POST.get('inputDate')
+			if get_date:
+				new_task = Tasks.objects.all()
+				task_data = TaskSerializer(new_task,many=True)
+				date_value = task_data.data
+				for index in date_value:
+					list_value=index.items()
+					dict_data = dict(list_value)
+					user = dict_data['user']
+					date = dict_data['date']
+				if date == get_date:
+					user_info = UserProfile.objects.all()
+					user_data = UserSerializer(user_info, many=True)
+					data_dict = user_data.data
+					for index in data_dict:
+						list_value = index.items()
+						dict_data = dict(list_value)
+						user_id = dict_data['user']
+						if user == user_id:
+							user_dict = {"userslist":dict_data['first_name']}
+							print(user_dict)
+						else:
+							pass
+				return JsonResponse(user_dict)
+		except Exception as e:
+			print(e)
+			return JsonResponse({'Error':'error'})
+
 class UserTaskDetails(TemplateView):
 	def get(self,request):
 		return render(request,'user_task_details.html')
@@ -216,18 +234,7 @@ class AssignProjectApi(APIView):
 
 class UserTaskDatewise(APIView):
 	def get(self,request,user_id=None):
-		usertasks = Task.objects.get(pk=user_id)
+		usertasks = Tasks.objects.get(pk=user_id)
 		user_tasks = TaskSerializer(usertasks)
-		print(user_tasks)
 		return render(request,'datewise_all_details.html',user_tasks.data)
 		
-class DateWiseWork(APIView):
-	def post(self,request):
-		input_date=request.POST.get('date')
-		print(input_date)
-		datewise=Tasks.objects.get(date=input_date)
-		if datewise:
-			print("date got!")
-		datee=TaskSerializer(datewise)
-		return Response(datee.data,status=status.HTTP_200_OK)
-
