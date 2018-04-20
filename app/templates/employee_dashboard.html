@@ -16,8 +16,8 @@
 					url: url,
 					type: "POST",
 					data: {
-							'userid': userid,
-							'csrfmiddlewaretoken': csrf_value
+						'userid': userid,
+						'csrfmiddlewaretoken': csrf_value
 					},
 					dataType: "json",
 					success: function(response) {
@@ -29,12 +29,12 @@
 							$("#select1").append("<option value='0'>" + pname + "</option>");
 							$("#select2").append("<option value='0'>" + nonpname + "</option>");
 							for (i = 0; i < len; i++) {
-									if (response.tt[i].user == userid) {
-											var projectid = response.tt[i].project;
-											var name = response.tt[i].project_name;
-											$("#select1").append("<option value='" + projectid + "'>" + name + "</option>");
-											$("#select2").append("<option value='" + projectid + "'>" + name + "</option>");
-									}
+								if (response.tt[i].user == userid) {
+									var projectid = response.tt[i].project;
+									var name = response.tt[i].project_name;
+									$("#select1").append("<option value='" + projectid + "'>" + name + "</option>");
+									$("#select2").append("<option value='" + projectid + "'>" + name + "</option>");
+								}
 							};
 					},
 					error: function(err) {

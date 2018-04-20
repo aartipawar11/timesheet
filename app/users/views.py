@@ -173,6 +173,9 @@ class WorkDetails(TemplateView):
 	@csrf_exempt	
 	def post(self,request):
 		try:
+			user_list=[]
+			data_list = []
+			dicti_data = { }
 			# import pdb;pdb.set_trace();
 			get_date = request.POST.get('inputDate')
 			if get_date:
@@ -180,10 +183,11 @@ class WorkDetails(TemplateView):
 				task_data = TaskSerializer(new_task,many=True)
 				date_value = task_data.data
 				for index in date_value:
-					list_value=index.items()
+					list_value = index.items()
 					dict_data = dict(list_value)
 					user = dict_data['user']
 					date = dict_data['date']
+					user_list.append(user)
 				if date == get_date:
 					user_info = UserProfile.objects.all()
 					user_data = UserSerializer(user_info, many=True)
@@ -192,12 +196,17 @@ class WorkDetails(TemplateView):
 						list_value = index.items()
 						dict_data = dict(list_value)
 						user_id = dict_data['user']
-						if user == user_id:
-							user_dict = {"userslist":dict_data['first_name']}
-							print(user_dict)
-						else:
-							pass
-				return JsonResponse(user_dict)
+						if user_id in user_list:
+							data_list.append(dict_data)
+					
+					return JsonResponse({"userlist":data_list})
+					# 		user_dict = {"userlist":dict_data}
+					# 		# dicti_data.update(user_dict)
+					# 		print(user_dict)
+					# 	else:
+					# 		pass
+					
+					# return JsonResponse(user_dict)
 		except Exception as e:
 			print(e)
 			return JsonResponse({'Error':'error'})

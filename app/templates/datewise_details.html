@@ -21,8 +21,16 @@
 					},
 					dataType: "json",
 					success: function(response){
+					var len = response.userlist.length;
 					if(response){
 							console.log(response);
+							// console.log(len);
+							for (i = 0; i < len; i++) {
+								var user_name = response.userlist[i].first_name;
+								// var aa = document.getElementById("name").innerHTML;
+								$("#name").append("<td>" + user_name + "</td >");
+
+							};
 							if(response.status==201){
 								alert("Successfully!");
 								
@@ -35,7 +43,6 @@
 						}
 				},
 				error: function (err) {
-					 // alert("Error");
 					return false;
 				}
 	
@@ -45,6 +52,7 @@
 	});
 	
 </script>
+
 <style>
 	.ui-datepicker-trigger { 
 	position:relative;
@@ -54,6 +62,7 @@
 	/* {} is the value according to your need */
 </style>
 <body>
+	<!-- <span id="name">Name:</span> -->
 	<div class="wrapper">
 	<div class="sidebar" data-image="/static/img/sidebar-5.jpg">
 		<!--
@@ -150,6 +159,27 @@
 							</tbody>
 						</table>
 					</div>
+				</div>
+				<div class="container">
+					<!-- <span id="name">NAME:</span> -->
+					<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Firstname</th>
+									<!-- <th>Lastname</th> -->
+								</tr>
+							</thead>
+							<tbody>
+								<!-- <tr>
+									{% for list in userslist %} -->
+								<tr id="name">
+									<td ><a href="name"></a></td>
+									<!-- <td value="{{list.id}}">{{list.last_name}}</td> -->
+								</tr>
+								<!-- {% endfor %}
+								</tr> -->
+							</tbody>
+						</table>	
 				</div>
 			</div>
 		</div>

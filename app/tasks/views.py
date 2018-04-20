@@ -6,6 +6,7 @@ from django.http import Http404
 from app.tasks.serializers import TaskSerializer
 from django.contrib.auth.models import User
 from django.views.generic import TemplateView
+from app.tasks.models import Tasks
 
 class TaskView(APIView):
 	
@@ -20,21 +21,25 @@ class TaskView(APIView):
 			print(err)
 			return Response("Error")
 
-
-
-
-# class AssignProject(TemplateView):
-# 	def get(self,request):
-# 		project_Data = Projects.objects.all()
-# 		project_data = ProjectSerializer(project_Data,many=True)
-		
-# 		project_dict={"projectlist":project_data.data}
-
-# 		userData = UserProfile.objects.all()
-# 		user_data = UserSerializer(userData, many=True)
+	def get(self,request,id=None):
+		# import pdb;pdb.set_trace();
+		if(id):
+			userprofile = Tasks.objects.get(pk=id)
+			user_data = TaskSerializer(userprofile)
+		else:
+			userData = Tasks.objects.all()
+			user_data = TaskSerializer(userData, many=True)
+		return Response(user_data.data,status=status.HTTP_200_OK)
 	
-# 		user_dict={"userslist":user_data.data}
-# 		user_dict.update(project_dict)
-		
+	# def put(self,request,id):
+	# 	try:
+	# 		get_data = Tasks.objects.get(pk=id)
+	# 		update_data = TaskSerializer(get_data,data=request.data)
+	# 		if update_data.is_valid():
+	# 			update_data.save()
+	# 			return Response(update_data.data,status=status.HTTP_200_OK)
+	# 	except:
+	# 		return Response("Error")
 
-# 		return render(request,'employee_dashboard.html',user_dict)
+
+
