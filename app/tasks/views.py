@@ -19,3 +19,19 @@ class TaskView(APIView):
 		except Exception as err:
 			print(err)
 			return Response("Error",status=status.HTTP_404_NOT_FOUND)
+
+	
+	
+	def put(self,request,user_id):
+		try:
+			# user_id = request.POST.get('id')
+			get_data = Tasks.objects.get(pk=user_id)
+			user_tasks = TaskSerializer(get_data,data=request.data)
+			# print(user_tasks)
+			if user_tasks.is_valid():
+				user_tasks.save()
+				return Response(user_tasks.data,status=status.HTTP_200_OK)
+			
+			# return Response("user_tasks.data")
+		except:
+			return Response("Error",status=status.HTTP_400_BAD_REQUEST)

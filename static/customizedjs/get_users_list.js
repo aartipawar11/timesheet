@@ -18,6 +18,8 @@
                                     + resp[i].first_name 
                                     + '</td><td>'
                                     + resp[i].last_name 
+                                    + '</td><td>'
+                                    + resp[i].role_name 
                                     + '</td></tr>';
                             }
                         // });

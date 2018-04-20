@@ -10,11 +10,14 @@
           $(document).ready(function(){
              $("#datesubmitbutton").click(function(event){
               event.preventDefault();
+              var el = document.getElementsByName("csrfmiddlewaretoken");
+              csrf_value = el[0].getAttribute("value");
               $.ajax({
-                  url: "http://127.0.0.1:8000/user/datewise",
+                  url: "http://127.0.0.1:8000/user/workdetails",
                   type:"POST",
                      data: {
                      'date': $("#datepicker-6").val(),
+                      'csrfmiddlewaretoken':csrf_value
                      },
                      dataType: "json",
                      success: function(response){
@@ -122,6 +125,9 @@
                 </div>
             </nav>
             <!-- End Navbar -->
+            <form>
+              {% csrf_token %}
+            </form>
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
@@ -142,6 +148,7 @@
                                   <tr>
                                     <th>Firstname</th>
                                     <th>Lastname</th>
+                                    <th>Role</th>
                                   
                                   </tr>
                                 </thead>
@@ -151,7 +158,7 @@
                                     <tr>
                                     <td value="{{list.id}}"><a href="taskdetail/{{list.id}}">{{list.first_name}}</a></td>
                                     <td value="{{list.id}}">{{list.last_name}}</td>
-                                   
+                                   <td value ="{{list.id}}">{{list.role_name}}</td>
                                     </tr>
                                     {% endfor %}
 
@@ -159,8 +166,15 @@
                                
                                 </tbody>
                               </table>
+                              <!-- {{user_task_dict.usertasks}} -->
+                              {% for list in usertasks %}
+                              <!-- {{list.user}} -->
+                             <a href="taskdetail/{{list.id}}" <li>{{list.id}}</li></a>
+                               {% endfor %}
+
+                               <hr>
                                     </div>
-                                   
+                                 
                         </div>
                     </div>
                 </div>

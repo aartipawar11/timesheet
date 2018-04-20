@@ -62,7 +62,7 @@ class UserProjectSerializer(serializers.ModelSerializer):
 	project_name = serializers.SerializerMethodField("getProjectDetail")
 	def getProjectDetail(self,obj):
 		try:
-			return ProjectSerializer(Projects.objects.get(id=obj.project.id)).data
+			return Projects.objects.get(id=obj.project.id).name
 		except Exception as e:
 			print(e)
 		 

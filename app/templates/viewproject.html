@@ -1,8 +1,10 @@
 {% include "header.html" %}
 
+
 <script>
    checkCookie();
 </script>
+<script type="text/javascript" src="/static/customizedjs/view_project.js"></script>
 <body>
    <div class="wrapper">
    <div class="sidebar" data-image="/static/img/sidebar-5.jpg">
@@ -40,7 +42,7 @@
    <!-- Navbar -->
    <nav class="navbar navbar-expand-lg " color-on-scroll="500">
       <div class=" container-fluid  ">
-         <a class="navbar-brand" href="../admindashboard">Admin Dashboard </a>
+         <a class="navbar-brand" href="admindashboard">Admin Dashboard </a>
          <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-bar burger-lines"></span>
          <span class="navbar-toggler-bar burger-lines"></span>
@@ -70,44 +72,26 @@
       <div class="container-fluid">
          <div class="row">
             <div class="col-md-12">
-
-            	<h2>Details Of Work</h2>
+            </div>
+            <div class="col-md-12">
+               <h2>View All Projects</h2>
                <br>
-               <div class="container">
-          
-						<table class="table table-bordered">
-                     <thead>
+<form>
+    {% csrf_token %}   
+</form>
+               <table class="table table-hover table-bordered">
+                  <thead>
                      <tr>
-                     <th>User id</th>
-                     <th>Date</th>
-                     <th>Biling Project Name</th>
-                      <th>Billing Description</th>
-                     <th>Billing Hour</th>
-                     <th>Non Billing Project Name</th>
-                     <th>Non Billing Description</th>
-                     <th>Non Billing Hour</th>
-                     <th>Total Hour</th>
+                        <th>Project ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Created At</th>
                      </tr>
-                     </thead>
-						<tbody>
-                     <tr>
-                     <td>{{id}}</td>
-                     <td>{{date}}</td>
-                     <td>{{project_details.name}}</td>
-                     <td>{{billing_description}}</td>
-                     <td>{{billing_hour}}</td>
-                     <td>Non billing project name</td>
-                     <td>{{non_billing_description}}</td>
-                     <td>{{non_billing_hour}}</td>
-                     <td>{{total_hour}}</td>
-                     </tr>
-						
-						</tbody>
-						</table>
-					</div>
-{{user_tasks}}
+                  </thead>
+                  <tbody id="tBody"></tbody>
+               </table>
 
-           </div>
+            </div>
          </div>
       </div>
    </div>

@@ -33,9 +33,9 @@
                  $("#select2").append("<option value='0'>" + nonpname + "</option>");
                  for (i = 0; i < len; i++) {
                      if (response.tt[i].user == userid) {
-                         // console.log(response.tt[i].project_name.name)
+                         // console.log(response.tt[i])
                          var projectid = response.tt[i].project;
-                         var name = response.tt[i].project_name.name;
+                         var name = response.tt[i].project_name;
                          $("#select1").append("<option value='" + projectid + "'>" + name + "</option>");
                          $("#select2").append("<option value='" + projectid + "'>" + name + "</option>");
                      }
@@ -153,6 +153,12 @@
                         <a class="nav-link" href="/user/userprofile">
                             <i class="fa fa-user fa" aria-hidden="true"></i>
                             <p>User Profile</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="/user/edittask">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            <p>Edit Task</p>
                         </a>
                     </li>
                     
