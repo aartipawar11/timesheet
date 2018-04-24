@@ -34,5 +34,5 @@ function deleteAllCookies() {
   setCookie("id", '', 1);
   setCookie("role", '', 1);
   setCookie("user", '', 1);
-  self.location = "login";
+  window.location = "http://127.0.0.1:8000/user/login";
 }

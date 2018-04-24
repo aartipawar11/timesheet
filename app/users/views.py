@@ -71,9 +71,39 @@ class UserProfileList(APIView):
 	def put(self,request,user_id):
 		try:
 			get_data = UserProfile.objects.get(pk=user_id)
+			
 			update_data = UserSerializer(get_data,data=request.data)
+			# user = User.objects.get(user_id =user_id )
+			
+			
+			# 
+			
+		
+		
+			
+			
+
 			if update_data.is_valid():
 				update_data.save()
+
+				# print(update_data.data)
+				get_name = update_data.data
+				current_user_name = get_name['user_name']
+				# print(current_user_name)
+				
+				# print(request.data)
+				get_username = request.data
+				new_user_name = get_username['user_name']
+				# print(new_user_name)
+				password = get_username['password']
+				print(password)
+
+				user = User.objects.get(username = current_user_name)
+				user.username = new_user_name
+				# user.set_password(password)
+				user.save()
+				
+
 				return Response(update_data.data,status=status.HTTP_200_OK)
 		except:
 			return Response("Error" ,status=status.HTTP_400_BAD_REQUEST)
@@ -206,52 +236,42 @@ class WorkDetails(TemplateView):
 		user_task_dict = {"usertasks":user_task_id.data}
 		
 		user_task_dict.update(user_dict)
-		# print(user_dict)
 		return render(request,'datewise_details.html',user_task_dict)
 
 
 
-	# @csrf_exempt	
-	# def post(self,request):
-	# 	try:
-	# 		task_list = []
-	# 		# import pdb;pdb.set_trace();
-	# 		get_date = request.POST.get('date')
-	# 		if get_date:
-	# 			new_task = Tasks.objects.all()
-	# 			task_data = TaskSerializer(new_task)
-	# 			date_value = task_data.data
-	# 			print(date_value)
-				# task_list.append(new_task)
-				# for index in task_list:
-
-				# 	task = Tasks.objects.get(date=index)
-				# 	# print(task)
+	@csrf_exempt	
+	def post(self,request):
+		try:
+			user_list=[]
+			data_list = []
+			dicti_data = { }
+			get_date = request.POST.get('date')
+			if get_date:
+				new_task = Tasks.objects.all()
+				task_data = TaskSerializer(new_task,many=True)
+				date_value = task_data.data
+				for index in date_value:
+					list_value=index.items()
+					dict_data = dict(list_value)
+					user = dict_data['user']
+					date = dict_data['date']
+				if date == get_date:
+					user_info = UserProfile.objects.all()
+					user_data = UserSerializer(user_info, many=True)
+					data_dict = user_data.data
 					
-				# 	task_data = TaskSerializer(task)
-				# 	date_value = task_data.data
-				# 	# print(date_value)
-				# 	date = date_value['date']
-				# 	user = date_value['user']
-
-				# if date == get_date:
-				# 	user_info = UserProfile.objects.all()
-				# 	user_data = UserSerializer(user_info, many=True)
-				# 	data_dict = {"userslist":user_data.data}
-				# 	dict_value = data_dict['userslist']
-				# 	for index in dict_value:
-				# 		list_value = index.items()
-				# 		dict_data = dict(list_value)
-				# 		user_id = dict_data['user']
-				# 		if user == user_id:
-				# 			user_dict = {"userslist":dict_data['first_name']}
-							# print(user_dict)
-						
-		# 	return JsonResponse(task_data.data,status=status.HTTP_201_CREATED)
-		# except Exception as e:
-		# 	print(e)
-		# 	return JsonResponse({'Error':'error'})
-
+					for index in data_dict:
+						list_value = index.items()
+						dict_data = dict(list_value)
+						user_id = dict_data['user']
+						if user_id in user_list:
+							data_list.append(dict_data)
+							
+				return JsonResponse({"userlist":data_list})
+		except Exception as e:
+			print(e)
+			return JsonResponse({'Error':'error'})
 
 
 
@@ -320,33 +340,36 @@ class UserTaskDatewise(APIView):
 # 		# print(date)
 # 		# return Response(input_date,status=status.HTTP_200_OK)
 # 		return Response(date.data,status=status.HTTP_200_OK)
-class EditTask(APIView):
-	def get(self,request):
-		
-		return render(request,'edittask.html')
+# class EditTask(APIView):
+# 	def get(self,request,user_id=None):
+# 		try:
+# 			if(user_id):
+# 				userprofilee = Tasks.objects.get(pk=user_id)
+# 				user_dataa = TaskSerializer(userprofilee)
+# 				usertaskedit = {"usertasks":user_dataa.data}
+# 				# return Response(user_dataa.data,status=status.HTTP_200_OK)
+# 				return render(request,'edit_each_task.html',usertaskedit)
+# 		except:
+# 			return Response("Error")
+# 		return render(request,'edittask.html')
 
-	# @csrf_exempt
-	def post(self,request):
-		# user_id = request.POST.get('id')
-		# print(name)
-		# usertasks = Tasks.objects.get(pk=user_id)
-		# print(usertasks.user)
-		usertasks = Tasks.objects.all()
-		user_tasks = TaskSerializer(usertasks,many=True)
+# 	def post(self,request):
+# 		usertasks = Tasks.objects.all()
+# 		user_tasks = TaskSerializer(usertasks,many=True)
+# 		return Response(user_tasks.data,status=status.HTTP_201_CREATED)
 
-		return Response(user_tasks.data,status=status.HTTP_201_CREATED)
-
-	
-	def put(self,request,user_id):
-		try:
-			# user_id = request.POST.get('id')
-			get_data = Tasks.objects.get(pk=user_id)
-			user_tasks = TaskSerializer(get_data,data=request.data)
-			# print(user_tasks)
-			if user_tasks.is_valid():
-				user_tasks.save()
-				return Response(user_tasks.data,status=status.HTTP_200_OK)
+# 	def put(self,request,user_id):
+# 		try:
+# 			get_data = Tasks.objects.get(pk=user_id)
+# 			# print("inside get data")
+# 			user_tasks = TaskSerializer(get_data,data=request.data)
+# 			print(user_tasks)
+# 			if user_tasks.is_valid():
+# 				user_tasks.save()
+# 				return Response(user_tasks.data,status=status.HTTP_200_OK)
 			
-			# return Response("user_tasks.data")
-		except:
-			return Response("Error",status=status.HTTP_400_BAD_REQUEST)
+# 			# return Response("user_tasks.data")
+# 		except:
+# 			return Response("Error",status=status.HTTP_400_BAD_REQUEST)
+	
+	

@@ -3,10 +3,162 @@
          checkCookie();
       </script>
 
-   <script type="text/javascript" src="/static/customizedjs/get_details.js"></script>
+   <!-- <script type="text/javascript" src="/static/customizedjs/get_details.js"></script> -->
+   <script type="text/javascript">
+       $(document).ready(function(event) {
+        var userid = getCookie("id");
+        var url = "http://127.0.0.1:8000/user/" + userid;
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            success: function(response) {
+                if (response) {
+                    console.log(response);
+                    document.getElementById("username").innerHTML = response.user_name;
+                    document.getElementById("first_name").innerHTML = response.first_name;
+                    document.getElementById("last_name").innerHTML = response.last_name;
+                    document.getElementById("mobile").innerHTML = response.mobile;
+                    document.getElementById("dob").innerHTML = response.dob;
+                    document.getElementById("gender").innerHTML = response.gender;
+                    document.getElementById("designation").innerHTML = response.designation;
 
-<script type="text/javascript" src="/static/customizedjs/edit_details.js"></script>
 
+
+                    if (response.status == 200) {
+                        alert("Got details!");
+                        console.log("response 200 coming");
+                    }
+                    if (response.status == 404) {
+                        console.log("Error in Getting user details")
+                        alert("Error in creating user")
+                    }
+
+                }
+            },
+            error: function(err) {
+                // alert("Error");
+                return false;
+            }
+
+        });
+
+    });
+
+
+   </script>
+
+<!-- <script type="text/javascript" src="/static/customizedjs/edit_details.js"></script> -->
+
+<script type="text/javascript">
+    
+   $(document).ready(function() {
+        $("#userdetailform").submit(function(event) {
+            event.preventDefault();
+            var id = getCookie("id");
+            var user = getCookie("user");
+
+            var role = getCookie("role");
+            var url = "http://127.0.0.1:8000/user/" + id;
+            $.ajax({
+                url: url,
+                type: "PUT",
+                data: {
+                     'user_name': $("#username").val(),
+                    'first_name': $("#first_name").val(),
+                    'last_name': $("#last_name").val(),
+                    'mobile': $("#mobile").val(),
+                    'dob': $("#dob").val(),
+                    'gender': $("#gender").val(),
+                    'id': getCookie("id"),
+                    'user': getCookie("user"),
+                    'role': getCookie("role"),
+                    'designation': $("#designation").val(),
+
+
+                },
+                dataType: "json",
+                success: function(response) {
+                    if (response) {
+                        console.log(response);
+                        $('.alert').show();
+
+                        // alert("Details updated  ")
+                           window.setTimeout(function() {
+                           $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                           $(this).remove(); 
+                           });
+                           location.reload()
+                           }, 2000);
+
+                        if (response.status == 200) {
+                            alert("User Created Successfully!");
+                            console.log("response 200 coming");
+                        }
+                        if (response.status == 404) {
+                            console.log("Error in Getting user details")
+                            alert("Error in creating user")
+                        }
+
+                    }
+                },
+                error: function(err) {
+                    // alert("Error");
+                    return false;
+                }
+
+            });
+        });
+
+    });
+
+
+</script>
+<script type="text/javascript">
+          $(document).ready(function(){
+           
+            
+              $.ajax({
+                  url: "https://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=jsonp&lang=en&jsonp=?",
+                  type:"GET",
+                     dataType: "json",
+                     success: function(response){
+                     if(response){
+                     
+                      document.getElementById("quote").innerHTML = response.quoteText;
+                      document.getElementById("author").innerHTML = response.quoteAuthor;
+                     }
+                 },
+                 error: function (err) {
+                   // alert("Error");
+                   return false;
+                 }
+         
+               });
+         
+             });
+      
+
+</script>
+<script>
+var check = function() {
+  if (document.getElementById('password').value ==
+    document.getElementById('confirm_password').value) {
+    document.getElementById('message').style.color = 'green';
+    document.getElementById('message').innerHTML = 'Password Matched';
+  } else {
+    document.getElementById('message').style.color = 'red';
+    document.getElementById('message').innerHTML = 'Password Not Matching';
+  }
+}</script>
+<script>
+$(document).ready(function(){
+    $("#changepassword").click(function(){
+
+        $("#password_field").toggle(1000);
+    });
+});
+</script>
    </head>
    <body>
       <div class="wrapper">
@@ -36,7 +188,7 @@
                      </a>
                   </li>
                     <li>
-                        <a class="nav-link" href="/user/edittask">
+                        <a class="nav-link" href="/task/edittask">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             <p>Edit Task</p>
                         </a>
@@ -88,24 +240,24 @@
                            <div class="card-body">
                               <form  id="userdetailform">
                                  <div class="row">
-                                    <div class="col-md-5 pr-1">
+                                    <div class="col-md-6 pr-1">
                                        <div class="form-group">
                                           <label>Company (disabled)</label>
                                           <input type="text" class="form-control" disabled="" placeholder="Company" value="Thoughtwin">
                                        </div>
                                     </div>
-                                    <div class="col-md-3 px-1">
+                                    <div class="col-md-6 pl-1">
                                        <div class="form-group">
                                           <label>Email</label>
-                                          <input type="text" name="username" class="form-control" placeholder="Username" value="test">
+                                          <textarea style="resize: none;" type="text" name="username" id="username" class="form-control" placeholder="Username"></textarea>
                                        </div>
                                     </div>
-                                    <div class="col-md-4 pl-1">
+                                    <!-- <div class="col-md-4 pl-1">
                                        <div class="form-group">
                                           <label>Password</label>
                                           <input type="password" name="password" class="form-control" placeholder="Password">
                                        </div>
-                                    </div>
+                                    </div> -->
                                  </div>
                                  <div class="row">
                                     <div class="col-md-6 pr-1">
@@ -148,10 +300,21 @@
                                           <label>Designation</label>
                                           <textarea  style="resize: none;" rows="4" cols="80" class="form-control" placeholder="Your Desgnation" name="designation" id="designation" value=""></textarea>
                                        </div>
+                                       <button id="changepassword" type="button" class="btn btn-info btn-fill pull-left">Change Password</button> <br><br>
+                                       <div id="password_field" style="height: 200px; display: none;">
+                                          <div class="form-group"><br>
+                                       
+                                          <textarea style="resize: none;" type="text" placeholder="New Password" name="password" id="password" class="form-control"  value="" onkeyup='check();'></textarea><br>
+                                          <textarea style="resize: none;" type="text" placeholder="Confirm New Password" name="confirm_password" id="confirm_password" class="form-control" onkeyup='check();' value=""></textarea>
+                                          <span id="message"></span>
+                                       </div>
+                                       </div>
                                     </div>
                                  </div>
+
                                  <button type="submit" class="btn btn-info btn-fill pull-right">Update Profile</button>
                                  <div class="clearfix"></div>
+
                               </form>
                            </div>
                         </div>
@@ -168,31 +331,20 @@
                                     <h5 class="title">D Ashwin</h5>
                                  </a>
                                  <p class="description">
-                                    D.Ashwin ...
+                                    <b><u>Thought Of The Day</u></b>
                                  </p>
                               </div>
-                              <p class="description text-center">
-                                 "Lamborghini Mercy
-                                 <br> Your chick she so thirsty
-                                 <br> I'm in that two seat Lambo"
-                              </p>
+                              <span style="font-style: italic;" class="description text-center" id="quote">
+                              </span><hr>
+                              -
+                              <span style="font-style: italic; class="description text-center" id="author"></span>
                            </div>
-                           <hr>
-                           <div class="button-container mr-auto ml-auto">
-                              <button href="#" class="btn btn-simple btn-link btn-icon">
-                              <i class="fa fa-facebook-square"></i>
-                              </button>
-                              <button href="#" class="btn btn-simple btn-link btn-icon">
-                              <i class="fa fa-twitter"></i>
-                              </button>
-                              <button href="#" class="btn btn-simple btn-link btn-icon">
-                              <i class="fa fa-google-plus-square"></i>
-                              </button>
-                           </div>
+                          
+                          
                         </div>
                      </div>
                   </div>
                </div>
-            </div>
+
      
             {% include "footer.html" %}
