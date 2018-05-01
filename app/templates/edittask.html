@@ -3,6 +3,8 @@
 <script>
    checkCookie();
 </script>
+
+<script type="text/javascript" src="/static/customizedjs/cal_weekly_hours.js"></script>
 <script type="text/javascript">
   $(document).ready(function(event) {
         var userid = getCookie("user");
@@ -47,7 +49,7 @@
                                       // + '<button id="editbutton" value=response[i].id>Edit</button>'
                                       + '<input class="btn btn-info" type="button" style="cursor: pointer;" id='+ response[i].id +' value="EDIT" onclick="clickMe(this)"/>'
                                       + '</td></tr>';
-                        
+               
                      }
                      $('#tBody').append(trHTML);
                  };
@@ -73,11 +75,12 @@ function clickMe(e){
  
 }
 </script>
-<body>
+
+  <body>
 
 
    <div class="wrapper">
-   <div class="sidebar" data-image="/static/img/sidebar-5.jpg">
+   <div class="sidebar" data-image="/static/img/sidebar-4.jpg">
       <!--
          Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
          
@@ -133,6 +136,13 @@ function clickMe(e){
                </li>
             </ul>
             <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                                <a class="nav-link">
+                                    <span class="no-icon" id="billhrs">Billing</span>&nbsp;Billing Hrs&nbsp;/&nbsp;
+                                    <span class="no-icon" id="nonbillhrs">NonBilling</span>&nbsp;Non-Billing Hrs
+                                </a>
+                            </li>
+
                <li class="nav-item">
                   <a class="nav-link" onclick="deleteAllCookies()">
                   <span class="no-icon">Log out</span>
@@ -143,16 +153,17 @@ function clickMe(e){
       </div>
    </nav>
    <!-- End Navbar -->
-    
    <div class="content">
       <div class="container-fluid">
          <div class="row">
             <div class="col-md-12">
+              
             </div>
             <div class="col-md-12">
               <table class="table table-bordered">
-                    <thead>
-                    <tr>
+                     <thead>
+                     <tr>
+
                         <th>User ID</th>
                         <th>DATE</th>
                         <th>BILING PROJECT NAME</th>
@@ -163,13 +174,15 @@ function clickMe(e){
                         <th>NON BILLING HOUR</th>
                         <th>TOTAL HOUR</th>
                         
-                        
-                    </tr>
+                  
+                     </tr>
+
                   </thead>
                   <tbody id="tBody"></tbody>
                   </table>
               
             </div>
+
          </div>
       </div>
    </div>

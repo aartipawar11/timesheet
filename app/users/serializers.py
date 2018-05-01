@@ -2,6 +2,7 @@ from rest_framework import serializers
 from app.users.models import UserProfile,UserProjects
 from app.roles.models import Role
 from app.projects.models import Projects
+from app.projects.serializers import ProjectSerializer
 from django.contrib.auth.models import User
 
 ## written by aarti
@@ -13,16 +14,16 @@ class UserSerializer(serializers.ModelSerializer):
 		except Exception as e:
 			print(e)
 
-	user_name = serializers.SerializerMethodField("getUserDetail")
-	def getUserDetail(self,obj):
+	user_name = serializers.SerializerMethodField("getUserName")
+	def getUserName(self,obj):
 		try:
 			return User.objects.get(id=obj.user.id).username
 		except Exception as e:
 			print(e)
-
+	
 	class Meta:
 		model = UserProfile
-		fields = ('id','user','role','role_name','user_name','first_name','last_name','mobile','dob','gender','designation','is_deleted','created_at','updated_at')
+		fields = ('id','user','role','role_name','user_name','first_name','last_name','mobile','dob','gender','designation','model_pic','is_deleted','created_at','updated_at')
 		extra_kwargs = {
 			'role': {
 				'required':True,

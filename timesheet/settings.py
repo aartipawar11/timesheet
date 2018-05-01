@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+# ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,7 +44,15 @@ INSTALLED_APPS = [
     'app.roles',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
 ]
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'd_ashwin'
+EMAIL_HOST_PASSWORD = '55diamirza55'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -54,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'timesheet.urls'
@@ -111,6 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
@@ -132,6 +142,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
@@ -142,3 +153,6 @@ os.path.join(BASE_DIR,'static')
 
     ]
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR),"static_cdn")
+
+MEDIA_URL = ''
+MEDIA_ROOT = os.path.join(BASE_DIR,'/home/hp/Projects/django/timesheet/timesheet/static')

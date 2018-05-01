@@ -3,18 +3,22 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from django.http import Http404
+from app.tasks.models import Tasks
 from app.tasks.serializers import TaskSerializer
 from django.contrib.auth.models import User
 from django.views.generic import TemplateView
 from app.tasks.models import Tasks
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from app.projects.serializers import ProjectSerializer
 from app.projects.models import Projects
+from app.users.models import UserProfile
+from datetime import datetime, timedelta
+
 
 
 ## written by aarti
 class TaskView(APIView):
-	
+
 	def post(self,request):
 		try:
 			task_data = TaskSerializer(data=request.data)
@@ -104,3 +108,22 @@ class UserTaskDatewise(APIView):
 		usertasks = Tasks.objects.all()
 		user_tasks = TaskSerializer(usertasks,many=True)
 		return Response(user_tasks.data,status=status.HTTP_201_CREATED)
+
+
+class CalculateHrs(APIView):
+	def get(self,request,user_id):
+		# get_datas= Tasks.objects.filter(date__year='2018')
+		# get_datas= Tasks.objects.filter(date=datetime.date(2018,4,30))
+		one_week_ago = datetime.today() - timedelta(days=7)
+		get_week_tasks = Tasks.objects.filter(date__gte=one_week_ago,user_id=user_id)
+		# get_datas= Tasks.objects.filter(date__range=["2018-04-18", "2018-04-30"],user_id=user_id)
+		task_data = TaskSerializer(get_week_tasks,many=True)
+		print(task_data.data)
+		return Response(task_data.data,status=status.HTTP_201_CREATED)
+
+	def post(self,request,user_id):
+		one_month_ago = datetime.today() - timedelta(days=30)
+		get_month_tasks = Tasks.objects.filter(date__gte=one_month_ago,user_id=user_id)
+		month_data = TaskSerializer(get_month_tasks,many=True)
+		return Response(month_data.data,status=status.HTTP_201_CREATED)
+

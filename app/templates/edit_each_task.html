@@ -24,7 +24,6 @@
              dataType: "json",
              success: function(response) {
                  var len = response.tt.length;
-                 // console.log(response);
                  $("#select1").empty();
                  $("#select2").empty();
                  
@@ -33,6 +32,7 @@
                  $("#select1").append("<option value='0'>" + pname + "</option>");
                  $("#select2").append("<option value='0'>" + nonpname + "</option>");
                  for (i = 0; i < len; i++) {
+
                       if (response.tt[i].user == userid) {
                         console.log(response.tt[i])
                         var projectid = response.tt[i].project;
@@ -40,30 +40,35 @@
                         console.log(projectid)
                         $("#select1").append("<option value='" + projectid + "'>" + name + "</option>");
                         $("#select2").append("<option value='" + projectid + "'>" + name + "</option>");
+
                      }
                  };
              },
              error: function(err) {
               return false;
+
              }
          });
      }); 
    </script>
 
 
+
 <script type="text/javascript">  
+
    $(document).ready(function() {
         $("#editted_billing_form").submit(function(event) {
             event.preventDefault();
             var newurl=window.location.href;
             var url = $(location).attr('href'),
-        parts = url.split("/"),
-        last_part = parts[parts.length-1];
-    
+
+    		parts = url.split("/"),
+    		last_part = parts[parts.length-1];    
             $.ajax({
                 url: newurl,
                 type: "PUT",
                 data: {
+
                   'id' : last_part,
                   'user':getCookie("user"),
                   'date' : $("#datepicker-6").val(),
@@ -73,11 +78,12 @@
                   'non_billing_description' :  $("#non_billing_description").val(),
                   'non_billing_hour' : $("#non_billing_hour").val(),
                   'total_hour' : $("#total_hour").val()   
+
                 },
                 dataType: "json",
                 success: function(response) {
                     if (response) {
-                        // console.log(response);
+
                         $('.alert').show();
 
                         // alert("Details updated  ")

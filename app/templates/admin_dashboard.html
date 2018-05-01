@@ -3,6 +3,7 @@
     checkCookie();
 </script>
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+
 <style type="text/css">
    #mybox{
    border: 2px;
@@ -16,6 +17,27 @@
    #mybox:hover{
       color: grey;
    }
+
+.circle{
+
+   background: white;
+   border: 2px;
+   border-color: #D9D9D9;
+   border-style: solid;
+   border-radius: 250px;
+   margin: 8px;
+   padding: 75px 75px 40px 40px;
+
+}
+.circle:hover{ 
+   cursor: pointer;
+   box-shadow: 0 0 28px 4px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.circletext{
+   color: rgba(0, 0, 0, 0.22);
+   font-weight: bold;
+}
+
    
 </style>
    <body>
@@ -80,43 +102,57 @@
                </div>
             </nav>
             <!-- End Navbar -->
-
+            <div class="content">
+               <div class="container">
+              <br><br>
+                   
+                     <div class="col-md-12">
+                      <!--   <ol>
+                           <li><a href="adduser">Add User</a></li>
+                           <li><a href="addproject">Add Project</a></li>
+                           <li><a href="viewprojects">View Projects</a></li>
+                           <li><a href="assignproject">Assign Project To User</a></li>
+                           <li><a href="workdetails">View Datewise Detail of user</a></li>
+                           <li><a style="color: red" href="deleteuser">Delete a User</a></li>
+                        </ol> -->
 <div class="row">
-<div id="mybox" class="animated bounceInLeft">
-<a href="http://127.0.0.1:8000/user/adduser"><i class="fa fa-user-plus fa-5x" aria-hidden="true"></i></a><br>
-<b>Add User</b>
+   <div align="center">
+<a href="http://127.0.0.1:8000/user/adduser" style="color: black"><span class="circle"><i class="fa fa-user fa-5x"></i>
+</span></a><br><br><br><br>
+<span class="circletext">ADD USER</span>
+</div>
+ <div align="center">
+<a href="http://127.0.0.1:8000/user/addproject" style="color: black"><span class="circle"><i class="fa fa-file-text fa-4x" aria-hidden="true"></i>
+</span></a><br><br><br><br>
+<span class="circletext">Add Project</span>
+</div>
+ <div align="center">
+<a href="http://127.0.0.1:8000/user/viewprojects" style="color: black"><span class="circle"><i class="fa fa-tasks fa-4x" aria-hidden="true" ></i>
+</span></a><br><br><br><br>
+<span class="circletext">View Project</span>
 </div>
 
-<div id="mybox" class="animated bounceInLeft">
-<a href="http://127.0.0.1:8000/user/addproject"><i class="fa fa-file-text fa-5x" aria-hidden="true"></i>
-</a><br>
-<b>Add Project</b>
+ <div align="center">
+<a href="http://127.0.0.1:8000/user/assignproject" style="color: black"><span class="circle"><i class="fa fa-files-o fa-4x" aria-hidden="true"></i>
+</span></a><br><br><br><br>
+<span class="circletext">Assign Project</span>
+</div>
+ <div align="center">
+<a href="http://127.0.0.1:8000/user/workdetails" style="color: black"><span class="circle"><i class="fa fa-calendar fa-4x" aria-hidden="true"></i>
+</span></a><br><br><br><br>
+<span class="circletext">Datewise</span>
 </div>
 
-<div id="mybox" class="animated swing">
-<a href="http://127.0.0.1:8000/user/viewprojects"><i class="fa fa-tasks fa-5x" aria-hidden="true" ></i>
-</a><br>
-<b>View Project</b>
+<div align="center">
+<a href="http://127.0.0.1:8000/user/deleteuser" style="color: red"><span class="circle"><i class="fa fa-minus-circle fa-4x" aria-hidden="true"></i>
+</span></a><br><br><br><br>
+<span class="circletext">Delete User</span>
 </div>
 
-<div id="mybox" class="animated swing">
-<a href="http://127.0.0.1:8000/user/assignproject"><i class="fa fa-files-o fa-5x" aria-hidden="true"></i>
-</a><br>
-<b>Assign</b>
 </div>
+<br><br><br>
+<!-- Circle Div -->
 
-<div id="mybox" class="animated bounceInRight">
-<a href="http://127.0.0.1:8000/user/workdetails"><i class="fa fa-calendar fa-5x" aria-hidden="true"></i>
-</a><br>
-<b>Datewise</b>
-</div>
-
-<div id="mybox" class="animated bounceInRight">
-<a href="http://127.0.0.1:8000/user/deleteuser"><i class="fa fa-minus-circle fa-5x" aria-hidden="true"></i>
-</a><br>
-<b>Delete User</b>
-</div>
-</div>
                      </div>
                   </div>
                </div>
@@ -139,3 +175,4 @@
 <script src="/static/js/core/bootstrap.min.js" type="text/javascript"></script>
 <script src="/static/js/light-bootstrap-dashboard.js?v=2.0.1" type="text/javascript"></script>
 </html>
+            

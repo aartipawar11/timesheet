@@ -1,5 +1,5 @@
-   $(document).ready(function(event) {
-      
+
+    $(document).ready(function(event) {      
         var el = document.getElementsByName("csrfmiddlewaretoken");
               csrf_value = el[0].getAttribute("value");
         var url = "http://127.0.0.1:8000/user/viewprojects";
@@ -49,5 +49,4 @@
             }
 
         });
-
     });

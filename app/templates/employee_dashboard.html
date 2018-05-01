@@ -1,274 +1,314 @@
+  
 {% include "header.html" %}
-<script>
-  checkCookie();
-</script>
+
+      <script>
+         checkCookie();
+      </script>
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 <script src="http://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="/static/customizedjs/datepicker.js"></script>
-<script type = "text/javascript" >
-  $(document).ready(function(event) {
-      var userid = getCookie("user");
-      var el = document.getElementsByName("csrfmiddlewaretoken");
-      csrf_value = el[0].getAttribute("value");
-      var url = "http://127.0.0.1:8000/user/dashboard";
-      $.ajax({
-          url: url,
-          type: "POST",
-          data: {
-              'userid': userid,
-              'csrfmiddlewaretoken': csrf_value
-          },
-          dataType: "json",
-          success: function(response) {
-              var len = response.tt.length;
-              // console.log(userid);
-              $("#select1").empty();
-              $("#select2").empty();
-              var pname = "Select Project";
-              var nonpname = "Thoughtwin | R & D";
-              $("#select1").append("<option value='0'>" + pname + "</option>");
-              $("#select2").append("<option value='0'>" + nonpname + "</option>");
-              for (i = 0; i < len; i++){
-                if(response.tt[i].user == userid){
-                  var projectid = response.tt[i].project;
-                  var name = response.tt[i].project_name;
-                  $("#select1").append("<option value='" + projectid + "'>" + name + "</option>");
-                  $("#select2").append("<option value='" + projectid + "'>" + name + "</option>");
-                  }
-              };
-          },
-          error: function(err) {
-              return false;
-          }
-      });
-  }); 
-</script>
+<script type="text/javascript" src="/static/customizedjs/cal_weekly_hours.js"></script>
+
+       <script type = "text/javascript" >
+     $(document).ready(function(event) {
+         var userid = getCookie("user");
+         var el = document.getElementsByName("csrfmiddlewaretoken");
+         csrf_value = el[0].getAttribute("value");
+         var url = "http://127.0.0.1:8000/user/dashboard";
+         $.ajax({
+             url: url,
+             type: "POST",
+             data: {
+                 'userid': userid,
+                 'csrfmiddlewaretoken': csrf_value
+             },
+             dataType: "json",
+             success: function(response) {
+                 var len = response.tt.length;
+                 // console.log(len);
+                 $("#select1").empty();
+                 $("#select2").empty();
+                 var pname = "Select Project";
+                 var nonpname = "Thoughtwin | R & D";
+                 $("#select1").append("<option value='0'>" + pname + "</option>");
+                 $("#select2").append("<option value='0'>" + nonpname + "</option>");
+                 for (i = 0; i < len; i++) {
+                     if (response.tt[i].user == userid) {
+                         // console.log(response.tt[i])
+                         var projectid = response.tt[i].project;
+                         var name = response.tt[i].project_name;
+                         $("#select1").append("<option value='" + projectid + "'>" + name + "</option>");
+                         $("#select2").append("<option value='" + projectid + "'>" + name + "</option>");
+                     }
+                 };
+             },
+             error: function(err) {
+
+                 return false;
+             }
+         });
+     }); 
+   </script>
+
 <script type="text/javascript">
-  $(document).ready(function(){
-          $("#billing_form").submit(function(event){
-           event.preventDefault();
-           // var time1= $("#billing_hour").val();
-           // var time2= $("#non_billing_hour").val();
-           // var total_hour= time1+time2;
-           // alert(time1);
-           // var el = document.getElementsByName("csrfmiddlewaretoken");
-           // csrf_value = el[0].getAttribute("value");
-           var projectid=$("#select1").val()+","+$("#select2").val();
-           alert(projectid);
-              $.ajax({
-               url: "http://127.0.0.1:8000/task/",
-               type:"POST",
-                  data: {
-                  'user':getCookie("user"),
-                  'project':projectid,
-                  'billing_hour': $("#billing_hour").val(),
-                  'non_billing_hour': $("#non_billing_hour").val(),
-                  
-                   // 'total_hour':$("#billing_hour").val()+$("#non_billing_hour").val(),
-                   'total_hour':"08:00",
-                   'billing_description':$("#billing_description").val(),
-                   'non_billing_description':$("#non_billing_description").val(),
-                   
-                   // 'csrfmiddlewaretoken':csrf_value
-                  },
-                  dataType: "json",
-                  success: function(response){
-                  if(response){
-                    console.log(response);
-                   // $('.alert').show();
-                   //   // alert("Details updated  ")
-                   //      window.setTimeout(function() {
-                   //      $(".alert").fadeTo(500, 0).slideUp(500, function(){
-                   //      $(this).remove(); 
-                   //      });
-                   //      location.reload()
-                   //      }, 2000);
-                    if(response.status==201){
-                     alert("Project Created Successfully!");
-                     window.location = "admindashboard"; 
-                    }
-                    if(response.status==404){
-                     console.log("Error in creating user")
-                      alert("Error in creating user")
-                    };
-                    
-                  }
-              },
-              error: function (err) {
-                // alert("Error");
-                return false;
+     $(document).ready(function(){
+             $("#billing_form").submit(function(event){
+              event.preventDefault();
+              var time1= $("#billing_hour").val();
+              var time2= $("#non_billing_hour").val();
+              var total_hour= addTimes(time1,time2);
+
+              if (total_hour >= '09:00'){
+                $('#time_error').show();
+                alert("Total Time Error")
               }
-      
-            });
-      
-          });
-      });
+              function timeToMins(time) {
+                var b = time.split(':');
+                return b[0]*60 + +b[1];
+              }
+              function timeFromMins(mins) {
+                function z(n){return (n<10? '0':'') + n;}
+                var h = (mins/60 |0) % 24;
+                var m = mins % 60;
+                return z(h) + ':' + z(m);
+              }
+              function addTimes(t0, t1) {
+                return timeFromMins(timeToMins(t0) + timeToMins(t1));
+              }
+                 $.ajax({
+                  url: "http://127.0.0.1:8000/task/",
+                  type:"POST",
+                     data: {
+                      'user':getCookie("user"),
+                      'project':$("#select1").val(),
+                     'billing_hour': $("#billing_hour").val(),
+                     'non_billing_hour': $("#non_billing_hour").val(),
+                      'total_hour':total_hour,
+                      'billing_description':$("#billing_description").val(),
+                      'non_billing_description':$("#non_billing_description").val(),
+                     },
+                     dataType: "json",
+                     success: function(response){
+                     if(response){
+                       console.log(response);
+                      $('.alert').show();
+                           window.setTimeout(function() {
+                           $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                           $(this).remove(); 
+                           });
+                           location.reload()
+                           }, 2000);
+                       if(response.status==404){
+                        console.log("Error")
+                         alert("Error")
+                       };
+                       
+                     }
+                 },
+                 error: function (err) {
+                   // alert("Error");
+                   return false;
+                 }
+         
+               });
+         
+             });
+         });
+
+
+
+
 </script>
 <style>
-  .ui-datepicker-trigger { 
-  position:relative;
-  /*top:10px ;*/
-  right:30px ; 
-  height:25px }
-  /* {} is the value according to your need */
+.ui-datepicker-trigger { 
+    position:relative;
+    /*top:10px ;*/
+    right:30px ; 
+    height:25px }
+ /* {} is the value according to your need */
 </style>
+
 </head>
 <body>
-  <div class="wrapper">
-    <div class="sidebar" data-image="/static/img/sidebar-5.jpg">
-      <!--
+    <div class="wrapper">
+        <div class="sidebar" data-image="/static/img/sidebar-4.jpg">
+            <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
+
         Tip 2: you can also add an image using data-image tag
-        -->
-      <div class="sidebar-wrapper">
-        <div class="logo">
-          <a href="http://www.thoughtwin.com" class="simple-text">
-          Thoughtwin
-          </a>
-        </div>
-        <ul class="nav">
-          <li  class="nav-item active">
-            <a class="nav-link" href="/user/dashboard">
-              <i class="fa fa-pie-chart" aria-hidden="true"></i>
-              <p>Dashboard</p>
-            </a>
-          </li>
-          <li>
-            <a class="nav-link" href="/user/userprofile">
-              <i class="fa fa-user fa" aria-hidden="true"></i>
-              <p>User Profile</p>
-            </a>
-          </li>
-          <li>
-            <a class="nav-link" href="/task/edittask">
-              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-              <p>Edit Task</p>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="main-panel">
-      <!-- fixed plugin  -->
-      <div class="fixed-plugin">
-      </div>
-      <!-- Navbar -->
-      <nav class="navbar navbar-expand-lg " color-on-scroll="500">
-        <div class=" container-fluid  ">
-          <a class="navbar-brand" href="/user/dashboard">My Dashboard </a>
-          <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-bar burger-lines"></span>
-          <span class="navbar-toggler-bar burger-lines"></span>
-          <span class="navbar-toggler-bar burger-lines"></span>
-          </button>
-          <div class="collapse navbar-collapse justify-content-end" id="navigation">
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item">
-                <a class="nav-link">
-                <span class="no-icon">Billing/NonBilling</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" onclick="deleteAllCookies()">
-                <span class="no-icon">Log out</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      <!-- End Navbar -->
-      <div class="alert alert-success" style="position: fixed;top:30px;left: 35%;height: 40px;width: 300px;color: black;border-radius: 10px; text-align: center;display: none;">
-        Submitted Successfully!
-      </div>
-      <div class="content">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12">
-            </div>
-            <div class="col-md-12">
-              <b>Enter Date: <input type = "text" id = "datepicker-6"></b>
-              <br><br><br>
-              <div class="card card-plain table-plain-bg">
-                <div class="card-header ">
-                  <h4 class="card-title">Billing Hours</h4>
-                  <br>
-                  <!-- <input type="date" name="date"> -->
-                  <!-- <input type = "text" id = "datepicker-6"> -->
+    -->
+            <div class="sidebar-wrapper">
+                <div class="logo">
+                    <a href="http://www.thoughtwin.com" class="simple-text">
+                        Thoughtwin
+                    </a>
                 </div>
-                <div class="container">
-                  <form id=billing_form>
-                    {% csrf_token %}       
-                    <table class="table table-bordered">
-                      <tbody>
-                        <tr>
-                          <th>Project Name</th>
-                          <td>
-                            <select id="select1">
-                              <option value="0">Select Project</option>
-                            </select>
-                            <br>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>Description</th>
-                          <td><textarea rows="2" cols="75" placeholder="Description" id=billing_description></textarea></td>
-                        </tr>
-                        <tr>
-                          <th>Time (Hours)</th>
-                          <td><input type="time" name="hours" max="8" id="billing_hour">  [ hh:mm ]</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <br>
-                    <div class="card-header ">
-                      <h4 class="card-title">Non-Billing Hours</h4>
-                      <br>
+                <ul class="nav">
+                    <li  class="nav-item active">
+                        <a class="nav-link" href="/user/dashboard">  
+                           <i class="fa fa-pie-chart" aria-hidden="true"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="/user/userprofile">
+                            <i class="fa fa-user fa" aria-hidden="true"></i>
+                            <p>User Profile</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="/task/edittask">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            <p>Edit Task</p>
+                        </a>
+                    </li>
+                    
+                   
+                   
+                </ul>
+            </div>
+        </div>
+        <div class="main-panel">
+            <!-- fixed plugin  -->
+            <div class="fixed-plugin">
+                
+            </div>
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg " color-on-scroll="500">
+                <div class=" container-fluid  ">
+                    <a class="navbar-brand" href="/user/dashboard">My Dashboard </a>
+                    <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-bar burger-lines"></span>
+                  <span class="navbar-toggler-bar burger-lines"></span>
+                  <span class="navbar-toggler-bar burger-lines"></span>
+                  </button>
+                    
+                    <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                        
+                        <ul class="navbar-nav ml-auto">
+                           <li class="nav-item">
+                                <a class="nav-link">
+                                    <span class="no-icon" id="billhrs">Billing</span>&nbsp;Billing Hrs&nbsp;/&nbsp;
+                                    <span class="no-icon" id="nonbillhrs">NonBilling</span>&nbsp;Non-Billing Hrs
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" onclick="deleteAllCookies()">
+                                    <span class="no-icon">Log out</span>
+                                </a>
+                            </li>
+                            
+                        </ul>
                     </div>
-                    <table class="table table-bordered">
-                      <tbody>
-                        <tr>
-                          <th>Project Name</th>
-                          <td>
-                            <select id="select2">
-                              <option value="0">Select Project</option>
-                            </select>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>Description</th>
-                          <td><textarea rows="2" cols="75" placeholder="Description" id=non_billing_description></textarea></td>
-                        </tr>
-                        <tr>
-                          <th>Time (Hours)</th>
-                          <td><input type="time" name="hours" id="non_billing_hour" max="8">  [ hh:mm ]</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <button class="center" id="btn1" type="Submit">Submit</button>
-                  </form>
                 </div>
-              </div>
+            </nav>
+            <!-- End Navbar -->
+            <div class="alert alert-success" style="position: fixed;top:30px;left: 35%;height: 40px;width: 300px;color: black;border-radius: 10px; text-align: center;display: none;">
+               Submitted Successfully!
+
             </div>
-          </div>
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                           
+                        </div>
+<div class="col-md-12">
+  <b>Enter Date: <input type = "text" id = "datepicker-6"></b>
+  <br><br><br>
+    <div class="card card-plain table-plain-bg">
+        <div class="card-header ">
+            <h4 class="card-title">Billing Hours</h4>
+            <br>
+            <!-- <input type="date" name="date"> -->
+            <!-- <input type = "text" id = "datepicker-6"> -->
         </div>
-      </div>
-      <footer class="footer">
-        <div class="container">
-          <nav>
-            <p class="copyright text-center">
-              ©
-              <a href="http://www.thoughtwin.com">Thoughtwin</a>, made with love by Python Team
-            </p>
-          </nav>
+                               
+  
+
+<div class="container">  
+<form id=billing_form>  
+ {% csrf_token %}       
+<table class="table table-bordered">
+
+<tbody>
+  <tr>
+    <th>Project Name</th>
+    <td><select id="select1">
+    <option value="0">Select Project</option>
+    </select><br></td>
+      </tr>
+      <tr>
+        <th>Description</th>
+        <td><textarea rows="2" cols="75" placeholder="Description" id=billing_description></textarea></td>
+      </tr>
+      <tr>
+        <th>Time (Hours)</th>
+        <td><input type="time" name="hours" max="8" id="billing_hour" onkeyup='checktime();'>  [ hh:mm ]</td>
+      </tr>
+    </tbody>
+
+  
+  </table>
+<br>
+  <div class="card-header ">
+     <h4 class="card-title">Non-Billing Hours</h4><br>
+ </div>
+ <table class="table table-bordered">
+
+<tbody>
+  <tr>
+    <th>Project Name</th>
+    <td><select id="select2">
+        <option value="0">Select Project</option>
+    </select></td>
+      </tr>
+      <tr>
+        <th>Description</th>
+        <td><textarea rows="2" cols="75" placeholder="Description" id=non_billing_description></textarea></td>
+      </tr>
+      <tr>
+        <th>Time (Hours)</th>
+        <td><input type="time" name="hours" id="non_billing_hour" onkeyup='checktime();' >  [ hh:mm ] <span id="time_error" style="color: red;display: none;">&nbsp;NOTE: Sum of billing hr and non-billing hr must be <=9 hrs</span></td>
+      </tr>
+    </tbody>
+
+  
+  </table>
+  <button class="center" id="btn1" type="Submit">Submit</button>
+    </form>
+</div>
+
+
+    
+    
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="footer">
+                <div class="container">
+                    <nav>
+                        
+                        <p class="copyright text-center">
+                            ©
+                            
+                            <a href="http://www.thoughtwin.com">Thoughtwin</a>, made with love by Python Team
+                        </p>
+                    </nav>
+                </div>
+            </footer>
         </div>
-      </footer>
     </div>
-  </div>
 </body>
 <!-- <script src="/static/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
-  <script src="/static/js/core/popper.min.js" type="text/javascript"></script>
-  <script src="/static/js/core/bootstrap.min.js" type="text/javascript"></script>
-  <script src="/static/js/light-bootstrap-dashboard.js?v=2.0.1" type="text/javascript"></script> -->
+<script src="/static/js/core/popper.min.js" type="text/javascript"></script>
+<script src="/static/js/core/bootstrap.min.js" type="text/javascript"></script>
+<script src="/static/js/light-bootstrap-dashboard.js?v=2.0.1" type="text/javascript"></script> -->
+
+
 </html>

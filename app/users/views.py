@@ -18,13 +18,16 @@ from app.projects.serializers import ProjectSerializer
 from app.projects.views import ProjectView
 from app.tasks.models import Tasks
 from app.tasks.serializers import TaskSerializer
+from django import forms
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse
+from django.core.mail import EmailMultiAlternatives
 
 ## written by aarti
 class UserProfileList(APIView):
 	
 	def post(self,request):
 		try:
-			
 			user = self.create_user(request)
 			if not(user):
 				return Response("Error while create user")
@@ -70,10 +73,30 @@ class UserProfileList(APIView):
 
 	def put(self,request,user_id):
 		try:
+			
 			get_data = UserProfile.objects.get(pk=user_id)
+
 			update_data = UserSerializer(get_data,data=request.data)
+			
 			if update_data.is_valid():
 				update_data.save()
+				get_name = update_data.data
+				current_user_name = get_name['user_name']
+				get_username = request.data
+				new_user_name = get_username['user_name']
+				password = get_username['password']
+				confirm_password = get_username['confirm_password']
+				print(password)
+				print(confirm_password)
+				if password != '' and confirm_password != '':
+					if password == confirm_password:
+						user = User.objects.get(username = current_user_name)
+						user.set_password(password)
+						return Response("PassChanged")
+					
+				user = User.objects.get(username = current_user_name)
+				user.username = new_user_name
+				user.save()
 				return Response(update_data.data,status=status.HTTP_200_OK)
 		except:
 			return Response("Error while updating user details")
@@ -81,14 +104,14 @@ class UserProfileList(APIView):
 	def delete(self,request,user_id):
 		delete_user=UserProfile.objects.get(pk=user_id)
 		delete_user.delete()
-		return Response(status=status.HTTP_204_NO_CONTENT)
+		return Response("Deleted",status=status.HTTP_200_OK)
 
 ## written by aarti
 class Login(TemplateView):
 	
 	def get(self,request):
 		return render(request,'login.html')
-	
+
 	def post(self,request,*args, **kwargs):
 		try:
 			email = request.POST.get('inputEmail')
@@ -96,6 +119,7 @@ class Login(TemplateView):
 			if email:
 				user = User.objects.get(username=email)
 				auth_user = authenticate(username=email, password=password)
+				print(auth_user)
 				token,created = Token.objects.get_or_create(user_id=user.id)
 				print(token)
 				if(user):
@@ -117,7 +141,6 @@ class Login(TemplateView):
 			print(e)
 			return JsonResponse({'Error':'error'})
 		
-		
 class Dashboard(TemplateView):
 	def get(self,request):	
 		user_dict = {"test":"yes"}
@@ -125,7 +148,6 @@ class Dashboard(TemplateView):
 		
 	@csrf_exempt
 	def post(self,request,user_id=None):
-		# import pdb;pdb.set_trace();
 		userData = UserProjects.objects.all()
 		user_data = UserProjectSerializer(userData, many=True)
 		return JsonResponse({"tt":user_data.data})
@@ -160,6 +182,21 @@ class AddProject(TemplateView):
 	def get(self,request):
 		return render(request,'addproject.html')
 
+class ViewProject(TemplateView):
+	def get(self,request):
+		return render(request,'viewproject.html')
+
+	def post(self,request):
+			try:
+				project_Data= Projects.objects.all()
+				project_data = ProjectSerializer(project_Data,many=True)
+				# print(project_data.data)
+				project_all = { "projects":project_data.data}
+				
+				return JsonResponse(project_all,status=status.HTTP_201_CREATED)
+			except Exception as err: 
+				print(err) 
+				return Response("Error",status=status.HTTP_404_NOT_FOUND)
 
 class WorkDetails(TemplateView):
 	def get(self,request):
@@ -168,7 +205,7 @@ class WorkDetails(TemplateView):
 		user_dict = {"userslist":user_data.data}
 		return render(request,'datewise_details.html',user_dict)
 
-	@csrf_exempt	
+		@csrf_exempt	
 	def post(self,request,*args,**kwargs):
 		try:
 			user_list=[]
@@ -226,7 +263,7 @@ class AssignProject(TemplateView):
 ## written by aarti		
 class AssignProjectApi(APIView):
 	def post(self,request):
-		try:	
+		try:
 			project_id = request.POST.get('project')	
 			user_id = request.POST.get('user')
 			user_data = UserProjectSerializer(data=request.data)
@@ -255,3 +292,17 @@ class ViewProject(TemplateView):
 		except Exception as err: 
 			print(err) 
 			return Response("Error",status=status.HTTP_404_NOT_FOUND)
+
+##Written By Ashwin
+class SendMail(APIView):
+	def get(self,request,user_id):
+	    subject = 'Password Changed'
+	    get_email = User.objects.get(id = user_id)
+	    from_email = 'admin@thoughtwin.com'
+	    html_content = "<div><img height='30px' src='https://image.ibb.co/drN81x/1_1.png'><br/><br/><hr><div><h2 style='font-family: Verdana, sans-serif;'>Your Thoughtwin Timesheet password has changed</h2></div><div style='font-family: Verdana, sans-serif;'>Hi "+str(get_email)+",<br><br>We are sending you this notification because your password for Thoughtwin Timesheet has changed.<br><br>If you have not changed it please click below link or button to login again and change your password manually.<br><br><button style='margin: 20px;color: white;background-color: #337AB7;border: 1px;height: 30px;width: 160px; text-decoration:none;font-size: 18px;border-radius: 10px;'><a href='http://127.0.0.1:8000/user/login' target='_blank' style='color: white;text-decoration: none;'> Login</a></button><br><br><a href='http://127.0.0.1:8000/user/login'>http://127.0.0.1:8000/user/login</a> <br><br><br><br>Best Regards<br><br>Thoughtwin team</div></div>"
+	    text_content = ""
+	    msg = EmailMultiAlternatives(subject,text_content, from_email, [get_email])
+	    msg.attach_alternative(html_content, "text/html")
+	    msg.send()
+	    return HttpResponseRedirect('/user/userprofile')
+

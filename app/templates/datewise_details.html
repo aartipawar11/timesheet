@@ -7,48 +7,44 @@
 <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="/static/customizedjs/datepicker.js"></script>
 <script type="text/javascript">
-	$(document).ready(function(){
-		$("#datesubmitbutton").click(function(event){
-			event.preventDefault();
-			var el = document.getElementsByName("csrfmiddlewaretoken");
-			csrf_value = el[0].getAttribute("value");
-			$.ajax({
-					url: "http://127.0.0.1:8000/user/workdetails",
-					type:"POST",
-					data: {
-					'inputDate':$("#datepicker-6").val(),
-					'csrfmiddlewaretoken':csrf_value
-					},
-					dataType: "json",
-					success: function(response){
-					var len = response.userlist.length;
-					if(response){
-							console.log(response);
-							for (i = 0; i < len; i++) {
-								var user_name = response.userlist[i].first_name;
-								// var aa = document.getElementById("name").innerHTML=user_name;
-								$("#name").append("<td>" +user_name+ "</td >");
 
-							};
-							if(response.status==201){
-								alert("Successfully!");
-								
-							}
-							if(response.status==500){
-								console.log("Error ")
-								 
-							};
-							 
-						}
-				},
-				error: function (err) {
-					return false;
-				}
-	
-			});
-	
-		});
-	});
+          $(document).ready(function(){
+             $("#datesubmitbutton").click(function(event){
+              event.preventDefault();
+              var el = document.getElementsByName("csrfmiddlewaretoken");
+              csrf_value = el[0].getAttribute("value");
+              $.ajax({
+                  url: "http://127.0.0.1:8000/user/workdetails",
+                  type:"POST",
+                     data: {
+                     'date': $("#datepicker-6").val(),
+                      'csrfmiddlewaretoken':csrf_value
+                     },
+                     dataType: "json",
+                     success: function(response){
+                     if(response){
+                       console.log(response);
+                       if(response.status==201){
+                        alert("Successfully!");
+                        
+                       }
+                       if(response.status==500){
+                        console.log("Error ")
+                         
+                       };
+                       
+                     }
+                 },
+                 error: function (err) {
+                   // alert("Error");
+                   return false;
+                 }
+         
+               });
+         
+             });
+         });
+
 	
 </script>
 
@@ -152,6 +148,7 @@
 								<tr>
 									<td value="{{list.user}}"><a href="../task/taskdetail/{{list.user}}">{{list.first_name}}</a></td>
 									<td value="{{list.user}}"><a href="../task/taskdetail/{{list.user}}">{{list.last_name}}</td>
+									<td value ="{{list.user}}">{{list.role_name}}</td>
 								</tr>
 								{% endfor %}
 								</tr>
