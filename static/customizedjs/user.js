@@ -11,7 +11,7 @@
                      'first_name': $("#first_name").val(),
                      'last_name': $("#last_name").val(),
                       'dob': $("#dob").val(),
-                      'gender': $("#gender").val(), 
+                      'gender': $("#gender:checked").val(), 
                       'email': $("#email").val(), 
                       'password': $("#password").val(), 
                       'designation': $("#designation").val(),

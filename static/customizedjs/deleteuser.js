@@ -3,7 +3,10 @@
              $("#deluserform").submit(function(event){
               event.preventDefault();
               var id=$("#inputid").val();
-               
+              if(id==''){
+                
+                document.getElementById("inputerror").innerHTML = "No Input Provided!";
+                }
                  $.ajax({
                   url: "http://127.0.0.1:8000/user/"+id,
                   type:"delete",

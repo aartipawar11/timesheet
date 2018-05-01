@@ -7,6 +7,9 @@ from app.tasks.models import Tasks
 from app.tasks.serializers import TaskSerializer
 from django.views.generic import TemplateView
 from django.shortcuts import render,redirect
+from app.users.models import UserProfile
+import datetime 
+from datetime import datetime, timedelta
 
 
 class TaskView(APIView):
@@ -28,11 +31,11 @@ class EditTask(APIView):
 
 			try:
 				if(user_id):
-					userprofilee = Tasks.objects.get(pk=user_id)
-					user_dataa = TaskSerializer(userprofilee)
-					usertaskedit = {"usertasks":user_dataa.data}
+					get_data = Tasks.objects.get(pk=user_id)
+					task_data = TaskSerializer(get_data)
+					user_task_edit = {"usertasks":task_data.data}
 					# return Response(user_dataa.data,status=status.HTTP_200_OK)
-					return render(request,'edit_each_task.html',usertaskedit)
+					return render(request,'edit_each_task.html',user_task_edit)
 			except:
 				return Response("Error")
 			return render(request,'edittask.html')
@@ -56,5 +59,19 @@ class EditTask(APIView):
 			except:
 				return Response("Error",status=status.HTTP_400_BAD_REQUEST)
 
+class CalculateHrs(APIView):
+	def get(self,request,user_id):
+		# get_datas= Tasks.objects.filter(date__year='2018')
+		# get_datas= Tasks.objects.filter(date=datetime.date(2018,4,30))
+		one_week_ago = datetime.today() - timedelta(days=7)
+		get_week_tasks = Tasks.objects.filter(date__gte=one_week_ago,user_id=user_id)
+		# get_datas= Tasks.objects.filter(date__range=["2018-04-18", "2018-04-30"],user_id=user_id)
+		task_data = TaskSerializer(get_week_tasks,many=True)
+		print(task_data.data)
+		return Response(task_data.data,status=status.HTTP_201_CREATED)
 
-
+	def post(self,request,user_id):
+		one_month_ago = datetime.today() - timedelta(days=30)
+		get_month_tasks = Tasks.objects.filter(date__gte=one_month_ago,user_id=user_id)
+		month_data = TaskSerializer(get_month_tasks,many=True)
+		return Response(month_data.data,status=status.HTTP_201_CREATED)

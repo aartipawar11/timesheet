@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
 			
 	class Meta:
 		model = UserProfile
-		fields = ('id','user','role','role_name','user_name','first_name','last_name','mobile','dob','gender','designation','is_deleted','created_at','updated_at')
+		fields = ('id','user','role','role_name','user_name','first_name','last_name','mobile','dob','gender','designation','model_pic','is_deleted','created_at','updated_at')
 		extra_kwargs = {
 			'role': {
 				'required':True,

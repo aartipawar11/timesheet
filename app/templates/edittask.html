@@ -3,9 +3,11 @@
 <script>
    checkCookie();
 </script>
+<script type="text/javascript" src="/static/customizedjs/cal_weekly_hours.js"></script>
+
 <script type="text/javascript">
   $(document).ready(function(event) {
-        var userid = getCookie("id");
+        var userid = getCookie("user");
         var url = "http://127.0.0.1:8000/task/edittask";
         $.ajax({
             url: url,
@@ -14,11 +16,13 @@
             success: function(response) {
                // console.log(response);
                var len = response.length;
-                 console.log(len);
+                 // console.log(len);
                 for (i = 0; i < len; i++) {
                   var trHTML = '';
+                  // alert(response[i].id)
+                  // console.log(userid);
                      if (response[i].user == userid) {
-                         console.log(response[i])
+                         // console.log(response[i].user)
                          var projectid = response[i].project;
                          // console.log(projectid)
                          
@@ -44,7 +48,7 @@
                                     + response[i].total_hour
                                     + '</td><td>'
                                     // + '<button id="editbutton" value=response[i].id>Edit</button>'
-                                    + '<input type="button" id='+ response[i].id +' value="EDIT" onclick="clickMe(this)"/>'
+                                    + '<input class="btn btn-info" type="button" style="cursor: pointer;" id='+ response[i].id +' value="EDIT" onclick="clickMe(this)"/>'
                                     + '</td></tr>';
                         
                      }
@@ -72,11 +76,13 @@ function clickMe(e){
  
 }
 </script>
-<body>
+
+
+  <body>
 
 
    <div class="wrapper">
-   <div class="sidebar" data-image="/static/img/sidebar-5.jpg">
+   <div class="sidebar" data-image="/static/img/sidebar-4.jpg">
       <!--
          Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
          
@@ -132,6 +138,12 @@ function clickMe(e){
                </li>
             </ul>
             <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                                <a class="nav-link">
+                                    <span class="no-icon" id="billhrs">Billing</span>&nbsp;Billing Hrs&nbsp;/&nbsp;
+                                    <span class="no-icon" id="nonbillhrs">NonBilling</span>&nbsp;Non-Billing Hrs
+                                </a>
+                            </li>
                <li class="nav-item">
                   <a class="nav-link" onclick="deleteAllCookies()">
                   <span class="no-icon">Log out</span>
@@ -142,11 +154,11 @@ function clickMe(e){
       </div>
    </nav>
    <!-- End Navbar -->
-    
    <div class="content">
       <div class="container-fluid">
          <div class="row">
             <div class="col-md-12">
+              
             </div>
             <div class="col-md-12">
               <table class="table table-bordered">
@@ -161,7 +173,7 @@ function clickMe(e){
                         <th>NON BILLING DESCRIPTION</th>
                         <th>NON BILLING HOUR</th>
                         <th>TOTAL HOUR</th>
-                        <th>EDIT</th>
+                        
                         
                      </tr>
                   </thead>
@@ -169,6 +181,7 @@ function clickMe(e){
                   </table>
               
             </div>
+           
          </div>
       </div>
    </div>

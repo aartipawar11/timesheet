@@ -2,8 +2,11 @@
       <script>
          checkCookie();
       </script>
-
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+    <script src="http://malsup.github.com/jquery.form.js"></script> 
    <!-- <script type="text/javascript" src="/static/customizedjs/get_details.js"></script> -->
+   <script type="text/javascript" src="/static/customizedjs/cal_weekly_hours.js"></script>
+   
    <script type="text/javascript">
        $(document).ready(function(event) {
         var userid = getCookie("id");
@@ -15,6 +18,8 @@
             success: function(response) {
                 if (response) {
                     console.log(response);
+                    document.getElementById("fname").innerHTML = response.first_name;
+                    document.getElementById("lname").innerHTML = response.last_name;
                     document.getElementById("username").innerHTML = response.user_name;
                     document.getElementById("first_name").innerHTML = response.first_name;
                     document.getElementById("last_name").innerHTML = response.last_name;
@@ -22,9 +27,8 @@
                     document.getElementById("dob").innerHTML = response.dob;
                     document.getElementById("gender").innerHTML = response.gender;
                     document.getElementById("designation").innerHTML = response.designation;
-
-
-
+                    var pic="/static/"+response.model_pic;                
+                     $('#profileimg').html('<img class="avatar border-gray" src='+pic+'/>')  
                     if (response.status == 200) {
                         alert("Got details!");
                         console.log("response 200 coming");
@@ -37,87 +41,52 @@
                 }
             },
             error: function(err) {
-                // alert("Error");
                 return false;
             }
-
         });
-
     });
-
-
    </script>
-
 <!-- <script type="text/javascript" src="/static/customizedjs/edit_details.js"></script> -->
-
 <script type="text/javascript">
-    
-   $(document).ready(function() {
-        $("#userdetailform").submit(function(event) {
-            event.preventDefault();
-            var id = getCookie("id");
-            var user = getCookie("user");
+$(document).ready(function() { 
+    var id = getCookie("id");
+    var urls = "http://127.0.0.1:8000/user/" + id;
+    $('#userdetailform').ajaxForm({ 
+        url : urls,
+        type: "put",
+        data:{
+          'user': getCookie("user"),
+          'id': getCookie("id"),
+          'role': getCookie("role"),
+        },
+        dataType:  'json',
+        success:   processJson 
+    }); 
+});
+</script>
 
-            var role = getCookie("role");
-            var url = "http://127.0.0.1:8000/user/" + id;
-            $.ajax({
-                url: url,
-                type: "PUT",
-                data: {
-                     'user_name': $("#username").val(),
-                    'first_name': $("#first_name").val(),
-                    'last_name': $("#last_name").val(),
-                    'mobile': $("#mobile").val(),
-                    'dob': $("#dob").val(),
-                    'gender': $("#gender").val(),
-                    'id': getCookie("id"),
-                    'user': getCookie("user"),
-                    'role': getCookie("role"),
-                    'designation': $("#designation").val(),
+<!-- AJAX Return Message -->
+<script type="text/javascript">
+  function processJson(data) { 
+    console.log(data);
+    var user = getCookie("user");
+     $('.alert').show();
+     window.setTimeout(function() {
+     $(".alert").fadeTo(500, 0).slideUp(500, function(){
+     $(this).remove(); 
+     });
 
-
-                },
-                dataType: "json",
-                success: function(response) {
-                    if (response) {
-                        console.log(response);
-                        $('.alert').show();
-
-                        // alert("Details updated  ")
-                           window.setTimeout(function() {
-                           $(".alert").fadeTo(500, 0).slideUp(500, function(){
-                           $(this).remove(); 
-                           });
-                           location.reload()
-                           }, 2000);
-
-                        if (response.status == 200) {
-                            alert("User Created Successfully!");
-                            console.log("response 200 coming");
-                        }
-                        if (response.status == 404) {
-                            console.log("Error in Getting user details")
-                            alert("Error in creating user")
-                        }
-
-                    }
-                },
-                error: function(err) {
-                    // alert("Error");
-                    return false;
-                }
-
-            });
-        });
-
-    });
-
-
+     if(data == "PassChanged"){
+        window.location.href ="sendmail/"+user
+     }
+     else{
+        location.reload()
+       }
+     }, 2000);
+}
 </script>
 <script type="text/javascript">
-          $(document).ready(function(){
-           
-            
+          $(document).ready(function(){   
               $.ajax({
                   url: "https://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=jsonp&lang=en&jsonp=?",
                   type:"GET",
@@ -151,18 +120,20 @@ var check = function() {
     document.getElementById('message').innerHTML = 'Password Not Matching';
   }
 }</script>
+
 <script>
 $(document).ready(function(){
     $("#changepassword").click(function(){
-
         $("#password_field").toggle(1000);
     });
 });
 </script>
+
+
    </head>
    <body>
       <div class="wrapper">
-         <div class="sidebar" data-image="/static/img/sidebar-5.jpg">
+         <div class="sidebar" data-image="/static/img/sidebar-4.jpg">
             <!--
                Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
                
@@ -214,6 +185,12 @@ $(document).ready(function(){
                         </li>
                      </ul>
                      <ul class="navbar-nav ml-auto">
+                      <li class="nav-item">
+                                <a class="nav-link">
+                                    <span class="no-icon" id="billhrs">Billing</span>&nbsp;Billing Hrs&nbsp;/&nbsp;
+                                    <span class="no-icon" id="nonbillhrs">NonBilling</span>&nbsp;Non-Billing Hrs
+                                </a>
+                            </li>
                         <li class="nav-item">
                            <a class="nav-link" onclick="deleteAllCookies()">
                            <span class="no-icon">Log out</span>
@@ -224,7 +201,9 @@ $(document).ready(function(){
                </div>
             </nav>
             <!-- End Navbar -->
-            <div class="alert alert-success" style="position: absolute;top:30px;left: 25%;height: 40px;width: 300px;color: black;border-radius: 10px; text-align: center;display: none;">
+            
+
+            <div class="alert alert-success" style="position: fixed;top:30px;left: 40%;height: 40px;width: 300px;color: black;border-radius: 10px; text-align: center;display: none;">
                Personal Information Saved Successfully!
 
             </div>
@@ -249,7 +228,7 @@ $(document).ready(function(){
                                     <div class="col-md-6 pl-1">
                                        <div class="form-group">
                                           <label>Email</label>
-                                          <textarea style="resize: none;" type="text" name="username" id="username" class="form-control" placeholder="Username"></textarea>
+                                          <textarea style="resize: none;" type="text" name="user_name" id="username" class="form-control" placeholder="Username"></textarea>
                                        </div>
                                     </div>
                                     <!-- <div class="col-md-4 pl-1">
@@ -300,8 +279,13 @@ $(document).ready(function(){
                                           <label>Designation</label>
                                           <textarea  style="resize: none;" rows="4" cols="80" class="form-control" placeholder="Your Desgnation" name="designation" id="designation" value=""></textarea>
                                        </div>
+                                       <div class="form-group">
+                                          <label>Change Profile Picture</label><br>
+
+                                          <input type="file" name="model_pic" id="model_pic">
+                                        </div>
                                        <button id="changepassword" type="button" class="btn btn-info btn-fill pull-left">Change Password</button> <br><br>
-                                       <div id="password_field" style="height: 200px; display: none;">
+                                       <div id="password_field" style="height: 150px; display: none;">
                                           <div class="form-group"><br>
                                        
                                           <textarea style="resize: none;" type="text" placeholder="New Password" name="password" id="password" class="form-control"  value="" onkeyup='check();'></textarea><br>
@@ -327,8 +311,9 @@ $(document).ready(function(){
                            <div class="card-body">
                               <div class="author">
                                  <a href="#">
-                                    <img class="avatar border-gray" src="/static/img/faces/face-1.jpg" alt="...">
-                                    <h5 class="title">D Ashwin</h5>
+                                    <span id="profileimg"></span>
+                                   
+                                    <h5><span class="title" id="fname"></span>&nbsp;<span class="title" id="lname"></span></h5>
                                  </a>
                                  <p class="description">
                                     <b><u>Thought Of The Day</u></b>

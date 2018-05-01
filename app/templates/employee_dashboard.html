@@ -8,6 +8,8 @@
 <script src="http://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="/static/customizedjs/datepicker.js"></script>
+<script type="text/javascript" src="/static/customizedjs/cal_weekly_hours.js"></script>
+
        <script type = "text/javascript" >
      $(document).ready(function(event) {
          var userid = getCookie("id");
@@ -53,14 +55,27 @@
      $(document).ready(function(){
              $("#billing_form").submit(function(event){
               event.preventDefault();
-              // var time1= $("#billing_hour").val();
-              // var time2= $("#non_billing_hour").val();
-              // var total_hour= time1+time2;
-              // alert(time1);
+              var time1= $("#billing_hour").val();
+              var time2= $("#non_billing_hour").val();
+              var total_hour= addTimes(time1,time2);
 
-              // var el = document.getElementsByName("csrfmiddlewaretoken");
-              // csrf_value = el[0].getAttribute("value");
-
+              if (total_hour >= '09:00'){
+                $('#time_error').show();
+                alert("Total Time Error")
+              }
+              function timeToMins(time) {
+                var b = time.split(':');
+                return b[0]*60 + +b[1];
+              }
+              function timeFromMins(mins) {
+                function z(n){return (n<10? '0':'') + n;}
+                var h = (mins/60 |0) % 24;
+                var m = mins % 60;
+                return z(h) + ':' + z(m);
+              }
+              function addTimes(t0, t1) {
+                return timeFromMins(timeToMins(t0) + timeToMins(t1));
+              }
                  $.ajax({
                   url: "http://127.0.0.1:8000/task/",
                   type:"POST",
@@ -69,37 +84,24 @@
                       'project':$("#select1").val(),
                      'billing_hour': $("#billing_hour").val(),
                      'non_billing_hour': $("#non_billing_hour").val(),
-                     
-                      // 'total_hour':$("#billing_hour").val()+$("#non_billing_hour").val(),
-                      'total_hour':"08:00",
+                      'total_hour':total_hour,
                       'billing_description':$("#billing_description").val(),
                       'non_billing_description':$("#non_billing_description").val(),
-
-                      
-                      // 'csrfmiddlewaretoken':csrf_value
                      },
                      dataType: "json",
                      success: function(response){
                      if(response){
                        console.log(response);
                       $('.alert').show();
-
-                        // alert("Details updated  ")
                            window.setTimeout(function() {
                            $(".alert").fadeTo(500, 0).slideUp(500, function(){
                            $(this).remove(); 
                            });
                            location.reload()
                            }, 2000);
-
-
-                       if(response.status==201){
-                        alert("Project Created Successfully!");
-                        window.location = "admindashboard"; 
-                       }
                        if(response.status==404){
-                        console.log("Error in creating user")
-                         alert("Error in creating user")
+                        console.log("Error")
+                         alert("Error")
                        };
                        
                      }
@@ -130,7 +132,7 @@
 </head>
 <body>
     <div class="wrapper">
-        <div class="sidebar" data-image="/static/img/sidebar-5.jpg">
+        <div class="sidebar" data-image="/static/img/sidebar-4.jpg">
             <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
 
@@ -187,7 +189,8 @@
                         <ul class="navbar-nav ml-auto">
                            <li class="nav-item">
                                 <a class="nav-link">
-                                    <span class="no-icon">Billing/NonBilling</span>
+                                    <span class="no-icon" id="billhrs">Billing</span>&nbsp;Billing Hrs&nbsp;/&nbsp;
+                                    <span class="no-icon" id="nonbillhrs">NonBilling</span>&nbsp;Non-Billing Hrs
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -242,7 +245,7 @@
       </tr>
       <tr>
         <th>Time (Hours)</th>
-        <td><input type="time" name="hours" max="8" id="billing_hour">  [ hh:mm ]</td>
+        <td><input type="time" name="hours" max="8" id="billing_hour" onkeyup='checktime();'>  [ hh:mm ]</td>
       </tr>
     </tbody>
 
@@ -267,7 +270,7 @@
       </tr>
       <tr>
         <th>Time (Hours)</th>
-        <td><input type="time" name="hours" id="non_billing_hour" max="8">  [ hh:mm ]</td>
+        <td><input type="time" name="hours" id="non_billing_hour" onkeyup='checktime();' >  [ hh:mm ] <span id="time_error" style="color: red;display: none;">&nbsp;NOTE: Sum of billing hr and non-billing hr must be <=9 hrs</span></td>
       </tr>
     </tbody>
 

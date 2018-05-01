@@ -46,7 +46,13 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
 ]
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'd_ashwin'
+EMAIL_HOST_PASSWORD = '55diamirza55'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -114,6 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
@@ -147,3 +154,6 @@ os.path.join(BASE_DIR,'static')
 
     ]
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR),"static_cdn")
+
+MEDIA_URL = ''
+MEDIA_ROOT = os.path.join(BASE_DIR,'/home/hp/Projects/django/timesheet/timesheet/static')

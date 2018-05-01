@@ -3,9 +3,131 @@
          checkCookie();
       </script>
 
-   <script type="text/javascript" src="/static/customizedjs/get_details.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+    <script src="http://malsup.github.com/jquery.form.js"></script> 
+   <!-- <script type="text/javascript" src="/static/customizedjs/get_details.js"></script> -->
+   <script type="text/javascript">
+       $(document).ready(function(event) {
+        var userid = getCookie("id");
+        var url = "http://127.0.0.1:8000/user/" + userid;
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            success: function(response) {
+                if (response) {
+                    console.log(response);
+                    document.getElementById("fname").innerHTML = response.first_name;
+                    document.getElementById("lname").innerHTML = response.last_name;
+                    document.getElementById("username").innerHTML = response.user_name;
+                    document.getElementById("first_name").innerHTML = response.first_name;
+                    document.getElementById("last_name").innerHTML = response.last_name;
+                    document.getElementById("mobile").innerHTML = response.mobile;
+                    document.getElementById("dob").innerHTML = response.dob;
+                    document.getElementById("gender").innerHTML = response.gender;
+                    document.getElementById("designation").innerHTML = response.designation;
+                    var pic="/static/"+response.model_pic;                
+                     $('#profileimg').html('<img class="avatar border-gray" src='+pic+'/>')  
+                    if (response.status == 200) {
+                        alert("Got details!");
+                        console.log("response 200 coming");
+                    }
+                    if (response.status == 404) {
+                        console.log("Error in Getting user details")
+                        alert("Error in creating user")
+                    }
 
-<script type="text/javascript" src="/static/customizedjs/edit_details.js"></script>
+                }
+            },
+            error: function(err) {
+                return false;
+            }
+        });
+    });
+   </script>
+
+<!-- <script type="text/javascript" src="/static/customizedjs/edit_details.js"></script> -->
+<script type="text/javascript">
+$(document).ready(function() { 
+    var id = getCookie("id");
+    var urls = "http://127.0.0.1:8000/user/" + id;
+    $('#userdetailform').ajaxForm({ 
+        url : urls,
+        type: "put",
+        data:{
+          'user': getCookie("user"),
+          'id': getCookie("id"),
+          'role': getCookie("role"),
+        },
+        dataType:  'json',
+        success:   processJson 
+    }); 
+});
+</script>
+
+<!-- AJAX Return Message -->
+<script type="text/javascript">
+  function processJson(data) { 
+    console.log(data);
+    var user = getCookie("user");
+     $('.alert').show();
+     window.setTimeout(function() {
+     $(".alert").fadeTo(500, 0).slideUp(500, function(){
+     $(this).remove(); 
+     });
+
+     if(data == "PassChanged"){
+        window.location.href ="sendmail/"+user
+     }
+     else{
+        location.reload()
+       }
+     }, 2000);
+}
+</script>
+<script type="text/javascript">
+          $(document).ready(function(){   
+              $.ajax({
+                  url: "https://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=jsonp&lang=en&jsonp=?",
+                  type:"GET",
+                     dataType: "json",
+                     success: function(response){
+                     if(response){
+                     
+                      document.getElementById("quote").innerHTML = response.quoteText;
+                      document.getElementById("author").innerHTML = response.quoteAuthor;
+                     }
+                 },
+                 error: function (err) {
+                   // alert("Error");
+                   return false;
+                 }
+         
+               });
+         
+             });
+      
+
+</script>
+<script>
+var check = function() {
+  if (document.getElementById('password').value ==
+    document.getElementById('confirm_password').value) {
+    document.getElementById('message').style.color = 'green';
+    document.getElementById('message').innerHTML = 'Password Matched';
+  } else {
+    document.getElementById('message').style.color = 'red';
+    document.getElementById('message').innerHTML = 'Password Not Matching';
+  }
+}</script>
+
+<script>
+$(document).ready(function(){
+    $("#changepassword").click(function(){
+        $("#password_field").toggle(1000);
+    });
+});
+</script>
    </head>
    <body>
       <div class="wrapper">
@@ -81,18 +203,18 @@
                            <div class="card-body">
                               <form  id="userdetailform">
                                  <div class="row">
-                                    <div class="col-md-5 pr-1">
+                                    <div class="col-md-6 pr-1">
                                        <div class="form-group">
                                           <label>Company (disabled)</label>
                                           <input type="text" class="form-control" disabled="" placeholder="Company" value="Thoughtwin">
                                        </div>
                                     </div>
-                                   <!--  <div class="col-md-3 px-1">
+                                   <div class="col-md-6 pl-1">
                                        <div class="form-group">
-                                          <label>Username</label>
-                                          <input type="text" name="username" class="form-control" placeholder="Username" value="">
+                                          <label>Email</label>
+                                          <textarea style="resize: none;" type="text" name="user_name" id="username" class="form-control" placeholder="Username"></textarea>
                                        </div>
-                                    </div> -->
+                                    </div>
                                   <!--   <div class="col-md-4 pl-1">
                                        <div class="form-group">
                                           <label for="exampleInputEmail1">Email address</label>
@@ -141,6 +263,20 @@
                                           <label>Designation</label>
                                           <textarea  style="resize: none;" rows="4" cols="80" class="form-control" placeholder="Your Desgnation" name="designation" id="designation" value=""></textarea>
                                        </div>
+                                       <div class="form-group">
+                                          <label>Change Profile Picture</label><br>
+
+                                          <input type="file" name="model_pic" id="model_pic">
+                                        </div>
+                                        <button id="changepassword" type="button" class="btn btn-info btn-fill pull-left">Change Password</button> <br><br>
+                                         <div id="password_field" style="height: 150px; display: none;">
+                                          <div class="form-group"><br>
+                                       
+                                          <textarea style="resize: none;" type="text" placeholder="New Password" name="password" id="password" class="form-control"  value="" onkeyup='check();'></textarea><br>
+                                          <textarea style="resize: none;" type="text" placeholder="Confirm New Password" name="confirm_password" id="confirm_password" class="form-control" onkeyup='check();' value=""></textarea>
+                                          <span id="message"></span>
+                                       </div>
+                                       </div>
                                     </div>
                                  </div>
                                  <button type="submit" class="btn btn-info btn-fill pull-right">Update Profile</button>
@@ -154,34 +290,24 @@
                            <div class="card-image">
                               <img src="/static/img/background.jpeg" alt="...">
                            </div>
-                           <div class="card-body">
+                            <div class="card-body">
                               <div class="author">
                                  <a href="#">
-                                    <img class="avatar border-gray" src="/static/img/faces/face-1.jpg" alt="...">
-                                    <h5 class="title">D Ashwin</h5>
+                                    <span id="profileimg"></span>
+                                   
+                                    <h5><span class="title" id="fname"></span>&nbsp;<span class="title" id="lname"></span></h5>
                                  </a>
                                  <p class="description">
-                                    D.Ashwin ...
+                                    <b><u>Thought Of The Day</u></b>
                                  </p>
                               </div>
-                              <p class="description text-center">
-                                 "Lamborghini Mercy
-                                 <br> Your chick she so thirsty
-                                 <br> I'm in that two seat Lambo"
-                              </p>
+                              <span style="font-style: italic;" class="description text-center" id="quote">
+                              </span><hr>
+                              -
+                              <span style="font-style: italic; class="description text-center" id="author"></span>
                            </div>
-                           <hr>
-                           <div class="button-container mr-auto ml-auto">
-                              <button href="#" class="btn btn-simple btn-link btn-icon">
-                              <i class="fa fa-facebook-square"></i>
-                              </button>
-                              <button href="#" class="btn btn-simple btn-link btn-icon">
-                              <i class="fa fa-twitter"></i>
-                              </button>
-                              <button href="#" class="btn btn-simple btn-link btn-icon">
-                              <i class="fa fa-google-plus-square"></i>
-                              </button>
-                           </div>
+                          
+                        
                         </div>
                      </div>
                   </div>
