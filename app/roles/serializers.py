@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from app.roles.models import Role
 
+## written by aarti
 class RoleSerializer(serializers.ModelSerializer):
 	class Meta:
 		model =  Role

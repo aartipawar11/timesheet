@@ -19,7 +19,7 @@ from app.projects.views import ProjectView
 from app.tasks.models import Tasks
 from app.tasks.serializers import TaskSerializer
 
-
+## written by aarti
 class UserProfileList(APIView):
 	
 	def post(self,request):
@@ -28,7 +28,6 @@ class UserProfileList(APIView):
 			user = self.create_user(request)
 			if not(user):
 				return Response("Error while create user")
-
 			self.overWrite(request, {'user':user.id})
 			print(request.data)	
 			user_data = UserSerializer(data=request.data)
@@ -77,22 +76,20 @@ class UserProfileList(APIView):
 				update_data.save()
 				return Response(update_data.data,status=status.HTTP_200_OK)
 		except:
-			return Response("Error")
+			return Response("Error while updating user details")
 
 	def delete(self,request,user_id):
 		delete_user=UserProfile.objects.get(pk=user_id)
 		delete_user.delete()
 		return Response(status=status.HTTP_204_NO_CONTENT)
 
-
+## written by aarti
 class Login(TemplateView):
 	
 	def get(self,request):
 		return render(request,'login.html')
 	
 	def post(self,request,*args, **kwargs):
-
-		## written by aarti
 		try:
 			email = request.POST.get('inputEmail')
 			password = request.POST.get('inputPassword')
@@ -128,6 +125,7 @@ class Dashboard(TemplateView):
 		
 	@csrf_exempt
 	def post(self,request,user_id=None):
+		# import pdb;pdb.set_trace();
 		userData = UserProjects.objects.all()
 		user_data = UserProjectSerializer(userData, many=True)
 		return JsonResponse({"tt":user_data.data})
@@ -171,35 +169,37 @@ class WorkDetails(TemplateView):
 		return render(request,'datewise_details.html',user_dict)
 
 	@csrf_exempt	
-	def post(self,request):
+	def post(self,request,*args,**kwargs):
 		try:
 			user_list=[]
 			data_list = []
-			dicti_data = { }
-			# import pdb;pdb.set_trace();
+			date_list = []
 			get_date = request.POST.get('inputDate')
 			if get_date:
 				new_task = Tasks.objects.all()
 				task_data = TaskSerializer(new_task,many=True)
 				date_value = task_data.data
-				for index in date_value:
-					list_value = index.items()
-					dict_data = dict(list_value)
-					user = dict_data['user']
-					date = dict_data['date']
-					user_list.append(user)
-				if date == get_date:
-					user_info = UserProfile.objects.all()
-					user_data = UserSerializer(user_info, many=True)
-					data_dict = user_data.data
-					for index in data_dict:
-						list_value = index.items()
-						dict_data = dict(list_value)
-						user_id = dict_data['user']
-						if user_id in user_list:
-							data_list.append(dict_data)
-					
-					return JsonResponse({"userlist":data_list})
+				print(date_value)
+				# for index in date_value:
+				# 	list_value = index.items()
+				# 	dict_data = dict(list_value)
+				# 	user = dict_data['user']
+				# 	date = dict_data['date']
+				# 	user_list.append(user)
+				# 	date_list.append(date)
+				# if get_date in date_list: 
+				# 	# user_info = UserProfile.objects.all()
+				# 	user_info = UserProfile.objects.get(pk=user)
+				# 	user_data = UserSerializer(user_info)
+				# 	data_dict = user_data.data
+				# 	for index in data_dict:
+				# 		list_value = index.items()
+				# 		dict_data = dict(list_value)
+				# 		user_id = dict_data['user']
+				# 		if user_id in user_list:
+				# 			data_list.append(dict_data)
+				# 			print(data_list)
+				# 			return JsonResponse({"userlist":data_list})
 					# 		user_dict = {"userlist":dict_data}
 					# 		# dicti_data.update(user_dict)
 					# 		print(user_dict)
@@ -211,10 +211,7 @@ class WorkDetails(TemplateView):
 			print(e)
 			return JsonResponse({'Error':'error'})
 
-class UserTaskDetails(TemplateView):
-	def get(self,request):
-		return render(request,'user_task_details.html')
-
+## written by aarti
 class AssignProject(TemplateView):
 	def get(self,request):
 		project_Data= Projects.objects.all()
@@ -225,7 +222,8 @@ class AssignProject(TemplateView):
 		user_dict={"userslist":user_data.data}
 		user_dict.update(project_dict)
 		return render(request,'assignproject.html',user_dict)
-		
+
+## written by aarti		
 class AssignProjectApi(APIView):
 	def post(self,request):
 		try:	
@@ -240,10 +238,20 @@ class AssignProjectApi(APIView):
 			print(e)
 			return JsonResponse({'Error':'error'})
 
+class UserTaskDetails(TemplateView):
+	def get(self,request):
+		return render(request,'user_task_details.html')
 
-class UserTaskDatewise(APIView):
-	def get(self,request,user_id=None):
-		usertasks = Tasks.objects.get(pk=user_id)
-		user_tasks = TaskSerializer(usertasks)
-		return render(request,'datewise_all_details.html',user_tasks.data)
-		
+class ViewProject(TemplateView):
+	def get(self,request):
+		return render(request,'viewproject.html')
+
+	def post(self,request):
+		try:
+			project_Data= Projects.objects.all()
+			project_data = ProjectSerializer(project_Data,many=True)
+			project_all = { "projects":project_data.data}
+			return JsonResponse(project_all,status=status.HTTP_201_CREATED)
+		except Exception as err: 
+			print(err) 
+			return Response("Error",status=status.HTTP_404_NOT_FOUND)

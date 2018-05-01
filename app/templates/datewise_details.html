@@ -24,11 +24,10 @@
 					var len = response.userlist.length;
 					if(response){
 							console.log(response);
-							// console.log(len);
 							for (i = 0; i < len; i++) {
 								var user_name = response.userlist[i].first_name;
-								// var aa = document.getElementById("name").innerHTML;
-								$("#name").append("<td>" + user_name + "</td >");
+								// var aa = document.getElementById("name").innerHTML=user_name;
+								$("#name").append("<td>" +user_name+ "</td >");
 
 							};
 							if(response.status==201){
@@ -151,8 +150,8 @@
 								<tr>
 									{% for list in userslist %}
 								<tr>
-									<td value="{{list.id}}"><a href="taskdetail/{{list.id}}">{{list.first_name}}</a></td>
-									<td value="{{list.id}}">{{list.last_name}}</td>
+									<td value="{{list.user}}"><a href="../task/taskdetail/{{list.user}}">{{list.first_name}}</a></td>
+									<td value="{{list.user}}"><a href="../task/taskdetail/{{list.user}}">{{list.last_name}}</td>
 								</tr>
 								{% endfor %}
 								</tr>
@@ -173,7 +172,7 @@
 								<!-- <tr>
 									{% for list in userslist %} -->
 								<tr id="name">
-									<td ><a href="name"></a></td>
+									<td><a href="name"></a></td>
 									<!-- <td value="{{list.id}}">{{list.last_name}}</td> -->
 								</tr>
 								<!-- {% endfor %}

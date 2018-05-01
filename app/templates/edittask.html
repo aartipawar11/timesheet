@@ -1,0 +1,177 @@
+{% include "header.html" %}
+
+<script>
+   checkCookie();
+</script>
+<script type="text/javascript">
+  $(document).ready(function(event) {
+        var userid = getCookie("user");
+        var url = "http://127.0.0.1:8000/task/edittask";
+        $.ajax({
+            url: url,
+            type: "POST",
+            dataType: "json",
+            success: function(response) {
+               // console.log(response);
+               var len = response.length;
+                 // console.log(len);
+                for (i = 0; i < len; i++) {
+                  var trHTML = '';
+                  // console.log(userid);
+                     if (response[i].user == userid) {
+                         // console.log(response[i].user)
+                         var project = response[i].project;
+                         var project_id = project.split(',')
+                        
+                           // var name = response[i].project_name;
+                            trHTML +=
+                                      '<tr><td>'
+                                      + response[i].user
+                                      + '</td><td>'
+                                      + response[i].date
+                                      + '</td><td>'
+                                      + response[i].project_name
+                                      + '</td><td>'
+                                      + response[i].billing_description
+                                      + '</td><td>'
+                                      + response[i].billing_hour
+                                      + '</td><td>'
+                                      + response[i].id
+                                      + '</td><td>'
+                                      + response[i].non_billing_description
+                                      + '</td><td>'
+                                      + response[i].non_billing_hour
+                                      + '</td><td>'
+                                      + response[i].total_hour
+                                      + '</td><td>'
+                                      // + '<button id="editbutton" value=response[i].id>Edit</button>'
+                                      + '<input class="btn btn-info" type="button" style="cursor: pointer;" id='+ response[i].id +' value="EDIT" onclick="clickMe(this)"/>'
+                                      + '</td></tr>';
+                        
+                     }
+                     $('#tBody').append(trHTML);
+                 };
+            },
+            error: function(err) {
+                // alert("Error");
+                return false;
+            }
+
+        });
+
+    });
+
+
+</script>
+
+<script>
+function clickMe(e){
+  var url="http://127.0.0.1:8000/task/edittask/"+e.id;
+ // alert("redirecting to "+url+ )
+    // alert("You have clicked button id = "+e.id+" and button value = "+document.getElementById(e.id).value);
+  window.location=url
+ 
+}
+</script>
+<body>
+
+
+   <div class="wrapper">
+   <div class="sidebar" data-image="/static/img/sidebar-5.jpg">
+      <!--
+         Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
+         
+         Tip 2: you can also add an image using data-image tag
+         -->
+      <div class="sidebar-wrapper">
+         <div class="logo">
+            <a href="http://www.thoughtwin.com" class="simple-text">
+            Thoughtwin
+            </a>
+         </div>
+         <ul class="nav">
+            <li>
+               <a class="nav-link" href="/user/dashboard">
+                  <i class="fa fa-pie-chart" aria-hidden="true"></i>
+                  <p>Dashboard</p>
+               </a>
+            </li>
+            <li>
+               <a class="nav-link" href="/user/userprofile">
+                  <i class="fa fa-user fa" aria-hidden="true"></i>
+                  <p>User Profile</p>
+               </a>
+            </li>
+              <li class="nav-item active">
+                        <a class="nav-link" href="/task/edittask">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            <p>Edit Task</p>
+                        </a>
+                    </li>
+         </ul>
+      </div>
+   </div>
+   <div class="main-panel">
+   <!-- fixed plugin  -->
+   <div class="fixed-plugin">
+   </div>
+   <!-- Navbar -->
+   <nav class="navbar navbar-expand-lg " color-on-scroll="500">
+      <div class=" container-fluid  ">
+         <a class="navbar-brand" href="dashboard">My Dashboard </a>
+         <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-bar burger-lines"></span>
+         <span class="navbar-toggler-bar burger-lines"></span>
+         <span class="navbar-toggler-bar burger-lines"></span>
+         </button>
+         <div class="collapse navbar-collapse justify-content-end" id="navigation">
+            <ul class="nav navbar-nav mr-auto">
+               <li class="nav-item">
+                  <a href="#" class="nav-link" data-toggle="dropdown">
+                  <span class="d-lg-none">Dashboard</span>
+                  </a>
+               </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+               <li class="nav-item">
+                  <a class="nav-link" onclick="deleteAllCookies()">
+                  <span class="no-icon">Log out</span>
+                  </a>
+               </li>
+            </ul>
+         </div>
+      </div>
+   </nav>
+   <!-- End Navbar -->
+    
+   <div class="content">
+      <div class="container-fluid">
+         <div class="row">
+            <div class="col-md-12">
+            </div>
+            <div class="col-md-12">
+              <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>DATE</th>
+                        <th>BILING PROJECT NAME</th>
+                        <th>BILLING DESCRIPTION</th>
+                        <th>BILLING HOUR</th>
+                        <th>NON BILLING PROJECT NAME</th>
+                        <th>NON BILLING DESCRIPTION</th>
+                        <th>NON BILLING HOUR</th>
+                        <th>TOTAL HOUR</th>
+                        
+                        
+                    </tr>
+                  </thead>
+                  <tbody id="tBody"></tbody>
+                  </table>
+              
+            </div>
+         </div>
+      </div>
+   </div>
+  
+   {% include "footer.html" %}

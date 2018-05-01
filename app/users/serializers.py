@@ -2,8 +2,9 @@ from rest_framework import serializers
 from app.users.models import UserProfile,UserProjects
 from app.roles.models import Role
 from app.projects.models import Projects
+from django.contrib.auth.models import User
 
-
+## written by aarti
 class UserSerializer(serializers.ModelSerializer):
 	role_name = serializers.SerializerMethodField("getRoleDetail")
 	def getRoleDetail(self,obj):
@@ -11,9 +12,17 @@ class UserSerializer(serializers.ModelSerializer):
 			return Role.objects.get(id=obj.role.id).name
 		except Exception as e:
 			print(e)
+
+	user_name = serializers.SerializerMethodField("getUserDetail")
+	def getUserDetail(self,obj):
+		try:
+			return User.objects.get(id=obj.user.id).username
+		except Exception as e:
+			print(e)
+
 	class Meta:
 		model = UserProfile
-		fields = ('id','user','role','role_name','first_name','last_name','mobile','dob','gender','designation','is_deleted','created_at','updated_at')
+		fields = ('id','user','role','role_name','user_name','first_name','last_name','mobile','dob','gender','designation','is_deleted','created_at','updated_at')
 		extra_kwargs = {
 			'role': {
 				'required':True,
@@ -57,6 +66,7 @@ class UserSerializer(serializers.ModelSerializer):
 			
 		}		
 
+## written by aarti
 class UserProjectSerializer(serializers.ModelSerializer):
 	project_name = serializers.SerializerMethodField("getProjectDetail")
 	def getProjectDetail(self,obj):

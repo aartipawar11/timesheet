@@ -2,6 +2,7 @@ from rest_framework import serializers
 from app.projects.models import Projects
 from app.users.models import UserProjects
 
+## written by aarti
 class ProjectSerializer(serializers.ModelSerializer):
 	class Meta:
 		model =  Projects 
