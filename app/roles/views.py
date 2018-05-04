@@ -4,9 +4,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.http import Http404
 from app.roles.serializers import RoleSerializer
-from app.roles.models import Role
 
 
+## written by aarti
 class RoleView(APIView):
 	
 	def post(self,request):

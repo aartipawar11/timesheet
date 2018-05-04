@@ -12,9 +12,10 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate
-from app.projects.views import ProjectView
-from app.projects.serializers import ProjectSerializer
+import re
 from app.projects.models import Projects
+from app.projects.serializers import ProjectSerializer
+from app.projects.views import ProjectView
 from app.tasks.models import Tasks
 from app.tasks.serializers import TaskSerializer
 from django import forms
@@ -22,25 +23,26 @@ from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 from django.core.mail import EmailMultiAlternatives
 import datetime 
+import zerosms
 
+## written by aarti
 class UserProfileList(APIView):
 	
 	def post(self,request):
 		try:
 			user = self.create_user(request)
 			if not(user):
-				return Response("Error while create user",status=status.HTTP_404_NOT_FOUND)
-
+				return Response("Error while create user")
 			self.overWrite(request, {'user':user.id})
 			print(request.data)	
 			user_data = UserSerializer(data=request.data)
 			if not(user_data.is_valid()):
-				return Response(user_data.errors,status=status.HTTP_404_NOT_FOUND)
+				return Response(user_data.errors)
 			user_data.save()
 			return Response(user_data.data,status=status.HTTP_201_CREATED)
 		except Exception as err:
 			print(err)
-			return Response("Error",status=status.HTTP_404_NOT_FOUND)
+			return Response("Error")
 
 	def overWrite(self, request, dic):
 		try:
@@ -86,8 +88,6 @@ class UserProfileList(APIView):
 				new_user_name = get_username['user_name']
 				password = get_username['password']
 				confirm_password = get_username['confirm_password']
-				print(password)
-				print(confirm_password)
 				if password != '' and confirm_password != '':
 					if password == confirm_password:
 						user = User.objects.get(username = current_user_name)
@@ -99,23 +99,20 @@ class UserProfileList(APIView):
 				user.save()
 				return Response(update_data.data,status=status.HTTP_200_OK)
 		except:
-			return Response("Error" ,status=status.HTTP_400_BAD_REQUEST)
+			return Response("Error while updating user details")
 
 	def delete(self,request,user_id):
 		delete_user=UserProfile.objects.get(pk=user_id)
 		delete_user.delete()
 		return Response("Deleted",status=status.HTTP_200_OK)
 
-
+## written by aarti
 class Login(TemplateView):
 	
 	def get(self,request):
 		return render(request,'login.html')
 
-	# @csrf_exempt
 	def post(self,request,*args, **kwargs):
-
-		## written by aarti
 		try:
 			email = request.POST.get('inputEmail')
 			password = request.POST.get('inputPassword')
@@ -135,6 +132,7 @@ class Login(TemplateView):
 				token_value = {
 					'token':token.key,
 					}
+				
 				user_response = user_data.data
 				user_response.update(token_value)
 				return JsonResponse(user_response)
@@ -145,7 +143,9 @@ class Login(TemplateView):
 		
 class Dashboard(TemplateView):
 	def get(self,request):	
-		return render(request,'employee_dashboard.html')
+		user_dict = {"test":"yes"}
+		return render(request,'employee_dashboard.html',user_dict)
+		
 	@csrf_exempt
 	def post(self,request,user_id=None):
 		userData = UserProjects.objects.all()
@@ -167,7 +167,6 @@ class AdminDetails(TemplateView):
 	def get(self,request):
 		userData = UserProfile.objects.all()
 		user_data = UserSerializer(userData, many=True)
-		print(user_data.data)
 		data={"uname":user_data.data}
 		return render(request,'admin_details.html',data)
 
@@ -191,9 +190,7 @@ class ViewProject(TemplateView):
 			try:
 				project_Data= Projects.objects.all()
 				project_data = ProjectSerializer(project_Data,many=True)
-				# print(project_data.data)
 				project_all = { "projects":project_data.data}
-				
 				return JsonResponse(project_all,status=status.HTTP_201_CREATED)
 			except Exception as err: 
 				print(err) 
@@ -204,16 +201,8 @@ class WorkDetails(APIView):
 		user_info = UserProfile.objects.all()
 		user_data = UserSerializer(user_info, many=True)
 		user_dict = {"userslist":user_data.data}
-
-		user_task=  Tasks.objects.all()
-		user_task_id = TaskSerializer(user_task,many=True)
-		user_task_dict = {"usertasks":user_task_id.data}
-		
-		user_task_dict.update(user_dict)
-		return render(request,'datewise_details.html',user_task_dict)
-
-
-	# @csrf_exempt	
+		return render(request,'datewise_details.html',user_dict)
+	
 	##Written By Ashwin
 	def post(self,request):
 		input_date= request.POST.get("date")
@@ -226,19 +215,19 @@ class WorkDetails(APIView):
 		print(task_data.data)
 		return Response(task_data.data,status=status.HTTP_201_CREATED)
 
+## written by aarti
 class AssignProject(TemplateView):
 	def get(self,request):
 		project_Data= Projects.objects.all()
 		project_data = ProjectSerializer(project_Data,many=True)
 		project_dict={"projectlist":project_data.data}
-
 		userData = UserProfile.objects.all()
 		user_data = UserSerializer(userData, many=True)
 		user_dict={"userslist":user_data.data}
 		user_dict.update(project_dict)
-
 		return render(request,'assignproject.html',user_dict)
 
+## written by aarti		
 class AssignProjectApi(APIView):
 	def post(self,request):
 		try:
@@ -249,16 +238,30 @@ class AssignProjectApi(APIView):
 				return Response(user_data.errors)
 			user_data.save()
 			return Response(user_data.data,status=status.HTTP_201_CREATED)
-			
 		except Exception as e:
 			print(e)
-			return JsonResponse({'Error':'err'})
+			return JsonResponse({'Error':'error'})
 
 class UserTaskDetails(TemplateView):
 	def get(self,request):
 		return render(request,'user_task_details.html')
 
 	##Written By Ashwin
+class ViewProject(TemplateView):
+	def get(self,request):
+		return render(request,'viewproject.html')
+
+	def post(self,request):
+		try:
+			project_Data= Projects.objects.all()
+			project_data = ProjectSerializer(project_Data,many=True)
+			project_all = { "projects":project_data.data}
+			return JsonResponse(project_all,status=status.HTTP_201_CREATED)
+		except Exception as err: 
+			print(err) 
+			return Response("Error",status=status.HTTP_404_NOT_FOUND)
+
+##Written By Ashwin
 class SendMail(APIView):
 	def get(self,request,user_id):
 	    subject = 'Password Changed'
@@ -271,10 +274,25 @@ class SendMail(APIView):
 	    msg.send()
 	    return HttpResponseRedirect('/user/userprofile')
 
-# def error_404(request):
-#         data = {}
-#         return render(request,'404.html', data)
 
-# def error_500(request):
-#         data = {}
-#         return render(request,'500.html', data)
+class SendSms(APIView):
+	def get(self,request):
+		return render(request,"send_sms.html")
+
+	def post(self,request):
+		try:
+			username = request.POST.get("username")
+			password = request.POST.get("password")
+			sendto = request.POST.get("sendto")
+			description = request.POST.get("description")
+			print(username,password,sendto,description)
+			try:
+				if username!='' and password !='' and sendto !='' and description!='':
+					zerosms.sms(phno=username,passwd=password,receivernum=sendto, message=description)
+					return JsonResponse({'send':'send'})
+				return JsonResponse({'error':'error'})
+			except:
+				return JsonResponse({'Error':'error'})
+		except Exception as e:
+			print(e)
+			return JsonResponse({'Error':'error'})

@@ -10,7 +10,7 @@
 <script type="text/javascript" src="/static/customizedjs/datepicker.js"></script>
    <script type = "text/javascript" >
      $(document).ready(function(event) {
-         var userid = getCookie("id");
+         var userid = getCookie("user");
          var el = document.getElementsByName("csrfmiddlewaretoken");
          csrf_value = el[0].getAttribute("value");
          var url = "http://127.0.0.1:8000/user/dashboard";
@@ -24,7 +24,6 @@
              dataType: "json",
              success: function(response) {
                  var len = response.tt.length;
-                 // console.log(len);
                  $("#select1").empty();
                  $("#select2").empty();
                  
@@ -33,53 +32,58 @@
                  $("#select1").append("<option value='0'>" + pname + "</option>");
                  $("#select2").append("<option value='0'>" + nonpname + "</option>");
                  for (i = 0; i < len; i++) {
-                     if (response.tt[i].user == userid) {
-                         // console.log(response.tt[i])
-                         var projectid = response.tt[i].project;
-                         var name = response.tt[i].project_name;
-                         $("#select1").append("<option value='" + projectid + "'>" + name + "</option>");
-                         $("#select2").append("<option value='" + projectid + "'>" + name + "</option>");
+
+                      if (response.tt[i].user == userid) {
+                        console.log(response.tt[i])
+                        var projectid = response.tt[i].project;
+                        var name = response.tt[i].project_name;
+                        console.log(projectid)
+                        $("#select1").append("<option value='" + projectid + "'>" + name + "</option>");
+                        $("#select2").append("<option value='" + projectid + "'>" + name + "</option>");
+
                      }
                  };
              },
              error: function(err) {
+              return false;
 
-                 return false;
              }
          });
      }); 
    </script>
 
 
-<script type="text/javascript">	 
+
+<script type="text/javascript">  
+
    $(document).ready(function() {
         $("#editted_billing_form").submit(function(event) {
             event.preventDefault();
             var newurl=window.location.href;
             var url = $(location).attr('href'),
+
     		parts = url.split("/"),
-    		last_part = parts[parts.length-1];
-    
+    		last_part = parts[parts.length-1];    
             $.ajax({
                 url: newurl,
                 type: "PUT",
                 data: {
-    'id' : last_part,
-    'user':getCookie("user"),
-    'date' : $("#datepicker-6").val(),
-	'project':$("#select1").val(),
-	'billing_description' : $("#billing_description").val(),
-	'billing_hour' : $("#billing_hour").val(),
-	'non_billing_description' :  $("#non_billing_description").val(),
-	'non_billing_hour' : $("#non_billing_hour").val(),
-	'total_hour' : $("#total_hour").val()   
 
+                  'id' : last_part,
+                  'user':getCookie("user"),
+                  'date' : $("#datepicker-6").val(),
+                  'project':$("#select1").val(),
+                  'billing_description' : $("#billing_description").val(),
+                  'billing_hour' : $("#billing_hour").val(),
+                  'non_billing_description' :  $("#non_billing_description").val(),
+                  'non_billing_hour' : $("#non_billing_hour").val(),
+                  'total_hour' : $("#total_hour").val()   
 
                 },
                 dataType: "json",
                 success: function(response) {
                     if (response) {
-                        console.log(response);
+
                         $('.alert').show();
 
                         // alert("Details updated  ")
@@ -202,12 +206,12 @@
 <table class="table table-bordered">
 
 <tbody>
-	 <b>Enter Date: <input type = "text" id = "datepicker-6" value="{{usertasks.date}}"></b><br><br>
+   <b>Enter Date: <input type = "text" id = "datepicker-6" value="{{usertasks.date}}"></b><br><br>
 <tr>
 <th>Project Name</th>
 <td><select id="select1">
     <option value="0">Select Project</option>
-    </select>[Current Project: {{ usertasks.project_details.name }}]<br></td>
+    </select>[Current Project: {{ usertasks.project_name }}]<br></td>
 </tr>
 <tr>
 <th>Description</th>
@@ -217,17 +221,13 @@
 <th>Time (Hours)</th>
 <td><input type="text" id="billing_hour" value="{{usertasks.billing_hour}}">[ hh:mm:ss ]</td>
 </tr>
-
 </tbody>
-
-
 </table>
 <br>
 <div class="card-header ">
 <h4 class="card-title">Non-Billing Hours</h4><br>
 </div>
 <table class="table table-bordered">
-
 <tbody>
 <tr>
 <th>Project Name</th>
@@ -248,8 +248,6 @@
 <td><input type="text" id="total_hour" value="{{usertasks.total_hour}}">[ hh:mm:ss ]</td>
 </tr>
 </tbody>
-
-
 </table>
 <button class="center" id="btn1" type="Submit">Submit</button>
 </form>

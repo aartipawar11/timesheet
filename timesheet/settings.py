@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+
 ]
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
@@ -70,7 +71,7 @@ ROOT_URLCONF = 'timesheet.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['/home/hp/Projects/django/timesheet/timesheet/app/templates',],
+        'DIRS': ['/home/hp/Desktop/projects/django/timesheet/timesheet/app/templates',],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -148,7 +149,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-
 STATICFILES_DIRS=[
 os.path.join(BASE_DIR,'static')
 
@@ -156,4 +156,5 @@ os.path.join(BASE_DIR,'static')
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR),"static_cdn")
 
 MEDIA_URL = ''
-MEDIA_ROOT = os.path.join(BASE_DIR,'/home/hp/Projects/django/timesheet/timesheet/static')
+MEDIA_ROOT = os.path.join(BASE_DIR,'/home/hp/Desktop/projects/django/timesheet/timesheet/static')
+

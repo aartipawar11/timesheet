@@ -1,4 +1,4 @@
-      $(document).ready(function(){
+ $(document).ready(function(){
              $("#adduserform").submit(function(event){
               event.preventDefault();
               // var el = document.getElementsByName("csrfmiddlewaretoken");
@@ -25,7 +25,7 @@
                        console.log(response);
                        $('.alert').show();
 
-                        // alert("Details updated  ")
+                  
                            window.setTimeout(function() {
                            $(".alert").fadeTo(500, 0).slideUp(500, function(){
                            $(this).remove(); 
@@ -44,7 +44,7 @@
                      }
                  },
                  error: function (err) {
-                   // alert("Error");
+              
                    return false;
                  }
          

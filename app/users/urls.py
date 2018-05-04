@@ -1,8 +1,8 @@
 from django.conf.urls import url
 from . import views
-# from django.contrib.auth import views as auth_views
-app_name='users'
+# import django_twilio
 
+app_name='users'
 
 urlpatterns = [
 	url(r'^login$',views.Login.as_view(),name='login'),
@@ -19,8 +19,11 @@ urlpatterns = [
 	url(r'^login/(?P<user_id>[0-9]+)$',views.Login.as_view()),
 	url(r'^(?P<user_id>[0-9]+)$',views.UserProfileList.as_view()),
 	url(r'^taskdetail$',views.UserTaskDetails.as_view()),
-	# url(r'^taskdetail/(?P<user_id>[0-9]+)$',views.UserTaskDatewise.as_view()),
 	url(r'^deleteuser$',views.DeleteUser.as_view()),
 	url(r'^sendmail/(?P<user_id>[0-9]+)$',views.SendMail.as_view()),
+	url(r'^sendsms$',views.SendSms.as_view()),
 	url(r'',views.UserProfileList.as_view()),
+
+	# url(r'^api/$', views.home),
+	# url(r'^send/', views.sms),
 ]

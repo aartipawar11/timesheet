@@ -3,8 +3,8 @@
 <script>
    checkCookie();
 </script>
-<script type="text/javascript" src="/static/customizedjs/cal_weekly_hours.js"></script>
 
+<script type="text/javascript" src="/static/customizedjs/cal_weekly_hours.js"></script>
 <script type="text/javascript">
   $(document).ready(function(event) {
         var userid = getCookie("user");
@@ -19,38 +19,37 @@
                  // console.log(len);
                 for (i = 0; i < len; i++) {
                   var trHTML = '';
-                  // alert(response[i].id)
                   // console.log(userid);
                      if (response[i].user == userid) {
                          // console.log(response[i].user)
-                         var projectid = response[i].project;
-                         // console.log(projectid)
-                         
-                         var name = response[i].project_name;
-                         trHTML +=
-                                    '<tr><td>'
-                                    + response[i].user
-                                    + '</td><td>'
-                                    + response[i].date
-                                    + '</td><td>'
-                                    + response[i].project_details.name
-                                    + '</td><td>'
-                                    + response[i].billing_description
-                                    + '</td><td>'
-                                    + response[i].billing_hour
-                                    + '</td><td>'
-                                    + response[i].id
-                                    + '</td><td>'
-                                    + response[i].non_billing_description
-                                    + '</td><td>'
-                                    + response[i].non_billing_hour
-                                    + '</td><td>'
-                                    + response[i].total_hour
-                                    + '</td><td>'
-                                    // + '<button id="editbutton" value=response[i].id>Edit</button>'
-                                    + '<input class="btn btn-info" type="button" style="cursor: pointer;" id='+ response[i].id +' value="EDIT" onclick="clickMe(this)"/>'
-                                    + '</td></tr>';
+                         var project = response[i].project;
+                         var project_id = project.split(',')
                         
+                           // var name = response[i].project_name;
+                            trHTML +=
+                                      '<tr><td>'
+                                      + response[i].user
+                                      + '</td><td>'
+                                      + response[i].date
+                                      + '</td><td>'
+                                      + response[i].project_name
+                                      + '</td><td>'
+                                      + response[i].billing_description
+                                      + '</td><td>'
+                                      + response[i].billing_hour
+                                      + '</td><td>'
+                                      + response[i].id
+                                      + '</td><td>'
+                                      + response[i].non_billing_description
+                                      + '</td><td>'
+                                      + response[i].non_billing_hour
+                                      + '</td><td>'
+                                      + response[i].total_hour
+                                      + '</td><td>'
+                                      // + '<button id="editbutton" value=response[i].id>Edit</button>'
+                                      + '<input class="btn btn-info" type="button" style="cursor: pointer;" id='+ response[i].id +' value="EDIT" onclick="clickMe(this)"/>'
+                                      + '</td></tr>';
+               
                      }
                      $('#tBody').append(trHTML);
                  };
@@ -72,11 +71,10 @@ function clickMe(e){
   var url="http://127.0.0.1:8000/task/edittask/"+e.id;
  // alert("redirecting to "+url+ )
     // alert("You have clicked button id = "+e.id+" and button value = "+document.getElementById(e.id).value);
-    window.location=url
+  window.location=url
  
 }
 </script>
-
 
   <body>
 
@@ -144,6 +142,7 @@ function clickMe(e){
                                     <span class="no-icon" id="nonbillhrs">NonBilling</span>&nbsp;Non-Billing Hrs
                                 </a>
                             </li>
+
                <li class="nav-item">
                   <a class="nav-link" onclick="deleteAllCookies()">
                   <span class="no-icon">Log out</span>
@@ -164,6 +163,7 @@ function clickMe(e){
               <table class="table table-bordered">
                      <thead>
                      <tr>
+
                         <th>User ID</th>
                         <th>DATE</th>
                         <th>BILING PROJECT NAME</th>
@@ -174,14 +174,15 @@ function clickMe(e){
                         <th>NON BILLING HOUR</th>
                         <th>TOTAL HOUR</th>
                         
-                        
+                  
                      </tr>
+
                   </thead>
                   <tbody id="tBody"></tbody>
                   </table>
               
             </div>
-           
+
          </div>
       </div>
    </div>

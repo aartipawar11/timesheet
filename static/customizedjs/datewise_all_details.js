@@ -3,7 +3,7 @@ $(document).ready(function(event) {
     value = urls.split("/"),
     user_id = value[value.length-1];
     var url = "http://127.0.0.1:8000/task/edittask";
-        $.ajax({
+            $.ajax({
             url: url,
             type: "POST",
             dataType: "json",
@@ -45,4 +45,6 @@ $(document).ready(function(event) {
 
         });
 
+
     });
+

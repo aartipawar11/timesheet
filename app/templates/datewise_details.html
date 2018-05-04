@@ -1,12 +1,13 @@
 {% include "header.html" %}
-      <script>
-         checkCookie();
-      </script>
+<script>
+	checkCookie();
+</script>
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 <script src="http://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="/static/customizedjs/datepicker.js"></script>
 <script type="text/javascript">
+
           $(document).ready(function(){
              $("#datesubmitbutton").click(function(event){
               event.preventDefault();
@@ -67,16 +68,17 @@
              });
          });
 
+	
 </script>
-<style>
-.ui-datepicker-trigger { 
-    position:relative;
-    /*top:10px ;*/
-    right:30px ; 
-    height:25px }
- /* {} is the value according to your need */
-</style>
 
+<style>
+	.ui-datepicker-trigger { 
+	position:relative;
+	/*top:10px ;*/
+	right:30px ; 
+	height:25px }
+	/* {} is the value according to your need */
+</style>
 <body>
     <div class="wrapper">
         <div class="sidebar" data-image="/static/img/sidebar-5.jpg">

@@ -21,6 +21,7 @@ from django.contrib import admin
 # from django.conf.urls.static import static
 
 urlpatterns = [
+
     url(r'^user/', include('app.users.urls')),
     url(r'^role/', include('app.roles.urls')),
     url(r'^project/', include('app.projects.urls')),
