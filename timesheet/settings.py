@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+
 ]
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
@@ -155,4 +156,5 @@ os.path.join(BASE_DIR,'static')
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR),"static_cdn")
 
 MEDIA_URL = ''
-MEDIA_ROOT = os.path.join(BASE_DIR,'/home/hp/Projects/django/timesheet/timesheet/static')
+MEDIA_ROOT = os.path.join(BASE_DIR,'/home/hp/Desktop/projects/django/timesheet/timesheet/static')
+

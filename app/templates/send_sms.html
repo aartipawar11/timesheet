@@ -1,6 +1,7 @@
+
 {% include "header.html" %}
 <link rel="stylesheet" href="/static/css/screen.css" />
-<script type="text/javascript" src="/static/customizedjs/add_new_project.js"></script>
+<script type="text/javascript" src="/static/customizedjs/send_sms.js"></script>
 <script>
   checkCookie();
 </script>
@@ -56,25 +57,21 @@
 			 </li>
 		  </ul>
 		  <ul class="navbar-nav ml-auto">
-		  	<li class="nav-item" >
-			 	<a class="nav-link" href="/user/sendsms">
-					<span class="no-icon">Send sms <i class="fa fa-commenting" aria-hidden="true"></i></span>
-			 	</a>
-		  	</li>
-		  
 			 <li class="nav-item">
 				<a class="nav-link" onclick="deleteAllCookies()">
-				<span class="no-icon"> Log out <i class="fa fa-power-off" aria-hidden="true"></i></span>
+				<span class="no-icon">Log out <i class="fa fa-power-off" aria-hidden="true"></i></span>
 				</a>
 			 </li>
-			
 		  </ul>
 		</div>
 	 </div>
   </nav>
   <!-- End Navbar -->
   <div class="alert alert-success" style="position: absolute;top:30px;left: 25%;height: 40px;width: 300px;color: black;border-radius: 10px; text-align: center;display: none;">
-	 Project Added Successfully!
+	Sms Sent Successfully!
+  </div>
+  <div class="alert alert-warning" style="position: absolute;top:30px;left: 25%;height: 40px;width: 300px;color: black;border-radius: 10px; text-align: center;display: none;">
+	Failed to send sms!
   </div>
   <div class="content">
 	 <div class="container-fluid">
@@ -82,23 +79,24 @@
 		  <div class="col-md-12">
 		  </div>
 		  <div class="col-md-12">
-			 <h2>Add Project</h2>
+			 <h2>Send Project Description Via Sms</h2>
 			 <br>
 			 <form id="createprojectform" method="post">
-				<!-- {% csrf_token %} --> 
+					
+				{% csrf_token %}
 				<div>
-				  <div class="form-group">
-					 <label for="projectname">Project Name</label>
-					 <input type="text" class="form-control" id="projectname" placeholder="Enter Project Name" name="name" required>
-				  </div>
-				  <div class="form-group">
-					 <label for="description">Project Description</label>
-					 <textarea class="form-control" rows="30" id="projectdescription" name="description" placeholder="Enter Project Description" required></textarea>
-				  </div>
-				  <br><br>
-				  <INPUT TYPE="hidden" NAME="redirect" VALUE="thankyou.html">
-				  <button type="Submit">Submit</button>
-				</div>
+				<label>From</label>
+					<input type="text" class="form-control col-md-4" name="Username" id="Username" placeholder="Enter Mobile Number" autofocus="" ><br><br>
+				<label>Password</label>
+					<input type="password" class="form-control col-md-4" name="Password" id="Password" placeholder="Password" ><br><br>
+				<label>To</label>
+					<input type="text" class="form-control col-md-4" name="sendto" id="sendto" placeholder="Send To" size="100" ><br><br>
+				
+					<label>Project Description</label>
+					<textarea rows="20" cols="80" class="form-control col-md-4" type="text" name="description" id="description" placeholder="Project Description"></textarea> <br><br>
+				</div>        
+				<button class="btn btn-primary"  id="Button2" name="Submit" value="Send" type="Submit">Send</button>
+			
 			 </form>
 		  </div>
 		</div>
@@ -109,4 +107,4 @@
   <script>
 	 $("#createprojectform").validate()
   </script>
-  {% include "footer.html" %}
+{% include "footer.html" %}

@@ -100,9 +100,7 @@ class EditTask(APIView):
 ## written by aarti
 class UserTaskDatewise(APIView):
 	def get(self,request,user_id=None):
-		usertasks = Tasks.objects.get(pk=user_id)
-		user_tasks = TaskSerializer(usertasks)
-		return render(request,'datewise_all_details.html',user_tasks.data)
+		return render(request,'datewise_all_details.html')
 
 	def post(self,request):
 		usertasks = Tasks.objects.all()

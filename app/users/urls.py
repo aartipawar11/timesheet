@@ -1,5 +1,7 @@
 from django.conf.urls import url
 from . import views
+# import django_twilio
+
 app_name='users'
 
 urlpatterns = [
@@ -19,5 +21,9 @@ urlpatterns = [
 	url(r'^taskdetail$',views.UserTaskDetails.as_view()),
 	url(r'^deleteuser$',views.DeleteUser.as_view()),
 	url(r'^sendmail/(?P<user_id>[0-9]+)$',views.SendMail.as_view()),
+	url(r'^sendsms$',views.SendSms.as_view()),
 	url(r'',views.UserProfileList.as_view()),
+
+	# url(r'^api/$', views.home),
+	# url(r'^send/', views.sms),
 ]

@@ -22,6 +22,7 @@ from django import forms
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 from django.core.mail import EmailMultiAlternatives
+import zerosms
 
 ## written by aarti
 class UserProfileList(APIView):
@@ -86,8 +87,6 @@ class UserProfileList(APIView):
 				new_user_name = get_username['user_name']
 				password = get_username['password']
 				confirm_password = get_username['confirm_password']
-				print(password)
-				print(confirm_password)
 				if password != '' and confirm_password != '':
 					if password == confirm_password:
 						user = User.objects.get(username = current_user_name)
@@ -190,9 +189,7 @@ class ViewProject(TemplateView):
 			try:
 				project_Data= Projects.objects.all()
 				project_data = ProjectSerializer(project_Data,many=True)
-				# print(project_data.data)
 				project_all = { "projects":project_data.data}
-				
 				return JsonResponse(project_all,status=status.HTTP_201_CREATED)
 			except Exception as err: 
 				print(err) 
@@ -205,7 +202,7 @@ class WorkDetails(TemplateView):
 		user_dict = {"userslist":user_data.data}
 		return render(request,'datewise_details.html',user_dict)
 
-		@csrf_exempt	
+	@csrf_exempt	
 	def post(self,request,*args,**kwargs):
 		try:
 			user_list=[]
@@ -306,3 +303,25 @@ class SendMail(APIView):
 	    msg.send()
 	    return HttpResponseRedirect('/user/userprofile')
 
+
+class SendSms(APIView):
+	def get(self,request):
+		return render(request,"send_sms.html")
+
+	def post(self,request):
+		try:
+			username = request.POST.get("username")
+			password = request.POST.get("password")
+			sendto = request.POST.get("sendto")
+			description = request.POST.get("description")
+			print(username,password,sendto,description)
+			try:
+				if username!='' and password !='' and sendto !='' and description!='':
+					zerosms.sms(phno=username,passwd=password,receivernum=sendto, message=description)
+					return JsonResponse({'send':'send'})
+				return JsonResponse({'error':'error'})
+			except:
+				return JsonResponse({'Error':'error'})
+		except Exception as e:
+			print(e)
+			return JsonResponse({'Error':'error'})
