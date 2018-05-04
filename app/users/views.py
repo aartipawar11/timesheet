@@ -21,6 +21,7 @@ from django import forms
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 from django.core.mail import EmailMultiAlternatives
+import datetime 
 
 class UserProfileList(APIView):
 	
@@ -140,7 +141,7 @@ class Login(TemplateView):
 
 		except Exception as e:
 			print(e)
-			return JsonResponse({'Error':'err'})
+			return JsonResponse({'Error':'err'},status=404)
 		
 class Dashboard(TemplateView):
 	def get(self,request):	
@@ -198,7 +199,7 @@ class ViewProject(TemplateView):
 				print(err) 
 				return Response("Error",status=status.HTTP_404_NOT_FOUND)
 
-class WorkDetails(TemplateView):
+class WorkDetails(APIView):
 	def get(self,request):
 		user_info = UserProfile.objects.all()
 		user_data = UserSerializer(user_info, many=True)
@@ -212,38 +213,18 @@ class WorkDetails(TemplateView):
 		return render(request,'datewise_details.html',user_task_dict)
 
 
-	@csrf_exempt	
+	# @csrf_exempt	
+	##Written By Ashwin
 	def post(self,request):
-		try:
-			user_list=[]
-			data_list = []
-			dicti_data = { }
-			get_date = request.POST.get('date')
-			if get_date:
-				new_task = Tasks.objects.all()
-				task_data = TaskSerializer(new_task,many=True)
-				date_value = task_data.data
-				for index in date_value:
-					list_value=index.items()
-					dict_data = dict(list_value)
-					user = dict_data['user']
-					date = dict_data['date']
-				if date == get_date:
-					user_info = UserProfile.objects.all()
-					user_data = UserSerializer(user_info, many=True)
-					data_dict = user_data.data
-					
-					for index in data_dict:
-						list_value = index.items()
-						dict_data = dict(list_value)
-						user_id = dict_data['user']
-						if user_id in user_list:
-							data_list.append(dict_data)
-							
-				return JsonResponse({"userlist":data_list})
-		except Exception as e:
-			print(e)
-			return JsonResponse({'Error':'error'})
+		input_date= request.POST.get("date")
+		in_date = input_date.split("-")
+		year=int(in_date[0])
+		month=int(in_date[1])
+		day=int(in_date[2])
+		get_tasks= Tasks.objects.filter(date=datetime.date(year,month,day))
+		task_data = TaskSerializer(get_tasks,many=True)
+		print(task_data.data)
+		return Response(task_data.data,status=status.HTTP_201_CREATED)
 
 class AssignProject(TemplateView):
 	def get(self,request):
@@ -263,12 +244,9 @@ class AssignProjectApi(APIView):
 		try:
 			project_id = request.POST.get('project')	
 			user_id = request.POST.get('user')
-			print(project_id)
-			print(user_id)
-				
 			user_data = UserProjectSerializer(data=request.data)
 			if not(user_data.is_valid()):
-				return Response(user_data.errors,status=status.HTTP_404_NOT_FOUND)
+				return Response(user_data.errors)
 			user_data.save()
 			return Response(user_data.data,status=status.HTTP_201_CREATED)
 			
@@ -280,13 +258,6 @@ class UserTaskDetails(TemplateView):
 	def get(self,request):
 		return render(request,'user_task_details.html')
 
-class UserTaskDatewise(APIView):
-	def get(self,request,user_id=None):
-		usertasks = Tasks.objects.get(pk=user_id)
-		print(usertasks.user)
-		user_tasks = TaskSerializer(usertasks)
-		return render(request,'datewise_all_details.html',user_tasks.data)
-	
 	##Written By Ashwin
 class SendMail(APIView):
 	def get(self,request,user_id):
@@ -299,3 +270,11 @@ class SendMail(APIView):
 	    msg.attach_alternative(html_content, "text/html")
 	    msg.send()
 	    return HttpResponseRedirect('/user/userprofile')
+
+# def error_404(request):
+#         data = {}
+#         return render(request,'404.html', data)
+
+# def error_500(request):
+#         data = {}
+#         return render(request,'500.html', data)

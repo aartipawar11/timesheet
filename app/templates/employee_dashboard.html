@@ -12,7 +12,7 @@
 
        <script type = "text/javascript" >
      $(document).ready(function(event) {
-         var userid = getCookie("id");
+         var userid = getCookie("user");
          var el = document.getElementsByName("csrfmiddlewaretoken");
          csrf_value = el[0].getAttribute("value");
          var url = "http://127.0.0.1:8000/user/dashboard";
@@ -26,7 +26,6 @@
              dataType: "json",
              success: function(response) {
                  var len = response.tt.length;
-                 // console.log(len);
                  $("#select1").empty();
                  $("#select2").empty();
                  var pname = "Select Project";
@@ -35,7 +34,6 @@
                  $("#select2").append("<option value='0'>" + nonpname + "</option>");
                  for (i = 0; i < len; i++) {
                      if (response.tt[i].user == userid) {
-                         // console.log(response.tt[i])
                          var projectid = response.tt[i].project;
                          var name = response.tt[i].project_name;
                          $("#select1").append("<option value='" + projectid + "'>" + name + "</option>");
@@ -44,7 +42,6 @@
                  };
              },
              error: function(err) {
-
                  return false;
              }
          });

@@ -10,6 +10,12 @@
           $(document).ready(function(){
              $("#datesubmitbutton").click(function(event){
               event.preventDefault();
+              
+             
+                $("#userlist").hide(1000);
+              $("#datewiseusers").show();
+              
+
               var el = document.getElementsByName("csrfmiddlewaretoken");
               csrf_value = el[0].getAttribute("value");
               $.ajax({
@@ -20,17 +26,34 @@
                       'csrfmiddlewaretoken':csrf_value
                      },
                      dataType: "json",
-                     success: function(response){
-                     if(response){
-                       console.log(response);
-                       if(response.status==201){
-                        alert("Successfully!");
-                        
-                       }
-                       if(response.status==500){
-                        console.log("Error ")
-                         
-                       };
+                     success: function(resp){
+                     if(resp){
+                       console.log(resp);
+                       var trHTML = '';
+                       for(i=0;i<resp.length;i++){
+                        // alert(resp[i].user_details.id)
+                      trHTML +=
+                                    '<tr><td>'  
+                                    + resp[i].user_name
+                                    + '</td><td>'
+                                    + resp[i].project_details.name
+                                    + '</td><td>'
+                                    + resp[i].billing_hour 
+                                    + '</td><td>'
+                                    + resp[i].non_billing_hour
+                                    + '</td><td>'
+                                    + resp[i].total_hour
+                                    + '</td><td>'
+                                    + resp[i].billing_description
+                                    + '</td><td>'
+                                    + resp[i].non_billing_description
+                                    + '</td></tr>';
+                   
+                    }
+                    $('#tBody').append(trHTML);
+                    
+
+                       
                        
                      }
                  },
@@ -140,43 +163,57 @@
                             <br>
                             <p>Enter Date: <input type = "text" id = "datepicker-6"></p>
                             <button id=datesubmitbutton>Submit</button>
-                            <br><h4>Users List</h4>
+                            <br>
+                            <div  id="datewiseusers" style="display: none;">
+                              <h4>Datewise User List</h4>
+                              <span id="datewiseuser"></span>
+
+<table class="table table-hover table-bordered">
+<thead>
+<tr>
+<th>Name</th>
+<th>Project name</th>
+<th>billing_hour</th>
+<th>non_billing_hour</th>
+<th>Total Hour</th>
+<th>Billing Description</th>
+<th>Non-Billing Description</th>
+</tr>
+</thead>
+<tbody id="tBody"></tbody>
+</table>
+
+                            </div>
+                            <div id="userlist">
+                            <h4>Users List</h4>
                                     <div class="container">
                                                  
                               <table class="table table-striped">
-                                <thead>
-                                  <tr>
-                                    <th>Firstname</th>
-                                    <th>Lastname</th>
-                                    <th>Role</th>
-                                  
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    {% for list in userslist %}
-                                    <tr>
-                                    <td value="{{list.user}}"><a href="taskdetail/{{list.user}}">{{list.first_name}}</a></td>
-                                    <td value="{{list.id}}">{{list.last_name}}</td>
-                                   <td value ="{{list.id}}">{{list.role_name}}</td>
-                                    </tr>
-                                    {% endfor %}
-
-                                  </tr>
-                               
-                                </tbody>
-                              </table>
-                              <!-- {{user_task_dict.usertasks}} -->
-                              {% for list in usertasks %}
-                              <!-- {{list.user}} -->
-                             <a href="taskdetail/{{list.id}}" <li>{{list.id}}</li></a>
-                               {% endfor %}
-
-                               <hr>
-                                    </div>
-                                 
-                        </div>
-                    </div>
-                </div>
-            </div>
+              <thead>
+                <tr>
+                  <th>Firstname</th>
+                  <th>Lastname</th>
+                  <th>Role</th>
+                </tr>
+              </thead>
+                          <tbody>
+                <tr>
+                  {% for list in userslist %}
+                <tr>
+                  <td value="{{list.user}}"><a href="../task/taskdetail/{{list.user}}">{{list.first_name}}</a></td>
+                  <td value="{{list.user}}"><a href="../task/taskdetail/{{list.user}}">{{list.last_name}}</td>
+                  <td value ="{{list.user}}">{{list.role_name}}</td>
+                </tr>
+                {% endfor %}
+                </tr>
+              </tbody>
+            </table>
+                              
+          </div>
+                             
+       </div>
+      </div>
+    </div>
+  </div>
+           
             {% include "footer.html" %}

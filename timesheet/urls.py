@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url,include
 from django.contrib import admin
-# from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+# from django.conf.urls import handler404,handler500
+# from app.users import views as myapp_views
+# from django.conf import settings
+# from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^user/', include('app.users.urls')),
@@ -23,6 +26,8 @@ urlpatterns = [
     url(r'^project/', include('app.projects.urls')),
     url(r'^task/', include('app.tasks.urls')),
     url(r'^admin/', admin.site.urls),
-]
-
+] 
+# +  static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# handler404 = myapp_views.error_404
+# handler500 = myapp_views.error_500
 # urlpatterns += staticfiles_urlpatterns()

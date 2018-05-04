@@ -1,7 +1,159 @@
 {% include "header.html" %}
-
 <script>
    checkCookie();
+</script>
+<!-- <script type="text/javascript" src="/static/customizedjs/datewise_all_details.js"></script> -->
+<script type="text/javascript">
+  $(document).ready(function(event) {
+    var urls = $(location).attr('href'),
+    value = urls.split("/"),
+    user_id = value[value.length-1];
+    var url = "http://127.0.0.1:8000/task/edittask";
+        $.ajax({
+            url: url,
+            type: "POST",
+            dataType: "json",
+            success: function(response) {
+               console.log(response);
+               var len = response.length;
+                for (i = 0; i < len; i++) {
+                  var trHTML = '';
+                     if (response[i].user == user_id) {
+                         var project = response[i].project; 
+                            trHTML +=
+                                      '<tr><td>'
+                                      + response[i].user
+                                      + '</td><td>'
+                                      + response[i].date
+                                      + '</td><td>'
+                                      + response[i].project_details.name
+                                      + '</td><td>'
+                                      + response[i].billing_description
+                                      + '</td><td>'
+                                      + response[i].billing_hour
+                                      + '</td><td>'
+                                      + response[i].id
+                                      + '</td><td>'
+                                      + response[i].non_billing_description
+                                      + '</td><td>'
+                                      + response[i].non_billing_hour
+                                      + '</td><td>'
+                                      + response[i].total_hour
+                                      + '</td></tr>';
+                        
+                     }
+                     $('#tBody').append(trHTML);
+                 };
+            },
+            error: function(err) {
+                return false;
+            }
+
+        });
+
+    });
+</script>
+<script type="text/javascript">
+       $(document).ready(function(event) {
+        var newurl=window.location.href;
+        var urls = $(location).attr('href'),
+        parts = urls.split("/"),
+        last_part = parts[parts.length-1];
+        var url = "http://127.0.0.1:8000/task/calculate_hours/"+last_part;
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function(response) {
+              if(response){
+                // console.log(response);
+               var total_billing_hour= "00:00";
+               var total_non_billing_hour= "00:00";
+               for(i=0;i<response.length;i++){
+                total_billing_hour=addTimes(total_billing_hour,response[i].billing_hour);
+                total_non_billing_hour=addTimes(total_non_billing_hour,response[i].non_billing_hour);
+               }
+                //Calclute Hrs start here
+              function timeToMins(time) {
+                var b = time.split(':');
+                return b[0]*60 + +b[1];
+              }
+              function timeFromMins(mins) {
+                function z(n){return (n<10? '0':'') + n;}
+                var h = (mins/60 |0) % 24;
+                var m = mins % 60;
+                return z(h) + ':' + z(m);
+              }
+              function addTimes(t0, t1) {
+                return timeFromMins(timeToMins(t0) + timeToMins(t1));
+              }
+                //Calclute Hrs ends here
+
+               document.getElementById('billhrs').innerHTML= total_billing_hour;
+               document.getElementById('nonbillhrs').innerHTML= total_non_billing_hour;
+               }
+            },
+            error: function(err) {
+                return false;
+            }
+        });
+    });
+
+</script>
+<!-- Month tasks -->
+<script type="text/javascript">
+   
+
+       $(document).ready(function(event) {
+        var newurl=window.location.href;
+
+        var urls = $(location).attr('href'),
+
+        parts = urls.split("/"),
+        last_part = parts[parts.length-1];
+
+
+        var url = "http://127.0.0.1:8000/task/calculate_hours/"+last_part;
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            success: function(response) {
+              if(response){
+                // console.log(response);
+               var total_billing_hour= "00:00";
+               var total_non_billing_hour= "00:00";
+               for(i=0;i<response.length;i++){
+                total_billing_hour=addTimes(total_billing_hour,response[i].billing_hour);
+                total_non_billing_hour=addTimes(total_non_billing_hour,response[i].non_billing_hour);
+               }
+               
+                //Calclute Hrs start here
+              
+              function timeToMins(time) {
+                var b = time.split(':');
+                return b[0]*60 + +b[1];
+              }
+              function timeFromMins(mins) {
+                function z(n){return (n<10? '0':'') + n;}
+                var h = (mins/60 |0) % 24;
+                var m = mins % 60;
+                return z(h) + ':' + z(m);
+              }
+              function addTimes(t0, t1) {
+                return timeFromMins(timeToMins(t0) + timeToMins(t1));
+              }
+                //Calclute Hrs ends here
+
+               document.getElementById('mnth_billhrs').innerHTML= total_billing_hour;
+               document.getElementById('mnth_non_billhrs').innerHTML= total_non_billing_hour;
+               }
+            },
+            error: function(err) {
+                return false;
+            }
+        });
+    });
+
 </script>
 <body>
    <div class="wrapper">
@@ -40,7 +192,7 @@
    <!-- Navbar -->
    <nav class="navbar navbar-expand-lg " color-on-scroll="500">
       <div class=" container-fluid  ">
-         <a class="navbar-brand" href="../admindashboard">Admin Dashboard </a>
+         <a class="navbar-brand" href="../../user/admindashboard">Admin Dashboard </a>
          <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-bar burger-lines"></span>
          <span class="navbar-toggler-bar burger-lines"></span>
@@ -72,7 +224,12 @@
             <div class="col-md-12">
 
             	<h2>Details Of Work</h2>
-               <br>
+               
+               <label style="color: blue">Weekly Hours :&nbsp;</label><span id="billhrs" style="color:darkred;">0</span>&nbsp;Billing Hrs /
+               <span id="nonbillhrs" style="color: darkred;">0</span>&nbsp;Non-Billing Hrs<br>
+
+               <label style="color: blue">Monthly Hours :&nbsp;</label><span id="mnth_billhrs" style="color: darkred;"></span>&nbsp;Billing Hrs /
+               <span id="mnth_non_billhrs" style="color: darkred;"></span>&nbsp;Non-Billing Hrs<br><br>
                <div class="container">
           
 						<table class="table table-bordered">
@@ -89,23 +246,10 @@
                      <th>Total Hour</th>
                      </tr>
                      </thead>
-						<tbody>
-                     <tr>
-                     <td>{{id}}</td>
-                     <td>{{date}}</td>
-                     <td>{{project_details.name}}</td>
-                     <td>{{billing_description}}</td>
-                     <td>{{billing_hour}}</td>
-                     <td>Non billing project name</td>
-                     <td>{{non_billing_description}}</td>
-                     <td>{{non_billing_hour}}</td>
-                     <td>{{total_hour}}</td>
-                     </tr>
-						
-						</tbody>
+						 <tbody id="tBody"></tbody>
 						</table>
 					</div>
-{{user_tasks}}
+<!-- {{user_tasks}} -->
 
            </div>
          </div>
